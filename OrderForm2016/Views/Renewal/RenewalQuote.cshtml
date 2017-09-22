@@ -1,0 +1,172 @@
+﻿@model OrderForm2016.Models.RenewEnrollment
+
+@{
+    ViewBag.Title = "Renew Enrollment";
+    Layout = "~/Views/Shared/_RenewalLayout.cshtml";
+}
+
+<section class="page-title">
+	<div class="container">
+		<h2>Renew Enrollment</h2>
+	</div>
+</section>
+
+
+
+<section>
+	<div class="container">
+
+		@using (Html.BeginForm("GetQuote", "Renewal"))
+		{
+		@Html.AntiForgeryToken()
+			@Html.HiddenFor(m => m.renewal_max)
+			@Html.HiddenFor(m => m.member_id)
+			@Html.HiddenFor(m => m.master_enrollment_id)
+			@Html.HiddenFor(m => m.eff_date)
+			@Html.HiddenFor(m => m.term_date)
+			@Html.HiddenFor(m => m.policy_id)
+			@Html.HiddenFor(model => model.renewEnrollment_id)
+			@Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+
+			<div class="row">
+				<div class="col-sm-8">
+
+					<div class="widget">
+						<div class="widget-block">
+
+							@if (ViewBag.NoEnrollments == true)
+							{
+							<div class="widget-block">
+								<h3 class="widget-title">No Enrollments Found</h3>
+							</div>
+							}
+							else
+							{
+							<fieldset>
+								<div class="row">
+									<div class="col-sm-6">
+										<div class="form-group">
+											@Html.LabelFor(m => m.master_enrollment_id, "Order No", htmlAttributes: new { @class = "control-label" })
+											<div class="form-control-static">@Html.DisplayFor(m => m.master_enrollment_id)</div>
+										</div>
+									</div>
+									<div class="col-sm-6">
+										<div class="form-group">
+											@Html.LabelFor(m => m.policyName, "Product", htmlAttributes: new { @class = "control-label" })
+											<div class="form-control-static">@Html.DisplayFor(m => m.policyName)</div>
+										</div>
+									</div>
+									<div class="col-sm-6">
+										<div class="form-group">
+											@Html.LabelFor(m => m.eff_date, "Departure Date", htmlAttributes: new { @class = "control-label" })
+											<div class="form-control-static">@Model.eff_date.ToShortDateString()</div>
+										</div>
+									</div>
+									<div class="col-sm-6">
+										<div class="form-group">
+											@Html.LabelFor(m => m.term_date, "Original Return Date", htmlAttributes: new { @class = "control-label" })
+											<div class="form-control-static">@Model.term_date.ToShortDateString()</div>
+										</div>
+									</div>
+								</div>
+							</fieldset>
+
+
+							<fieldset>
+								<h3 class="widget-title"><strong>Members</strong> to Renew</h3>
+								<table class="table  table-striped">
+									<thead>
+									<th>Member ID</th>
+									<th>First Name</th>
+									<th>Last Name</th>
+									<th>Birth Date</th>
+									</thead>
+									<tbody>
+										@for (int i = 0; i < Model.members.Count(); i++)
+										{
+										<tr>
+											<td>@Model.members[i].trawickID</td>
+											<td>@Model.members[i].firstName</td>
+											<td>@Model.members[i].lastName</td>
+											<td>@Model.members[i].DOB.ToShortDateString()</td>
+										</tr>
+										}
+									</tbody>
+								</table>
+							</fieldset>
+							}
+
+
+							@if (Model.eligible)
+							{
+							<fieldset>
+								<div class="row">
+									<div class="col-sm-6">
+										<div class="form-group">
+											@if (ViewBag.DaysMessage != null)
+											{
+											@Html.LabelFor(m => m.latestDate, "Last date you can be covered through*", htmlAttributes: new { @class = "control-label" })
+											}
+											else
+											{
+											@Html.LabelFor(m => m.latestDate, "Last date you can be covered through", htmlAttributes: new { @class = "control-label" })
+											}
+											<div class="form-control-static">@Model.latestDate.ToShortDateString()</div>
+										</div>
+									</div>
+									<div class="col-sm-6">
+										<div class="form-group">
+											@Html.LabelFor(m => m.newTermDate, "NewTermDate", htmlAttributes: new { @class = "control-label" })
+											<div class="input-group  date">
+												@Html.TextBoxFor(m => m.newTermDate, "{0:MM/dd/yyyy}", new { @class = "form-control  dateUS", placeholder = "mm/dd/yyyy", data_provide = "datepicker", data_date_start_date = Model.term_date.AddDays(1).ToShortDateString(), data_date_end_date = Model.latestDate.ToShortDateString(), @required = "required" })
+												<div class="input-group-addon  input-group-calendar"><i class="fa  fa-calendar"></i></div>
+											</div>
+											@Html.ValidationMessageFor(m => m.newTermDate, "", new { @class = "text-danger" })
+										</div>
+									</div>
+								</div>
+								@if (ViewBag.DaysMessage != null)
+								{
+									<div class="help-block  small">@ViewBag.DaysMessage</div>
+								}
+							</fieldset>
+							}
+							else
+							{
+							<div class="alert  alert-info  well-sm" role="alert">
+								<span class=""><i class="fa fa-exclamation-triangle" aria-hidden="true"></i></span>
+								<span class="">@Html.DisplayFor(m => m.disqualifyMessage)</span>
+								@*<tag>Click here to purchase another policy link</tag>*@
+							</div>
+							}
+						</div><!-- /.widget-block -->
+
+						@if (Model.eligible)
+						{
+						<div class="widget-footer  form-submit">
+							<button type="button" class="btn  btn-default  btn-prev"><i class="fa  fa-caret-left"></i> Previous</button>
+							<button type="submit" class="btn  btn-primary  btn-next">Get Quote <i class="fa  fa-caret-right"></i></button>
+						</div>
+						}
+
+					</div><!-- /.widget -->
+
+				</div><!-- /.col -->
+
+
+				<div class="col-sm-4">
+					@Html.Partial("_SideLogos")
+				</div>
+
+			</div><!-- /.row -->
+		}
+	</div>
+</section>
+
+
+
+@section Scripts {
+	@*@Scripts.Render("~/bundles/jqueryval")*@
+	<script src="/scripts/main.js"></script>
+}

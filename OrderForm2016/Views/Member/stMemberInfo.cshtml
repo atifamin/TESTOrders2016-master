@@ -1,0 +1,252 @@
+﻿@model List<OrderForm2016.Models.Member>
+@using OrderForm2016.Helpers
+
+
+@{
+	ViewBag.Title = "Member Info";
+
+	List<SelectListItem> GenderList = new List<SelectListItem>();
+	GenderList.Add(new SelectListItem
+	{
+		Text = "M",
+		Value = "Male"
+	});
+	GenderList.Add(new SelectListItem
+	{
+		Text = "F",
+		Value = "Female",
+	});
+}
+
+<section class="page-title">
+	<div class="container">
+		<h2>@ViewBag.ProductName  Member Info</h2>
+		@if (ViewBag.ProductDesc != ViewBag.ProductName)
+		{
+		<h4>@ViewBag.ProductDesc</h4>}
+	</div>
+</section>
+
+
+<section>
+	<div class="container">
+
+
+		@using (Html.BeginForm("GetCCInfo", "CreditCard", new { bFormID = Model[0].base_form_id }, FormMethod.Post, new { id = "memberform" }))
+		{
+		@Html.AntiForgeryToken()
+			@Html.ValidationSummary(true, "", new { @class = "text-danger" })
+			@Html.HiddenFor(m => m[0].base_form_id, new { @id = "bFormID" })
+			@Html.HiddenFor(m => m[0].traveler_age_id)
+			@Html.Hidden("country", "US")
+
+			if (ViewBag.TripCanIncluded != null)
+			{
+			@Html.Hidden("tripCanIncluded", (bool)ViewBag.TripCanIncluded)
+			}
+
+			<div class="row">
+				<div class="col-sm-9">
+
+					<div id="errorMsg">
+					</div>
+
+					<div class="widget">
+
+						<div class="widget-block">
+
+							<div class="widget-block">
+								<h3 class="widget-title"><strong>Member</strong> Information</h3>
+							</div>
+
+							@{
+								int prodId = ViewBag.ProductId;
+								int adults = 0;
+								int children = 0;
+
+								for (int i = 0; i < Model.Count; i++)
+								{
+									int age = Model[i].TravelerAge;
+									string type = Model[i].memType;
+									string title = "Spouse";
+
+									if (type == "trav")
+									{
+										title = "Traveler " + (++adults);
+									}
+									else if (type == "child")
+									{
+										title = "Child " + (++children);
+									}
+									<fieldset data-traveler-id="@Model[i].traveler_age_id">
+
+										@Html.HiddenFor(m => m[i].memType)
+										@Html.HiddenFor(x => x[i].TripCost)
+
+										<h5 class="widget-subtitle">@title - Age <span class="age">@age</span></h5>
+
+										<div class="row  small">
+											<div class="col-md-4  col-lg-2">
+												<div class="form-group">
+													@Html.LabelFor(m => m[i].firstName, "First Name", new { @class = "control-label" })
+													@Html.EditorFor(m => m[i].firstName, new { htmlAttributes = new { @class = "form-control input-sm", @required = "required" } })
+													@Html.ValidationMessageFor(m => m[i].firstName, "", new { @class = "text-danger" })
+												</div>
+											</div>
+											<div class="col-md-4  col-lg-2">
+												<div class="form-group">
+													@Html.LabelFor(m => m[i].midName, "Middle Name", new { @class = "control-label" })
+													@Html.EditorFor(m => m[i].midName, new { htmlAttributes = new { @class = "form-control input-sm" } })
+													@Html.ValidationMessageFor(m => m[i].midName, "", new { @class = "text-danger" })
+												</div>
+											</div>
+											<div class="col-md-4  col-lg-3">
+												<div class="form-group">
+													@Html.LabelFor(m => m[i].lastName, "Last Name", new { @class = "control-label" })
+													@Html.EditorFor(m => m[i].lastName, new { htmlAttributes = new { @class = "form-control input-sm", @required = "required" } })
+													@Html.ValidationMessageFor(m => m[i].lastName, "", new { @class = "text-danger" })
+												</div>
+											</div>
+											<div class="col-md-4  col-lg-2">
+												<div class="form-group">
+													@Html.LabelFor(m => m[i].DOB, "DOB", new { @class = "control-label" })
+													@if (ViewBag.ProductId == 43 && Session["isFromQuoteForm"] == null)
+													{
+													@Html.TextBoxFor(m => m[i].DOB, "{0:d}", new { @class = "form-control input-sm", @readonly = true })
+													}
+													else
+													{
+														string dateRegex = "\\d{1,2}/\\d{1,2}/\\d{4}";
+														@Html.TextBox(Html.NameFor(m => m[i].DOB).ToString(), "", new { @class = "form-control input-sm dob", placeholder = "mm/dd/yyyy", pattern = @dateRegex, @data_eff_date = @ViewBag.DepartureDate.ToShortDateString(), @data_member_age = @age.ToString(), @data_member_id = @Model[i].memberCount.ToString(), @required = "required" })
+													}
+													@Html.ValidationMessageFor(m => m[i].DOB, "", new { @class = "text-danger" })
+												</div>
+											</div>
+											<div class="col-md-4  col-lg-2">
+												<div class="form-group">
+													@Html.LabelFor(m => m[i].passPort, "Passport", new { @class = "control-label" })
+													@Html.EditorFor(m => m[i].passPort, new { htmlAttributes = new { @class = "form-control input-sm" } })
+													@Html.ValidationMessageFor(m => m[i].passPort, "", new { @class = "text-danger" })
+												</div>
+											</div>
+											<div class="col-md-4  col-lg-1">
+												<div class="form-group">
+													@Html.LabelFor(m => m[i].gender, "Gender", new { @class = "control-label" })
+													@Html.DropDownListFor(m => m[i].gender, @GenderList, new { @class = "form-control input-sm" })
+													@Html.ValidationMessageFor(m => m[i].gender, "", new { @class = "text-danger" })
+												</div>
+											</div>
+										</div><!-- /.row -->
+
+										<div class="row  small">
+											<div class="col-md-6  col-lg-4">
+												<div class="form-group">
+													@Html.LabelFor(m => m[i].addr1, "Address 1", new { @class = "control-label" })
+													@Html.EditorFor(m => m[i].addr1, new { htmlAttributes = new { @class = "form-control input-sm", @required = "required" } })
+													@Html.ValidationMessageFor(m => m[i].addr1, "", new { @class = "text-danger" })
+												</div>
+											</div>
+											<div class="col-md-6  col-lg-2">
+												<div class="form-group">
+													@Html.LabelFor(m => m[i].addr2, "Address 2", new { @class = "control-label" })
+													@Html.EditorFor(m => m[i].addr2, new { htmlAttributes = new { @class = "form-control input-sm" } })
+													@Html.ValidationMessageFor(m => m[i].addr2, "", new { @class = "text-danger" })
+												</div>
+											</div>
+											<div class="col-md-6  col-lg-3">
+												<div class="form-group">
+													@Html.LabelFor(m => m[i].city, "City", new { @class = "control-label" })
+													@Html.EditorFor(m => m[i].city, new { htmlAttributes = new { @class = "form-control input-sm", @required = "required" } })
+													@Html.ValidationMessageFor(m => m[i].city, "", new { @class = "text-danger" })
+												</div>
+											</div>
+											<div class="col-md-2  col-lg-1">
+												<div class="form-group">
+													@Html.LabelFor(m => m[i].state, "State", new { @class = "control-label" })
+													@Html.EditorFor(m => m[i].state, new { htmlAttributes = new { @class = "form-control input-sm", @required = "required", @readonly = true } })
+													@Html.ValidationMessageFor(m => m[i].state, "", new { @class = "text-danger" })
+												</div>
+											</div>
+											<div class="col-md-4  col-lg-2">
+												<div class="form-group">
+													@Html.LabelFor(m => m[i].zip, "Zip", new { @class = "control-label" })
+													@Html.EditorFor(m => m[i].zip, new { htmlAttributes = new { @class = "form-control input-sm" } })
+													@Html.ValidationMessageFor(m => m[i].zip, "", new { @class = "text-danger" })
+												</div>
+											</div>
+										</div><!-- /.row -->
+										@if (i == 0)
+										{
+										<hr />
+										<div class="row  small">
+											<div class="col-md-6">
+												<div class="form-group">
+													@Html.LabelFor(m => m[0].email, "Primary Email", new { @class = "control-label" })
+													@Html.EditorFor(m => m[0].email, new { htmlAttributes = new { @class = "form-control input-sm", @type = "email", @required = "required" } })
+													@Html.ValidationMessageFor(m => m[0].email, "", new { @class = "text-danger" })
+												</div>
+											</div>
+											<div class="col-md-6">
+												<div class="form-group">
+													@Html.LabelFor(m => m[0].phone, "Primary Phone #", new { @class = "control-label" })
+													@Html.EditorFor(m => m[0].phone, new { htmlAttributes = new { @class = "form-control input-sm", @type = "tel", @required = "required" } })
+													@Html.ValidationMessageFor(m => m[0].phone, "", new { @class = "text-danger" })
+												</div>
+											</div>
+										</div><!-- /.row -->
+										}
+									</fieldset>
+								}
+							}
+
+
+							@*<div class="help-block  pull-right"><strong class="text-danger">*</strong> where you currently live and call home</div>
+							<h3 class="widget-title"><strong>Address</strong> Information</h3>*@
+
+
+						</div><!-- /.widget-block -->
+
+						<div class="widget-footer  form-submit">
+							<button type="button" class="btn  btn-default  btn-prev"><i class="fa  fa-caret-left"></i> Previous</button>
+							<button type="submit" class="btn  btn-primary  btn-next">Continue <i class="fa  fa-caret-right"></i></button>
+						</div>
+
+					</div><!-- /.widget -->
+				</div><!-- /.col -->
+
+
+				<div class="col-sm-3">
+					@Html.Partial("_SideLogos")
+				</div><!-- /.col -->
+
+			</div><!-- /.row -->}
+	</div><!-- /.container -->
+</section>
+
+
+@section Scripts {
+	@Scripts.Render("~/bundles/jqueryval")
+	<script src="/scripts/main.js"></script>
+	<script src="/scripts/AgeBands.js"></script>
+	<script src="/scripts/memberinfo.js"></script>
+}
+
+
+@section Modals {
+	<div class="modal  fade" tabindex="-1" role="dialog" id="ageband" data-backdrop="static" data-keyboard="false">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					@*<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>*@
+					<h4 class="modal-title"></h4>
+				</div>
+				<div class="modal-body">
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn  btn-default" data-dismiss="modal" id="cancelAgeBand">Cancel</button>
+					<button type="button" class="btn  btn-primary" id="updateAgeBand">Update Quote</button>
+				</div>
+			</div><!-- /.modal-content -->
+		</div><!-- /.modal-dialog -->
+	</div><!-- /.modal -->
+}

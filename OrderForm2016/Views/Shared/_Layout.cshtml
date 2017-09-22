@@ -1,0 +1,80 @@
+﻿@{
+	var context = Html.ViewContext;
+	var agent = new OrderForm2016.Models.Agent();
+	try
+	{
+		int bfID = Html.ViewContext.ViewBag.baseFormID;
+		agent = CommonProcs.GetAgent(bfID);
+	}
+	catch
+	{
+		int agent_id = 1;
+		if (Request.QueryString["agent_id"] != null)
+		{
+			int.TryParse(Request.QueryString["agent_id"].ToString(), out agent_id);
+		}
+		agent = new OrderForm2016.Models.Agent(agent_id);
+	}
+	bool isAgent = agent.AgentId > 1 && agent.IsActive && agent.AgentId != 379;
+	bool isVisitorsCoverage = agent.AgentId == 92;
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="x-ua-compatible" content="ie=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<meta name="format-detection" content="telephone=no">
+	<title>@ViewBag.Title - Trawick International</title>
+   
+	<link rel="icon" type="image/png" href="~/content/images/favicon-16x16.png" sizes="16x16">
+	<link rel="icon" type="image/png" href="~/content/images/favicon-32x32.png" sizes="32x32">
+
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:400,300,500,700,900" type="text/css">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
+
+	@Styles.Render("~/bundles/css")
+	@RenderSection("styles", required: false)
+
+	<!--[if lt IE 9 ]>
+		<LINK href="/Content/css/iealert/style.css" rel="stylesheet">
+		<script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+		<script type='text/javascript'>var oldIE = true;</script>
+	<![endif]-->
+
+	@Scripts.Render("~/bundles/modernizr")
+	@Scripts.Render("~/bundles/jquery")
+
+	<script src="/scripts/iealert.min.js"></script>
+</head>
+<body>
+
+	@Html.Partial("_InlineJS", "GTM-ML6DT9L")
+
+	@if (isAgent)
+	{
+	@Html.Partial("_AgentHeader", agent)
+	}
+	else
+	{
+	@Html.Partial("_Header")
+	}
+
+	<main class="main main-content">
+
+		@RenderBody()
+
+		<footer class="footer">
+			<div class="container">
+				@*<p>&copy; @DateTime.Now.Year - Trawick International</p>*@
+			</div>
+		</footer>
+
+	</main>
+
+	@Scripts.Render("~/bundles/bootstrap")
+	@RenderSection("scripts", required: false)
+	@RenderSection("modals", required: false)
+
+</body>
+</html>

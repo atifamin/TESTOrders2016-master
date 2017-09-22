@@ -1,0 +1,259 @@
+﻿@model OrderForm2016.Models.CreditCardInfo
+@{
+	ViewBag.Title = "Complete Purchase";
+	Layout = "~/Views/Shared/_RenewalLayout.cshtml";
+
+
+	var lastFour = Model.last_four;
+	if (lastFour != null)
+	{
+		lastFour = lastFour.Substring(lastFour.Length - 4);
+	}
+}
+
+
+<section class="page-title">
+	<div class="container">
+		<h2>Enter Payment Information</h2>
+		<h4>Use existing card or enter new payment information</h4>
+	</div>
+</section>
+
+
+<section>
+	<div class="container">
+		<div class="row">
+			<div class="col-sm-8">
+
+				@using (Html.BeginForm("CompletePurchase", "RenewCreditCard", FormMethod.Post, new { @class = "" }))
+				{
+				@Html.AntiForgeryToken()
+					@Html.ValidationSummary(true, "", new { @class = "text-danger" })
+					@Html.HiddenFor(m => m.enrollment_id)
+					@*@Html.HiddenFor(m => m.bypassPayment)*@
+					@Html.HiddenFor(m => m.enrollDates.effDate)
+					@Html.HiddenFor(m => m.enrollDates.termDate)
+					@Html.HiddenFor(m => m.enrollDates.newEffDate)
+					@Html.HiddenFor(m => m.enrollDates.newTermDate)
+					@Html.HiddenFor(m => m.enrollDates.Notes)
+					@Html.HiddenFor(m => m.enrollDates.newPrice)
+					@Html.HiddenFor(m => m.enrollDates.master_enrollment_id)
+					@Html.HiddenFor(m => m.TotalAmount)
+					@Html.HiddenFor(m => m.base_form_id)
+
+
+					var wClass = ViewBag.PurchStatus != null ? "error" : "";
+
+					<div class="widget">
+
+						<div class="widget-header @wClass">
+							@if (ViewBag.PurchStatus != null)
+							{
+							<h4 class="text-center">@ViewBag.PurchStatus</h4>
+							}
+
+							@if (ViewBag.AlreadyCharged != null && ViewBag.AlreadyCharged == true)
+							{
+							<h4 class="text-center text-danger">Warning - You have already made a payment for $@Model.TotalAmount for this transaction today.</h4>
+							}
+							else
+							{
+							<div class="text-right">
+								<h4 class="widget-subtitle">
+									<strong class="small">Total Amount:</strong>
+									<span class="cost  text-info">@String.Format("{0:c}", Convert.ToDecimal(Model.TotalAmount))</span>
+								</h4>
+							</div>
+							}
+						</div>
+
+
+						<div class="widget-block">
+
+							<fieldset id="credit">
+
+								<h3 class="widget-title"><strong>Credit Card</strong> Information</h3>
+
+								<p>
+									<label class="checkbox-inline">
+										@Html.CheckBox(Html.NameFor(m => m.useExistTrans).ToString(), true)
+										Use Stored Credit Card ending in <span class="text-danger">@lastFour</span>
+									</label>
+								</p>
+
+								<div class="row">
+									<div class="col-md-7">
+										<div class="form-group">
+											@Html.LabelFor(m => m.cardNumber, new { @class = "control-label" })
+											@Html.EditorFor(m => m.cardNumber, new { htmlAttributes = new { @class = "form-control", @required = true } })
+											@Html.ValidationMessageFor(m => m.cardNumber, "", new { @class = "text-danger" })
+										</div>
+									</div>
+									<div class="col-md-3">
+										<div class="form-group">
+											@Html.LabelFor(m => m.expirationDate, "Exp Date", new { @class = "control-label" })
+											<div class="input-group  date  expiration-date">
+												@Html.TextBox(Html.NameFor(m => m.expirationDate).ToString(), "", new { @class = "form-control", placeholder = "mm/yyyy", @required = true, @data_provide = "datepicker", @data_date_format = "mm/yyyy", @data_date_start_date = "0d", @data_date_start_view = "decade", @data_date_min_view_mode = "months", @data_date_enable_on_readonly = "false" })
+												<div class="input-group-addon  input-group-calendar"><i class="fa  fa-calendar"></i></div>
+											</div>
+											@Html.ValidationMessageFor(m => m.expirationDate, "", new { @class = "text-danger" })
+										</div>
+									</div>
+									<div class="col-md-2">
+										<div class="form-group">
+											@Html.LabelFor(m => m.cardCode, new { @class = "control-label" })
+											@Html.EditorFor(m => m.cardCode, new { htmlAttributes = new { @class = "form-control", @required = true } })
+											@Html.ValidationMessageFor(m => m.cardCode, "", new { @class = "text-danger" })
+										</div>
+									</div>
+								</div><!-- /.row -->
+
+							</fieldset>
+
+
+							<fieldset id="billing">
+
+								<h3 class="widget-title"><strong>Billing</strong> Information</h3>
+
+								<p><label class="checkbox-inline"><input type="checkbox" name="useHomeCountry">Use Home Country Mailing Address</label></p>
+
+								<div class="row">
+									<div class="col-md-6">
+										<div class="form-group">
+											@Html.LabelFor(m => m.firstName, new { @class = "control-label" })
+											@Html.EditorFor(m => m.firstName, new { htmlAttributes = new { @class = "form-control", placeholder = "First", @required = true } })
+											@Html.ValidationMessageFor(m => m.firstName, "", new { @class = "text-danger" })
+										</div>
+									</div>
+									<div class="col-md-6">
+										<div class="form-group">
+											@Html.LabelFor(m => m.lastName, new { @class = "control-label" })
+											@Html.EditorFor(m => m.lastName, new { htmlAttributes = new { @class = "form-control", placeholder = "Last", @required = true } })
+											@Html.ValidationMessageFor(m => m.lastName, "", new { @class = "text-danger" })
+										</div>
+									</div>
+								</div><!-- /.row -->
+
+
+								<div class="form-group">
+									@Html.LabelFor(m => m.address, new { @class = "control-label" })
+									@Html.EditorFor(m => m.address, new { htmlAttributes = new { @class = "form-control", placeholder = "Address", @required = true } })
+									@Html.ValidationMessageFor(m => m.address, "", new { @class = "text-danger" })
+								</div><!-- /.form-group -->
+
+
+								<div class="row">
+									<div class="col-md-7">
+										<div class="form-group">
+											@Html.LabelFor(m => m.city, new { @class = "control-label" })
+											@Html.EditorFor(m => m.city, new { htmlAttributes = new { @class = "form-control", placeholder = "City", @required = true } })
+											@Html.ValidationMessageFor(m => m.city, "", new { @class = "text-danger" })
+										</div>
+									</div>
+									<div class="col-md-2">
+										<div class="form-group">
+											@Html.LabelFor(m => m.state, new { @class = "control-label" })
+											@Html.EditorFor(m => m.state, new { htmlAttributes = new { @class = "form-control", placeholder = "State", @required = true } })
+											@Html.ValidationMessageFor(m => m.state, "", new { @class = "text-danger" })
+										</div>
+									</div>
+									<div class="col-md-3">
+										<div class="form-group">
+											@Html.LabelFor(m => m.zip, new { @class = "control-label" })
+											@Html.EditorFor(m => m.zip, new { htmlAttributes = new { @class = "form-control", placeholder = "Zip Code", @required = true } })
+											@Html.ValidationMessageFor(m => m.zip, "", new { @class = "text-danger" })
+										</div>
+									</div>
+								</div><!-- /.row -->
+
+								@if (ViewBag.countryList != null)
+								{
+								<div class="form-group">
+									@Html.LabelFor(m => m.country, new { @class = "control-label" })
+									@Html.DropDownListFor(m => m.country, (SelectList)ViewBag.countryList, "Select Country", new { @class = "form-control", @required = true })
+									@*@Html.EditorFor(m => m.country, new { htmlAttributes = new { @class = "form-control", placeholder = "Country", @required = true } })*@
+									@Html.ValidationMessageFor(m => m.country, "", new { @class = "text-danger" })
+								</div><!-- /.form-group -->
+								}
+
+							</fieldset>
+
+						</div><!-- /.widget-block -->
+
+
+						<div class="widget-footer  form-submit">
+							<a class="btn btn-prev btn-default">Previous</a>
+							<button type="submit" id="submitButton" class="btn  btn-primary  btn-next">Complete Purchase <i class="fa  fa-caret-right"></i></button>
+						</div><!-- /.widget-footer -->
+					</div><!-- /.widget -->
+				}
+
+			</div><!-- /.col -->
+		</div><!-- /.row -->
+	</div><!-- /.container -->
+</section>
+
+
+@section Scripts {
+	@Scripts.Render("~/bundles/jqueryval")
+	<script>
+
+		$('input[name="useHomeCountry"]').on('change', function(e) {
+			var homeAddress = @Html.Raw(Json.Encode(ViewBag.HomeAddress));
+			for (var key in homeAddress) {
+				var input = $(':input[name="'+key+'"]');
+				input.val(this.checked ? decodeEntities(homeAddress[key]) : '');
+				input.attr('readonly', this.checked);
+			}
+		});
+
+		function decodeEntities(encodedString) {
+			var textArea = document.createElement('textarea');
+			textArea.innerHTML = encodedString;
+			return textArea.value;
+		}
+
+
+
+
+
+		$('input[name="useExistTrans"]').on('change', useExistTransChanged);
+
+		function useExistTransChanged() {
+			var useExistTrans = $('input[name="useExistTrans"]');
+			var useHomeCountry = $('input[name="useHomeCountry"]');
+
+			var inputs = {
+				'cardNumber': '●●●●●●●●●●●●@lastFour',
+				'expirationDate': '●●●●●●',
+				//'cardCode': '●●●'
+			};
+			//&#9679;
+
+			var isChecked = useExistTrans[0].checked;
+			var forceHomeCountryAddress = false;
+			for (var key in inputs) {
+				var input = $('input[name="'+key+'"]');
+				input.val(isChecked ? inputs[key] : input[0].defaultValue);
+				input.prop('readonly', isChecked);
+			}
+
+			if (isChecked) useHomeCountry.prop('checked', true).change();
+			if (forceHomeCountryAddress) {
+				useHomeCountry.prop('disabled', useExistTrans[0].checked);
+			}
+		}
+
+		useExistTransChanged();
+
+
+
+		//$('label[for="TotalAmount"]').on('dblclick', totalAmountDblClickHandler);
+
+		//function totalAmountDblClickHandler() {
+		//	var totalAmount = $('input[name="TotalAmount"]'), notRO = !totalAmount.is('[readonly]');
+		//	totalAmount.prop('readonly', notRO).toggleClass('form-control-static', notRO);
+		//}
+
+	</script>
+}

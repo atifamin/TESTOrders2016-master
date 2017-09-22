@@ -1,0 +1,212 @@
+﻿@model OrderForm2016.Models.xlHead
+
+@{
+	ViewBag.Title = "GroupEnroll";
+
+	List<SelectListItem> YesNoList = new List<SelectListItem>();
+	YesNoList.Add(new SelectListItem
+	{
+		Text = "No",
+		Value = "No",
+		Selected = true
+	});
+	YesNoList.Add(new SelectListItem
+	{
+		Text = "Yes",
+		Value = "Yes",
+	});
+
+	//int prodId = Model.product_id;
+
+	bool FileUploaded = (ViewBag.Success != null && ViewBag.Success == true);
+}
+
+
+<section class="page-title">
+	<div class="container">
+		<h2>@ViewBag.ProductName  Group Enroll</h2>
+		@if (ViewBag.ProductDesc != ViewBag.ProductName)
+		{
+		<h4>@ViewBag.ProductDesc</h4>}
+	</div>
+</section>
+
+
+
+<section>
+	<div class="container">
+		@if (ViewBag.Response != null)
+		{
+		<h3>Error - @ViewBag.Response</h3>
+		}
+		else
+		{
+			using (Html.BeginForm("SubmitGroupRoster", "GroupEnroll", FormMethod.Post, new { @id = "geform", enctype = "multipart/form-data" }))
+			{
+			@Html.AntiForgeryToken()
+				@Html.Hidden("headID", Model.xlHeadID)
+				@Html.Hidden("agentID", Model.agent_id)
+
+
+				<div class="row">
+					<div class="col-sm-9">
+
+						<div id="errorMsg"></div>
+
+						<div class="widget">
+
+							<div class="widget-header">
+								<div class="row">
+									<div class="col-sm-6">
+										For more information click the <i class="fa fa-info-circle text-primary"></i> icon.
+									</div>
+									<div class="col-sm-6  text-right">
+										<a class="btn btn-sm btn-primary no-shadow" href="~/GroupEnrollTemplate.xlsx" download="GroupEnrollTemplate.xlsx" title="Download Group Enroll Template"><i class="fa fa-download"></i> Roster Template</a>
+									</div>
+								</div>
+							</div>
+
+
+							<div class="widget-block">
+
+
+								<fieldset>
+									@{
+										object selAttr = FileUploaded ? (object)new { @class = "form-control", @readonly = true } : new { @class = "form-control" };
+										object dateAttr = FileUploaded ? (object)new { @class = "form-control  dateUS", placeholder = "mm/dd/yyyy", @readonly = true } : new { @class = "form-control  dateUS", placeholder = "mm/dd/yyyy" };
+									}
+									<h3 class="widget-title"><strong>Product</strong> Information</h3>
+									<div class="row">
+										<div class="col-sm-12 col-lg-6">
+											<div class="form-group">
+												@Html.LabelFor(m => m.product_id, "Select Product", new { @class = "control-label" })
+												@Html.DropDownListFor(m => m.product_id, (SelectList)ViewBag.Products, selAttr)
+												@Html.ValidationMessageFor(m => m.product_id, "", new { @class = "text-danger" })
+											</div>
+										</div>
+										<div class="col-sm-6 col-lg-3">
+											<div class="form-group">
+												@Html.LabelFor(m => m.effDate, "Date Your Trip Begins", new { @class = "control-label" })
+												<div class="input-group date">
+													@Html.TextBox(Html.NameFor(m => m.effDate).ToString(), "", dateAttr)
+													<div class="input-group-addon"><i class="fa  fa-calendar"></i></div>
+												</div>
+												@Html.ValidationMessageFor(m => m.effDate, "", new { @class = "text-danger" })
+											</div>
+										</div>
+										<div class="col-sm-6 col-lg-3">
+											<div class="form-group">
+												@Html.LabelFor(m => m.termDate, "Date Your Trip Ends", new { @class = "control-label" })
+												<div class="input-group date">
+													@Html.TextBox(Html.NameFor(m => m.termDate).ToString(), "", dateAttr)
+													<div class="input-group-addon"><i class="fa  fa-calendar"></i></div>
+												</div>
+												@Html.ValidationMessageFor(m => m.termDate, "", new { @class = "text-danger" })
+											</div>
+										</div>
+									</div><!-- /.row -->
+								</fieldset>
+
+								@if (FileUploaded)
+								{
+								@Html.Partial("_BaseForm", Model)
+								}
+
+
+								<div id="partials">
+
+									@*@Html.Partial("_BaseForm", Model)*@
+
+									@*@Html.Partial("_Address", Model)*@
+
+									@*@Html.Partial("_Sports", Model)*@
+
+									@*@Html.Partial("_TripCanDefault", Model)*@
+
+									@*@Html.Partial("_Nationwide", Model)*@
+
+								</div>
+
+								@{
+									if (ViewData["partial"] != null)
+									{
+										ViewResult partial = (ViewResult)ViewData["partial"];
+										string partialName = partial.ViewData["partialName"].ToString();
+										switch (partialName)
+										{
+											case "Travel":
+											@Html.Partial("_TravelDefault", partial.ViewData.Model);
+												break;
+											case "TripCan":
+											@Html.Partial("_TripCanDefault", partial.ViewData.Model);
+												break;
+											case "Nationwide":
+											@Html.Partial("_Nationwide", partial.ViewData.Model);
+												break;
+										}
+									}
+
+									if (!FileUploaded)
+									{
+									@Html.Partial("_FileUpload", Model)
+									}
+								}
+							</div><!-- /.widget-block -->
+
+							@if (FileUploaded)
+							{
+							<div class="widget-footer form-submit">
+								<button type="submit" name="Command" value="GetQuote" class="btn btn-primary">Continue</button>
+							</div>
+							}
+
+						</div><!-- /.widget -->
+					</div><!-- /.col -->
+
+
+					<div class="col-sm-3">
+						@Html.Partial("_SideLogos")
+					</div><!-- /.col -->
+				</div><!-- /.row -->}
+									}
+	</div>
+</section>
+
+
+
+
+@section Styles {
+
+}
+
+@section Scripts {
+	@Scripts.Render("~/bundles/jqueryval")
+	<script src="/scripts/main.js"></script>
+	<script>
+		var sportsOptions = $('select[name$="sports"]');
+		var selectClass = $('#selectClass');
+
+		selectClass.find('a').on('click', function (e) {
+			var a = $(this).addClass('active');
+			a.siblings().removeClass('active');
+			sportsOptions.val(a.data('value'));
+			e.preventDefault();
+		});
+
+		sportsOptions.on('change', function (e) {
+			selectClass.find('a').removeClass('active');
+			selectClass.find('a[data-value="' + this.value + '"]').addClass('active');
+		});
+
+
+		var optionVals = sportsOptions.find('option').map(function () { return this.value }).get();
+
+		selectClass.find('a').each(function (e) {
+			if (optionVals.indexOf(this.dataset.value) < 0) {
+				//$(this).addClass('hidden');
+				$(this).remove();
+			}
+		});
+
+	</script>
+}

@@ -1,0 +1,257 @@
+﻿<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="x-ua-compatible" content="ie=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<meta name="format-detection" content="telephone=no">
+	<title>Untitled Document</title>
+
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
+	<link rel="stylesheet" href="content/css/bootstrap.css">
+	<link rel="stylesheet" href="content/css/bootstrap-datepicker3.css">
+
+	<style>
+		.datepicker table tr td,
+		.datepicker table tr th {
+			transition: .2s ease-in-out;
+		}
+
+		.datepicker table tr td.day:not(.disabled):hover,
+		.datepicker table tr td.focused:not(.disabled) {
+			box-shadow: inset 0 1px 5px rgba(0, 0, 0, 0.2);
+		}
+
+		/*input[type="date"] {
+			position: relative;
+		}
+
+		input[type="date"]::-webkit-calendar-picker-indicator {
+			position: absolute;
+			top: 0;
+			left: 0;
+			right: 0;
+			bottom: 0;
+			width: auto;
+			height: auto;
+			color: transparent;
+			background: transparent;
+		}*/
+
+		/*input[type="date"]::-webkit-calendar-picker-indicator {
+			display: inline-block;
+		}
+
+		input[type="date"]::-webkit-inner-spin-button {
+			-webkit-appearance: none;
+			margin: 0;
+		}
+
+		input[type="date"]::-webkit-clear-button {}
+
+		input::-webkit-datetime-edit-ampm-field:focus, 
+		input::-webkit-datetime-edit-day-field:focus, 
+		input::-webkit-datetime-edit-hour-field:focus, 
+		input::-webkit-datetime-edit-millisecond-field:focus, 
+		input::-webkit-datetime-edit-minute-field:focus, 
+		input::-webkit-datetime-edit-month-field:focus, 
+		input::-webkit-datetime-edit-second-field:focus, 
+		input::-webkit-datetime-edit-week-field:focus, 
+		input::-webkit-datetime-edit-year-field:focus {
+			background-color: transparent;
+			color: inherit;
+			outline: none;
+		}*/
+	</style>
+
+	<link rel="stylesheet" href="content/css/sweetalert/sweetalert.css">
+	<link rel="stylesheet" href="content/css/sweetalert/themes/custom.css">
+
+
+	<script src="scripts/jquery-2.2.3.js"></script>
+	<script src="scripts/moment.min.js"></script>
+	<script src="scripts/bootstrap.js"></script>
+	<script src="scripts/bootstrap-datepicker.min.js"></script>
+	<script src="scripts/jquery.validate.js"></script>
+	<script src="scripts/additional-methods.js"></script>
+
+	<script src="scripts/sweetalert.min.js"></script>
+
+	<script src="scripts/AgeBands.js"></script>
+	<script src="scripts/memberinfo.js"></script>
+
+
+	<script src="scripts/datepicker.js"></script>
+</head>
+
+<body>
+	<br><br>
+	<div class="container">
+		<form action="/" method="post" id="baseform">
+
+
+			<div class="row">
+
+				<div class="col-md-4">
+					<div class="form-group">
+						<label class="control-label" for="eff_date">Date Your Trip Begins</label>
+						<div class="input-group">
+							<input type="text" class="form-control date-range" id="eff_date" name="eff_date" data-daterange="start" placeholder="mm/dd/yyyy" required>
+							<div class="input-group-addon"><i class="fa fa-calendar"></i></div>
+						</div>
+						<span class="field-validation-valid text-danger" data-valmsg-for="eff_date" data-valmsg-replace="true"></span>
+					</div>
+				</div>
+
+				<div class="col-md-4">
+					<div class="form-group">
+						<label class="control-label" for="term_date">Date Your Trip Ends</label>
+						<div class="input-group">
+							<input type="text" class="form-control date-range" id="term_date" name="term_date" data-daterange="end" placeholder="mm/dd/yyyy" required>
+							<div class="input-group-addon"><i class="fa fa-calendar"></i></div>
+						</div>
+						<span class="field-validation-valid text-danger" data-valmsg-for="term_date" data-valmsg-replace="true"></span>
+					</div>
+				</div>
+
+				<div class="col-md-4"></div>
+
+			</div>
+
+
+
+
+			<hr />
+
+
+
+
+			<div class="row">
+
+				<div class="col-md-3">
+					<div class="form-group">
+						<label class="control-label" for="purchase_date">Trip Purchase Date</label>
+						<div class="input-group">
+							<input type="text" class="form-control date-purchase" id="purchase_date" name="purchase_date" required>
+							<div class="input-group-addon"><i class="fa fa-calendar"></i></div>
+						</div>
+						<span class="field-validation-valid text-danger" data-valmsg-for="purchase_date" data-valmsg-replace="true"></span>
+						<div class="text-danger hidden-xs hidden">
+							<hr />
+							<ul class="list-unstyled">
+								<li>data-provide="datepicker"</li>
+								<li>data-date-end-date="-1d"</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+
+				<div class="col-md-3">
+					<div class="form-group">
+						<label class="control-label" for="purchase_date_m">Trip Purchase Date (m)</label>
+						<div class="input-group">
+							<input type="text" class="form-control date-purchase mobile" id="purchase_date_m" name="purchase_date_m" required>
+							<div class="input-group-addon"><i class="fa fa-calendar"></i></div>
+						</div>
+						<span class="field-validation-valid text-danger" data-valmsg-for="purchase_date_m" data-valmsg-replace="true"></span>
+					</div>
+				</div>
+
+				<div class="col-md-3">
+					<div class="form-group">
+						<label class="control-label" for="expirationDate">Exp Date</label>
+						<div class="input-group">
+							<input type="text" class="form-control date-expire" id="expirationDate" name="expirationDate" required>
+							<div class="input-group-addon"><i class="fa fa-calendar"></i></div>
+						</div>
+						<span class="field-validation-valid text-danger" data-valmsg-for="expirationDate" data-valmsg-replace="true"></span>
+						<div class="text-danger hidden-xs hidden">
+							<hr />
+							<ul class="list-unstyled">
+								<li>data-provide="datepicker"</li>
+								<li>data-date-format="mm/yy"</li>
+								<li>data-date-start-date="0d"</li>
+								<li>data-date-start-view="year"</li>
+								<li>data-date-min-view-mode="months"</li>
+								<li></li>
+							</ul>
+						</div>
+					</div>
+				</div>
+
+				<div class="col-md-3">
+					<div class="form-group">
+						<label class="control-label" for="expirationDate_m">Exp Date (m)</label>
+						<div class="input-group">
+							<input type="text" class="form-control date-expire mobile" id="expirationDate_m" name="expirationDate_m" required>
+							<div class="input-group-addon"><i class="fa fa-calendar"></i></div>
+						</div>
+						<span class="field-validation-valid text-danger" data-valmsg-for="expirationDate_m" data-valmsg-replace="true"></span>
+					</div>
+				</div>
+
+			</div>
+
+
+			<hr />
+
+
+			<div class="row">
+				<div class="col-md-4">
+					<div class="form-group">
+						<label class="control-label" for="">DOB <span class="age" id="dob-age">30</span></label>
+						<input type="text" class="form-control date-dob" id="birth_date" name="[0].DOB" data-eff-date="7/20/2017" data-member-age="30" data-member-id="158589" data-update="#dob-age" required>
+						<span class="field-validation-valid text-danger" data-valmsg-for="[0].DOB" data-valmsg-replace="true"></span>
+						<div class="text-danger hidden-xs hidden">
+							<hr />
+							<ul class="list-unstyled">
+								<li>data-provide="datepicker"</li>
+								<li>data-date-default-view-date="07/20/1987"</li>
+								<li>data-date-start-view="decade"</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-4">
+					<div class="form-group">
+						<label class="control-label" for="">DOB <span class="age" id="dob-age_m">30</span></label>
+						<input type="text" class="form-control date-dob mobile" id="birth_date_m" name="[0].DOB_m" data-eff-date="7/20/2017" data-member-age="30" data-member-id="158589" data-update="#dob-age_m" required>
+						<span class="field-validation-valid text-danger" data-valmsg-for="[0].DOB_m" data-valmsg-replace="true"></span>
+						<div class="text-danger hidden-xs hidden">
+							<hr />
+							<ul class="list-unstyled">
+								<li>data-provide="datepicker"</li>
+								<li>data-date-default-view-date="07/20/1987"</li>
+								<li>data-date-start-view="decade"</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-4">
+
+
+				</div>
+			</div>
+
+
+
+			<hr />
+
+
+
+			<button type="button" class="btn btn-success" id="submit">Submit</button>
+
+		</form>
+
+
+		<hr />
+
+
+		<div class="alert alert-info" role="alert">
+			<ul id="output" class="list-unstyled"></ul>
+		</div>
+
+
+	</div>
+</body>
+</html>

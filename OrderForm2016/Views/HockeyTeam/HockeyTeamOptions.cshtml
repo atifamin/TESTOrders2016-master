@@ -1,0 +1,151 @@
+﻿@model OrderForm2016.Models.BaseForm
+
+@{
+	ViewBag.Title = "United States Premier Hockey League";
+
+
+	List<SelectListItem> YesNoList = new List<SelectListItem>();
+	YesNoList.Add(new SelectListItem
+	{
+		Text = "No",
+		Value = "No",
+		Selected = true
+	});
+	if (Model.oldestAge < 67)
+	{
+		YesNoList.Add(new SelectListItem
+		{
+			Text = "Yes",
+			Value = "Yes",
+		});
+	}
+}
+
+<section class="page-title">
+	<div class="container">
+		<h4>New England Medical Insurance Welcomes the United States Premier Hockey League</h4>
+	</div>
+</section>
+
+
+<section>
+	<div class="container">
+
+		@using (Html.BeginForm("MemberInfo", "Member", new { @id = string.Empty, @bFormID = Model.base_form_id }))
+		{
+		@Html.AntiForgeryToken()
+			@Html.HiddenFor(m => m.base_form_id)
+			@Html.HiddenFor(m => m.ProductName)
+			@Html.HiddenFor(m => m.ProductDesc)
+			@Html.HiddenFor(m => m.country)
+			@Html.HiddenFor(m => m.destination)
+			@Html.HiddenFor(m => m.eff_date)
+			@Html.HiddenFor(m => m.term_date)
+			@Html.HiddenFor(m => m.product_id)
+			@Html.HiddenFor(m => m.TravelerAges)
+			@Html.HiddenFor(m => m.tripCanIncluded)
+			@Html.HiddenFor(m => m.tripCostPerPerson)
+			@Html.HiddenFor(m => m.tripPurchaseDate)
+			@Html.ValidationSummary(true, "", new { @class = "text-danger" })
+			@Html.Hidden("isHockey")
+
+
+			<div class="row">
+				<div class="col-sm-8">
+
+					<div class="widget">
+						<div class="widget-header">
+							<div class="row">
+								<div class="col-sm-8">
+									@*<h3 class="widget-title">USPHL Package Options</h3>*@
+									<h3 class="widget-title">USPHL Foreign Players <br class="hidden-xs" />Mandatory Plan</h3>
+								</div>
+								<div class="col-sm-4 text-right">
+									@*<h3 class="widget-title">$720.00</h3>*@
+									<small class="text-muted">Plan cost US Dollars</small>
+									<h3 class="widget-title">$720.00</h3>
+								</div>
+							</div>
+						</div>
+
+						<div class="widget-block">
+
+							<fieldset>
+
+								<div class="form-group">
+									@Html.Label("Plan Coverage Dates", new { @class = "control-label" })
+									<div class="form-control-static">
+										@Model.eff_date.ToShortDateString() to @Model.term_date.ToShortDateString()
+									</div>
+								</div>
+
+								<div class="row">
+									<div class="col-md-6">
+										<div class="form-group">
+											@Html.Label("Policy Maximum", new { @class = "control-label" })
+											<div class="form-control-static">
+												Plan C: Policy Max $250,000
+											</div>
+										</div>
+									</div>
+									<div class="col-md-6">
+										<div class="form-group">
+											@Html.Label("Deductible", new { @class = "control-label" })
+											<div class="form-control-static">
+												$1,000
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<div class="row">
+									<div class="col-md-6">
+										<div class="form-group">
+											@Html.Label("Athletic Sports", new { @class = "control-label" })
+											<div class="form-control-static">
+												Class 2, Includes Hockey
+											</div>
+										</div>
+									</div>
+									<div class="col-md-6">
+										<div class="form-group">
+											@Html.Label("Hazardous Activities", new { @class = "control-label" })
+											<div class="form-control-static">
+												Included
+											</div>
+										</div>
+									</div>
+								</div>
+
+								@*<div class="list-group  small" id="selectClass">
+										<a href="#" data-value="class2" class="list-group-item"><strong>Class 2</strong> includes Ballet, Basketball, Cheerleading, Equestrian, Fencing, Field Hockey, Football(no Division 1), Gymnastics, Hockey, Karate, Lacrosse, Polo, Rowing, Rugby, Soccer</a>
+									</div>*@
+
+							</fieldset>
+
+
+						</div><!-- /.widget-block -->
+
+
+						<div class="widget-footer  form-submit">
+							<button type="submit" name="direction" value="prev" class="btn  btn-default  btn-prev"><i class="fa  fa-caret-left"></i> Previous</button>
+							@if (!string.IsNullOrEmpty(ViewBag.brochurePath))
+							{
+							<a href="@ViewBag.brochurePath" class="btn  btn-default  btn-details" target="_blank" role="button"><span class="hidden-xs">View Policy </span>Details</a>
+							}
+							<button type="submit" name="direction" value="next" class="btn  btn-primary  btn-next">Continue <i class="fa  fa-caret-right"></i></button>
+						</div>
+
+					</div><!-- /.widget -->
+				</div><!-- /.col -->
+
+
+				<div class="col-sm-4">
+					@Html.Partial("_SideLogos")
+				</div><!-- /.col -->
+
+
+			</div><!-- /.row -->
+		}
+	</div><!-- /.container -->
+</section>

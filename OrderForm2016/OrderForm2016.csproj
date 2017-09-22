@@ -1,0 +1,488 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props" Condition="Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" />
+  <Import Project="..\packages\Microsoft.Net.Compilers.1.0.0\build\Microsoft.Net.Compilers.props" Condition="Exists('..\packages\Microsoft.Net.Compilers.1.0.0\build\Microsoft.Net.Compilers.props')" />
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{067610DC-4BF1-4FE6-B401-27C8DE786C6D}</ProjectGuid>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>OrderForm2016</RootNamespace>
+    <AssemblyName>OrderForm2016</AssemblyName>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <MvcBuildViews>false</MvcBuildViews>
+    <UseIISExpress>true</UseIISExpress>
+    <IISExpressSSLPort>13478</IISExpressSSLPort>
+    <IISExpressAnonymousAuthentication>enabled</IISExpressAnonymousAuthentication>
+    <IISExpressWindowsAuthentication>disabled</IISExpressWindowsAuthentication>
+    <IISExpressUseClassicPipelineMode>false</IISExpressUseClassicPipelineMode>
+    <UseGlobalApplicationHostFile />
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AI.Agent.Intercept, Version=1.2.0.1011, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ApplicationInsights.Agent.Intercept.1.2.0\lib\net45\Microsoft.AI.Agent.Intercept.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AI.DependencyCollector, Version=1.2.3.246, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ApplicationInsights.DependencyCollector.1.2.3\lib\net45\Microsoft.AI.DependencyCollector.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AI.PerfCounterCollector, Version=1.2.3.246, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ApplicationInsights.PerfCounterCollector.1.2.3\lib\net45\Microsoft.AI.PerfCounterCollector.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AI.ServerTelemetryChannel, Version=1.2.3.246, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ApplicationInsights.WindowsServer.TelemetryChannel.1.2.3\lib\net45\Microsoft.AI.ServerTelemetryChannel.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AI.Web, Version=1.2.3.246, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ApplicationInsights.Web.1.2.3\lib\net45\Microsoft.AI.Web.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AI.WindowsServer, Version=1.2.3.246, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ApplicationInsights.WindowsServer.1.2.3\lib\net45\Microsoft.AI.WindowsServer.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.ApplicationInsights, Version=1.2.3.490, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ApplicationInsights.1.2.3\lib\net45\Microsoft.ApplicationInsights.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Web.DynamicData" />
+    <Reference Include="System.Web.Entity" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Web.Abstractions" />
+    <Reference Include="System.Web.Routing" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.EnterpriseServices" />
+    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http">
+    </Reference>
+    <Reference Include="System.Net.Http.WebRequest">
+    </Reference>
+    <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.Helpers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Mvc, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.Mvc.5.2.3\lib\net45\System.Web.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Optimization">
+      <HintPath>..\packages\Microsoft.AspNet.Web.Optimization.1.1.3\lib\net40\System.Web.Optimization.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.Razor.3.2.3\lib\net45\System.Web.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Deployment, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.Deployment.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="WebGrease">
+      <Private>True</Private>
+      <HintPath>..\packages\WebGrease.1.5.2\lib\WebGrease.dll</HintPath>
+    </Reference>
+    <Reference Include="Antlr3.Runtime">
+      <Private>True</Private>
+      <HintPath>..\packages\Antlr.3.4.1.9004\lib\Antlr3.Runtime.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\packages\Newtonsoft.Json.6.0.4\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="App_Start\BundleConfig.cs" />
+    <Compile Include="App_Start\FilterConfig.cs" />
+    <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Controllers\CertLinksController.cs" />
+    <Compile Include="Controllers\CreditCardController.cs" />
+    <Compile Include="Controllers\CustomFormsController.cs" />
+    <Compile Include="Controllers\DocumentsController.cs" />
+    <Compile Include="Controllers\ErrorHandlerController.cs" />
+    <Compile Include="Controllers\GroupEnrollController.cs" />
+    <Compile Include="Controllers\HockeyTeamController.cs" />
+    <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\MemberController.cs" />
+    <Compile Include="Controllers\NoJScriptController.cs" />
+    <Compile Include="Controllers\OptionsFormController.cs" />
+    <Compile Include="Controllers\QuoteFormController.cs" />
+    <Compile Include="Controllers\QuotesController.cs" />
+    <Compile Include="Controllers\RenewalController.cs" />
+    <Compile Include="Controllers\RenewCreditCardController.cs" />
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="Helpers\CommonProcs.cs" />
+    <Compile Include="Helpers\CreditCardAPIHelper.cs" />
+    <Compile Include="Helpers\DataHelper.cs" />
+    <Compile Include="Helpers\FormValidation.cs" />
+    <Compile Include="Helpers\GoogleAnalyticsHelper.cs" />
+    <Compile Include="Helpers\GroupEnrollHelper.cs" />
+    <Compile Include="Helpers\MailHelper.cs" />
+    <Compile Include="Helpers\ModelReader.cs" />
+    <Compile Include="Helpers\ObjectExtension.cs" />
+    <Compile Include="Helpers\OrderRequest.cs" />
+    <Compile Include="Helpers\QuoteRetrieval.cs" />
+    <Compile Include="Helpers\SelectListHelper.cs" />
+    <Compile Include="Helpers\TrawickAPIHelper.cs" />
+    <Compile Include="Models\Agent.cs" />
+    <Compile Include="Models\BaseForm.cs" />
+    <Compile Include="Models\ccPartial.cs" />
+    <Compile Include="Models\CertLinks.cs" />
+    <Compile Include="Models\ChildAges.cs" />
+    <Compile Include="Models\clsDataGetter.cs" />
+    <Compile Include="Models\CreditCardInfo.cs" />
+    <Compile Include="Models\Documents.cs" />
+    <Compile Include="Models\EnrollDates.cs" />
+    <Compile Include="Models\Enrollment.cs" />
+    <Compile Include="Models\Error.cs" />
+    <Compile Include="Models\GBGModels\GBGEDI.cs" />
+    <Compile Include="Models\GBGModels\GBGEDIData.cs" />
+    <Compile Include="Models\GBGModels\GBGEnrollment.cs" />
+    <Compile Include="Models\GBGModels\GBGRequest.cs" />
+    <Compile Include="Models\GBGModels\GBGRequestComplete.cs" />
+    <Compile Include="Models\GBGModels\GBGRequestViewModel.cs" />
+    <Compile Include="Models\GBGModels\GBGResponse.cs" />
+    <Compile Include="Models\GBGModels\GBGResponseComplete.cs" />
+    <Compile Include="Models\HomeAddress.cs" />
+    <Compile Include="Models\Member.cs" />
+    <Compile Include="Models\NationwideOptions.cs" />
+    <Compile Include="Models\NationwideRates.cs" />
+    <Compile Include="Models\Navigation.cs" />
+    <Compile Include="Models\QEModels\Certificate.cs" />
+    <Compile Include="Models\QEModels\Products.cs" />
+    <Compile Include="Models\QuoteAdjustment.cs" />
+    <Compile Include="Models\QuoteFormEmail.cs" />
+    <Compile Include="Models\QuoteFormMetadata.cs" />
+    <Compile Include="Models\QuoteFormResults.cs" />
+    <Compile Include="Models\QuoteForm.cs" />
+    <Compile Include="Models\referrers.cs" />
+    <Compile Include="Models\SIModels\Enrollment_Payment.cs" />
+    <Compile Include="Models\SIModels\Enrollment_Premium.cs" />
+    <Compile Include="Models\SIModels\Payment.cs" />
+    <Compile Include="Models\QEModels\country.cs" />
+    <Compile Include="Models\MissionaryOptions.cs" />
+    <Compile Include="Models\Options360.cs" />
+    <Compile Include="Models\OrderForm2016Data.cs" />
+    <Compile Include="Models\QEModels\ProductOrderFieldOptions.cs" />
+    <Compile Include="Models\QEModels\ProductOrderFields.cs" />
+    <Compile Include="Models\QEModels\QuoteEngineData.cs" />
+    <Compile Include="Models\QEModels\QuoteRequest.cs" />
+    <Compile Include="Models\QuoteResults.cs" />
+    <Compile Include="Models\RenewEnrollment.cs" />
+    <Compile Include="Models\RenewMemberLogin.cs" />
+    <Compile Include="Models\RepatOptions.cs" />
+    <Compile Include="Models\RenewalQuoteViewModel.cs" />
+    <Compile Include="Models\SIModels\policy_plan.cs" />
+    <Compile Include="Models\SIModels\SIAdminData.cs" />
+    <Compile Include="Models\SIModels\USStateList.cs" />
+    <Compile Include="Models\StudyAbroadPartial.cs" />
+    <Compile Include="Models\ThankYouViewModel.cs" />
+    <Compile Include="Models\TravelerAges.cs" />
+    <Compile Include="Models\TravelOptions.cs" />
+    <Compile Include="Models\TravelRates.cs" />
+    <Compile Include="Models\TripCanOptions.cs" />
+    <Compile Include="Models\TripCanRates.cs" />
+    <Compile Include="Models\VisitorMatrix.cs" />
+    <Compile Include="Models\xlHead.cs" />
+    <Compile Include="Models\xlTravelers.cs" />
+    <Compile Include="Models\xlViewModel.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Content\css\bootstrap-datepicker3.css" />
+    <Content Include="Content\css\bootstrap.css" />
+    <Content Include="Content\css\custom.css" />
+    <Content Include="Content\css\font-awesome.css" />
+    <Content Include="Content\css\iealert\6_bottom.png" />
+    <Content Include="Content\css\iealert\6_left.png" />
+    <Content Include="Content\css\iealert\6_l_b_c.png" />
+    <Content Include="Content\css\iealert\6_l_t_c.png" />
+    <Content Include="Content\css\iealert\6_right.png" />
+    <Content Include="Content\css\iealert\6_r_b_c.png" />
+    <Content Include="Content\css\iealert\6_r_t_c.png" />
+    <Content Include="Content\css\iealert\6_r_t_c_h.png" />
+    <Content Include="Content\css\iealert\6_top.png" />
+    <Content Include="Content\css\iealert\bg.png" />
+    <Content Include="Content\css\iealert\bottom.png" />
+    <Content Include="Content\css\iealert\iesprites.png" />
+    <Content Include="Content\css\iealert\left.png" />
+    <Content Include="Content\css\iealert\right.png" />
+    <Content Include="Content\css\iealert\style.css" />
+    <Content Include="Content\css\iealert\style_dev.css" />
+    <Content Include="Content\css\iealert\top.png" />
+    <Content Include="Content\css\iealert\u-center.png" />
+    <Content Include="Content\css\iealert\u-left.png" />
+    <Content Include="Content\css\iealert\u-right.png" />
+    <Content Include="Content\css\spacing.css" />
+    <Content Include="Content\css\sweetalert\sweetalert.css" />
+    <Content Include="Content\css\sweetalert\themes\custom.css" />
+    <Content Include="Content\css\sweetalert\themes\facebook\facebook.css" />
+    <Content Include="Content\css\sweetalert\themes\google\google.css" />
+    <Content Include="Content\css\sweetalert\themes\twitter\twitter.css" />
+    <Content Include="Content\css\themes\base\accordion.css" />
+    <Content Include="Content\css\themes\base\all.css" />
+    <Content Include="Content\css\themes\base\autocomplete.css" />
+    <Content Include="Content\css\themes\base\base.css" />
+    <Content Include="Content\css\themes\base\button.css" />
+    <Content Include="Content\css\themes\base\core.css" />
+    <Content Include="Content\css\themes\base\datepicker.css" />
+    <Content Include="Content\css\themes\base\dialog.css" />
+    <Content Include="Content\css\themes\base\draggable.css" />
+    <Content Include="Content\css\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
+    <Content Include="Content\css\themes\base\images\ui-bg_flat_75_ffffff_40x100.png" />
+    <Content Include="Content\css\themes\base\images\ui-bg_glass_55_fbf9ee_1x400.png" />
+    <Content Include="Content\css\themes\base\images\ui-bg_glass_65_ffffff_1x400.png" />
+    <Content Include="Content\css\themes\base\images\ui-bg_glass_75_dadada_1x400.png" />
+    <Content Include="Content\css\themes\base\images\ui-bg_glass_75_e6e6e6_1x400.png" />
+    <Content Include="Content\css\themes\base\images\ui-bg_glass_95_fef1ec_1x400.png" />
+    <Content Include="Content\css\themes\base\images\ui-bg_highlight-soft_75_cccccc_1x100.png" />
+    <Content Include="Content\css\themes\base\images\ui-icons_222222_256x240.png" />
+    <Content Include="Content\css\themes\base\images\ui-icons_2e83ff_256x240.png" />
+    <Content Include="Content\css\themes\base\images\ui-icons_454545_256x240.png" />
+    <Content Include="Content\css\themes\base\images\ui-icons_888888_256x240.png" />
+    <Content Include="Content\css\themes\base\images\ui-icons_cd0a0a_256x240.png" />
+    <Content Include="Content\css\themes\base\menu.css" />
+    <Content Include="Content\css\themes\base\progressbar.css" />
+    <Content Include="Content\css\themes\base\resizable.css" />
+    <Content Include="Content\css\themes\base\selectable.css" />
+    <Content Include="Content\css\themes\base\selectmenu.css" />
+    <Content Include="Content\css\themes\base\slider.css" />
+    <Content Include="Content\css\themes\base\sortable.css" />
+    <Content Include="Content\css\themes\base\spinner.css" />
+    <Content Include="Content\css\themes\base\tabs.css" />
+    <Content Include="Content\css\themes\base\theme.css" />
+    <Content Include="Content\css\themes\base\tooltip.css" />
+    <Content Include="Content\fonts\fontawesome-webfont.svg" />
+    <Content Include="Content\images\404.jpg" />
+    <Content Include="Content\images\cc-logos.png" />
+    <Content Include="Content\images\digicert.png" />
+    <Content Include="Content\images\favicon-16x16.png" />
+    <Content Include="Content\images\favicon-32x32.png" />
+    <Content Include="Content\images\logo-trawick.png" />
+    <Content Include="Content\images\slider-services.jpg" />
+    <Content Include="Content\images\trawick-logo.svg" />
+    <Content Include="Content\images\trustwave.png" />
+    <Content Include="datepicker.html" />
+    <Content Include="favicon.ico" />
+    <Content Include="Content\fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="Global.asax" />
+    <Content Include="Content\css\Site.css" />
+    <Content Include="index.html" />
+    <Content Include="quoteResults.html" />
+    <Content Include="Scripts\additional-methods.js" />
+    <Content Include="Scripts\AgeBands.js" />
+    <Content Include="Scripts\ai.0.15.0-build58334.js" />
+    <Content Include="Scripts\ai.0.15.0-build58334.min.js" />
+    <Content Include="Scripts\bootstrap-datepicker.min.js" />
+    <Content Include="Scripts\bootstrap.js" />
+    <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="Content\fonts\glyphicons-halflings-regular.woff2" />
+    <Content Include="Content\fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="Content\fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="Content\fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="Content\fonts\fontawesome-webfont.eot" />
+    <Content Include="Content\fonts\fontawesome-webfont.ttf" />
+    <Content Include="Content\fonts\fontawesome-webfont.woff" />
+    <Content Include="Content\fonts\fontawesome-webfont.woff2" />
+    <Content Include="Content\fonts\FontAwesome.otf" />
+    <Content Include="Content\css\sweetalert\themes\facebook\facebook.scss" />
+    <Content Include="Content\css\sweetalert\themes\google\google.scss" />
+    <Content Include="Content\css\sweetalert\themes\twitter\twitter.scss" />
+    <Content Include="Content\pdf\USPHL.pdf" />
+    <None Include="Properties\PublishProfiles\Orders2016Test.pubxml" />
+    <None Include="Scripts\jquery-1.10.2.intellisense.js" />
+    <None Include="Scripts\jquery-2.2.3.intellisense.js" />
+    <Content Include="Scripts\datepicker.js" />
+    <Content Include="Scripts\iealert.min.js" />
+    <Content Include="Scripts\jquery-2.2.3.js" />
+    <Content Include="Scripts\jquery-2.2.3.min.js" />
+    <Content Include="Scripts\jquery-2.2.3.min.map" />
+    <Content Include="Scripts\jquery-ui-1.11.4.js" />
+    <Content Include="Scripts\jquery-ui-1.11.4.min.js" />
+    <None Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery.validate.js" />
+    <Content Include="Scripts\jquery.validate.min.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
+    <Content Include="Scripts\main.js" />
+    <Content Include="Scripts\memberinfo.js" />
+    <Content Include="Scripts\modernizr-2.6.2.js" />
+    <Content Include="Scripts\moment.min.js" />
+    <Content Include="Scripts\respond.js" />
+    <Content Include="Scripts\respond.min.js" />
+    <Content Include="Scripts\sweetalert.min.js" />
+    <Content Include="Scripts\toggles.js" />
+    <Content Include="Scripts\Travelers.js" />
+    <Content Include="Scripts\_references.js" />
+    <Content Include="Web.config" />
+    <Content Include="Views\Web.config" />
+    <Content Include="Views\_ViewStart.cshtml" />
+    <Content Include="Views\ErrorHandler\Error.cshtml" />
+    <Content Include="Views\Shared\_Layout.cshtml" />
+    <Content Include="Views\Home\BaseForm.cshtml" />
+    <Content Include="Views\Home\_ccPartial.cshtml" />
+    <Content Include="Views\OptionsForm\TravelOptions.cshtml" />
+    <Content Include="Views\OptionsForm\TripCanOptions.cshtml" />
+    <Content Include="Views\OptionsForm\Options360.cshtml" />
+    <Content Include="Views\OptionsForm\MissionaryOptions.cshtml" />
+    <Content Include="Views\Home\RepatOptions.cshtml" />
+    <Content Include="Views\Home\_saPartial.cshtml" />
+    <Content Include="Views\Quotes\QuoteResults.cshtml" />
+    <Content Include="Views\Shared\_Header.cshtml" />
+    <Content Include="Views\Shared\_AgentHeader.cshtml" />
+    <Content Include="Views\Member\MemberInfo.cshtml" />
+    <Content Include="Views\CreditCard\CreditCardInfo.cshtml" />
+    <Content Include="Views\CreditCard\ThankYou.cshtml" />
+    <Content Include="Views\Home\VisitorMatrix.cshtml" />
+    <Content Include="Views\Shared\_SideLogos.cshtml" />
+    <Content Include="Views\Home\GroupTraveler.cshtml" />
+    <Content Include="Views\Home\_TravelersPartial.cshtml" />
+    <Content Include="Views\Shared\_ThankYouLayout.cshtml" />
+    <Content Include="Views\OptionsForm\_Options.cshtml" />
+    <Content Include="Views\Shared\_Navbar.cshtml" />
+    <Content Include="Views\ErrorHandler\CustomError.cshtml" />
+    <Content Include="Views\Home\_STTravelers.cshtml" />
+    <Content Include="Views\Home\_STTripCan.cshtml" />
+    <Content Include="Views\Member\stMemberInfo.cshtml" />
+    <Content Include="Views\Renewal\MemberLogin.cshtml" />
+    <Content Include="Views\Renewal\RenewalQuote.cshtml" />
+    <Content Include="Views\Renewal\RenewCreditCardInfo.cshtml" />
+    <Content Include="Views\Renewal\RenewMemberInfo.cshtml" />
+    <Content Include="Views\QuoteForm\QuoteFormResults.cshtml" />
+    <Content Include="Views\Home\_NWTravelers.cshtml" />
+    <Content Include="Views\OptionsForm\NationwideOptions.cshtml" />
+    <Content Include="Views\Shared\_RenewalLayout.cshtml" />
+    <Content Include="Views\QuoteForm\EmailQuote.cshtml" />
+    <Content Include="Views\CertLinks\CertLinks.cshtml" />
+    <Content Include="Views\HockeyTeam\HockeyTeamOptions.cshtml" />
+    <Content Include="Views\GroupEnroll\GroupEnroll.cshtml" />
+    <Content Include="Views\GroupEnroll\_Nationwide.cshtml" />
+    <Content Include="Views\GroupEnroll\_FileUpload.cshtml" />
+    <Content Include="Views\GroupEnroll\_Address.cshtml" />
+    <Content Include="Views\GroupEnroll\_TripCanDefault.cshtml" />
+    <Content Include="Views\GroupEnroll\_TravelDefault.cshtml" />
+    <Content Include="Views\GroupEnroll\_BaseForm.cshtml" />
+    <Content Include="Views\GroupEnroll\_Sports.cshtml" />
+    <Content Include="Views\GroupEnroll\GroupEnrollList.cshtml" />
+    <Content Include="Views\Shared\_InlineJS.cshtml" />
+    <Content Include="Views\Shared\_EmptyLayout.cshtml" />
+    <Content Include="Views\Shared\_EmailQuote.cshtml" />
+    <Content Include="Views\NoJScript\Index.cshtml" />
+    <Content Include="Views\CustomForms\CustomQuoteResults.cshtml" />
+    <Content Include="Views\QuoteForm\_TravelOptions.cshtml" />
+    <Content Include="Views\QuoteForm\QuoteFormResults2.cshtml" />
+    <Content Include="Views\QuoteForm\_NationwideOptions.cshtml" />
+    <Content Include="Views\QuoteForm\_TripCanOptions.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="App_Data\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="packages.config" />
+    <None Include="Project_Readme.html" />
+  </ItemGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <Target Name="MvcBuildViews" AfterTargets="AfterBuild" Condition="'$(MvcBuildViews)'=='true'">
+    <AspNetCompiler VirtualPath="temp" PhysicalPath="$(WebProjectOutputDir)" />
+  </Target>
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>True</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>13478</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://localhost:13479/</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\Microsoft.Net.Compilers.1.0.0\build\Microsoft.Net.Compilers.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Net.Compilers.1.0.0\build\Microsoft.Net.Compilers.props'))" />
+    <Error Condition="!Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props'))" />
+  </Target>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target> -->
+</Project>

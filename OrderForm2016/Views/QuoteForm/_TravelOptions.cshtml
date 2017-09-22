@@ -1,0 +1,85 @@
+﻿@model OrderForm2016.Models.QuoteFormResults
+
+@{
+	bool showButton = false;
+
+}
+
+@*<div class="well well-sm">
+			@using (Html.BeginForm("ResubmitTravelQuotes", "QuoteForm", FormMethod.Post, new { @id = "" }))
+			{
+			@Html.HiddenFor(m => m.QuoteFormResultsID)
+					@Html.HiddenFor(m => m.agent_id)
+					<div class="row" id="adjustments">
+							@if (Model.medLimitList != null && Model.medLimitList.Count() > 0)
+							{
+									showButton = true;
+									<div class="col-sm-6 col-lg-4">
+											<div class="form-group">
+													@Html.Label("Select Medical Maximum", new { @class = "control-label" })
+													@Html.DropDownList("plan", Model.medLimitList, new { @class = "form-control" })
+											</div>
+									</div>
+							}
+							@if (Model.deductibleList != null && Model.deductibleList.Count() > 0)
+							{
+									showButton = true;
+									<div class="col-sm-6 col-lg-4">
+											<div class="form-group">
+													@Html.Label("Select Deductible", new { @class = "control-label" })
+													@Html.DropDownList("Deductible", Model.deductibleList, new { @class = "form-control" })
+											</div>
+									</div>
+							}
+							@if (Model.ADDList != null && Model.ADDList.Count() > 0)
+							{
+									showButton = true;
+									<div class="col-sm-6 col-lg-4">
+											<div class="form-group">
+													@Html.Label("Select AD&D Upgrade Option", new { @class = "control-label" })
+													@Html.DropDownList("ad_d", Model.ADDList, new { @class = "form-control" })
+											</div>
+									</div>
+							}
+					</div>
+					if (showButton)
+					{
+					<button type="submit" class="btn btn-default">Update</button>
+					}
+			}
+	</div>*@
+
+
+@using (Html.BeginForm("BaseFormFromQuoteID", "Home", new { @qid = Model.buyLink.baseFormID }, FormMethod.Post, new { id = "travOptions" }))
+{
+	@Html.HiddenFor(m => m.QuoteFormResultsID)
+	@*@Html.Hidden("plan_default", Model.plan)
+	@Html.Hidden("deductible_default", Model.deductible)
+	@Html.Hidden("ad_d_default", Model.ad_d)*@
+
+	<div class="well well-sm">
+		<div class="row" id="adjustments">
+			<div class="col-sm-6 col-lg-4">
+				<div class="form-group">
+					@Html.LabelFor(m => m.plan, "Medical Maximum", new { @class = "control-label" })
+					@Html.DropDownList("plan", Model.medLimitList, new { @class = "form-control select-max" })
+					@*@Html.DropDownListFor(m => m.medical_limit, Model.medLimitList, new { @class = "form-control" })*@
+				</div>
+			</div>
+			<div class="col-sm-6 col-lg-4">
+				<div class="form-group">
+					@Html.LabelFor(m => m.deductible, "Deductible", new { @class = "control-label" })
+					@Html.DropDownList("deductible", Model.deductibleList, new { @class = "form-control select-ded" })
+					@*@Html.DropDownListFor(m => m.deductible, Model.deductibleList, new { @class = "form-control" })*@
+				</div>
+			</div>
+			<div class="col-sm-6 col-lg-4">
+				<div class="form-group">
+					@Html.LabelFor(m => m.ad_d, "AD&D Upgrade Option", new { @class = "control-label" })
+					@Html.DropDownList("ad_d", Model.ADDList, new { @class = "form-control select-add" })
+					@*@Html.DropDownListFor(m => m.ad_d, Model.ADDList, new { @class = "form-control" })*@
+				</div>
+			</div>
+		</div>
+	</div>
+}

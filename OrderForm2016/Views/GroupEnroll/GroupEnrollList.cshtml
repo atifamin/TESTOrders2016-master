@@ -1,0 +1,148 @@
+﻿@model OrderForm2016.Models.xlViewModel
+
+@{
+	ViewBag.Title = "GroupEnrollList";
+	if (ViewBag.Response != null)
+	{
+	<h2>@ViewBag.Response</h2>
+	}
+}
+
+@helper DescDisplay(string rowString)
+{
+	string[] options = rowString.Split(';');
+	foreach (var opt in options)
+	{
+		string[] parts = opt.Split(':');
+		string title = parts[0];
+		string desc = parts[1];
+		if (parts.Length > 2)
+		{
+			desc = opt.Replace(parts[0] + ':', "");
+		}
+		<span><strong class="text-muted">@title</strong> @desc</span> <text>&nbsp;</text>
+	}
+}
+
+<section class="page-title">
+	<div class="container">
+		<h2>@ViewBag.ProductName  Group Enroll List</h2>
+		@if (ViewBag.ProductDesc != ViewBag.ProductName)
+		{
+		<h4>@ViewBag.ProductDesc</h4>}
+	</div>
+</section>
+
+
+
+<section>
+	<div class="container">
+
+		@using (Html.BeginForm("EnrollAccept", "GroupEnroll", new { @id = string.Empty, @bFormID = Model.xlHead.xlHeadID }))
+		{
+		@Html.AntiForgeryToken()
+			@Html.HiddenFor(x => x.xlHead.xlHeadID)
+            @Html.HiddenFor(x => x.xlHead.baseFormID)
+			//@Html.HiddenFor(x => x.QuoteAmount)
+
+			<div class="row">
+				<div class="col-sm-9">
+
+					<div id="errorMsg"></div>
+
+					<div class="widget">
+
+						<div class="widget-header">
+							<div class="row">
+								<div class="col-xs-6 col-sm-8">
+									<h3 class="widget-title"><strong>Group</strong> Travelers</h3>
+								</div>
+                                <div class="col-xs-6 col-sm-4 text-right">
+                                    <div class="small"><strong>Quote Number</strong></div>
+                                    @Html.ActionLink(Model.QuoteID.ToString(), "BaseFormFromQuoteID","Home",new { @qid = Model.QuoteID },new { @target = "_blank" })
+                                </div>								<div class="col-xs-6 col-sm-4 text-right">
+									<div class="small"><strong>Quote Amount</strong></div>
+									@*@string.Format("{0:c}", Model.QuoteAmount)*@
+                                @Html.EditorFor(x => x.QuoteAmount)
+								</div>
+							</div>
+						</div>
+
+						<div class="widget-block">
+
+							<div class="form-group">
+								@DescDisplay(Model.EnrollDescription1)
+								@DescDisplay(Model.EnrollDescription2)
+							</div>
+							<hr />
+
+							@if (Model.xlTravelers != null)
+							{
+							<div>
+								<label class="control-label">Travelers</label> <span class="pull-right"><strong class="text-danger">*</strong> at time of travel</span>
+								<table class="table table-striped">
+									<thead>
+										<tr>
+											<th>First Name</th>
+											<th>Middle Name</th>
+											<th>Last Name</th>
+											<th>DOB</th>
+											<th>Age*</th>
+											<th>Gender</th>
+											<th>Passport</th>
+										</tr>
+									</thead>
+									<tbody>
+										@for (int i = 0; i < Model.xlTravelers.Count; i++)
+										{
+											var traveler = Model.xlTravelers[i];
+											string tAge;
+											if (traveler.age == 0)
+											{
+												tAge = "< 1";
+											}
+											else
+											{
+												tAge = traveler.age.ToString();
+											}
+											<tr>
+												<td>@Html.HiddenFor(x => Model.xlTravelers[i].firstName)@traveler.firstName</td>
+												<td>@Html.HiddenFor(x => Model.xlTravelers[i].midName)@traveler.midName</td>
+												<td>@Html.HiddenFor(x => Model.xlTravelers[i].lastName)@traveler.lastName</td>
+												<td>@Html.HiddenFor(x => Model.xlTravelers[i].DOB)@traveler.DOB.ToShortDateString()</td>
+												<td>@Html.HiddenFor(x => Model.xlTravelers[i].age)@tAge</td>
+												<td>@Html.HiddenFor(x => Model.xlTravelers[i].gender)@traveler.gender</td>
+												<td>@Html.HiddenFor(x => Model.xlTravelers[i].passport)@traveler.passport</td>
+											</tr>
+										}
+									</tbody>
+								</table>
+							</div>
+							}
+						</div><!-- /.widget-block -->
+
+						<div class="widget-footer form-submit">
+							<button type="submit" class="btn btn-primary">Continue</button>
+						</div>
+
+					</div><!-- /.widget -->
+				</div><!-- /.col -->
+
+
+				<div class="col-sm-3">
+					@Html.Partial("_SideLogos")
+				</div><!-- /.col -->
+			</div><!-- /.row -->
+								}
+	</div>
+</section>
+
+
+
+@section Styles {
+
+}
+
+@section Scripts {
+	<script src="/scripts/main.js"></script>
+}

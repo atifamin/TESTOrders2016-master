@@ -1,0 +1,172 @@
+﻿@model OrderForm2016.Models.ThankYouViewModel
+@{
+	ViewBag.Title = "Thank you for your purchase!";
+	Layout = "~/Views/Shared/_ThankYouLayout.cshtml";
+
+	// get agent/current url to reload after thank you
+	var agent = (OrderForm2016.Models.Agent)Session["Agent"];
+	bool isAgent = false;
+	if ((agent != null))
+	{
+		string agentName = agent.Name;
+		isAgent = agent.AgentId > 1 && agent.IsActive;
+		bool isVisitorsCoverage = agent.AgentId == 92;
+	}
+}
+
+<div class="full-page-photo" style="background-image: url(/content/images/slider-services.jpg);">
+	<div class="container">
+		<section class="call-to-action  middle">
+			<div class="header">Thank you</div>
+			<h1>Thank you for purchasing your insurance product with Trawick International</h1>
+			<h4>We appreciate your business and hope that we have been able to assist with all of your needs</h4>
+			<p>We have sent you a confirmation email, please check your inbox</p>
+			@{
+				if (Model != null)
+				{
+				<a class="btn  btn-lg  btn-warning" role="button" data-toggle="modal" data-target="#thanks">Click Here for Details of Your Purchase</a>
+				}
+			}
+		</section>
+	</div>
+</div>
+
+
+@section Modals {
+	@if (Model != null)
+	{
+
+	<div class="modal  fade in" tabindex="-1" role="dialog" id="thanks">
+		<div class="modal-dialog  modal-lg">
+			<div class="modal-content">
+
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+					<p class="modal-title">Summary</p>
+				</div>
+
+				<div class="modal-body" id="receipt">
+
+					<div class="invoice-tables">
+
+						<h4 class="title">Summary of Coverage</h4>
+
+						<div class="table-responsive">
+							<table class="table  table-striped">
+								<thead>
+									<tr>
+										<th>Your Agent:</th>
+										<th></th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td colspan="2">@Html.DisplayFor(m => m.agentName)</td>
+									</tr>
+									<tr>
+										<td>@Html.DisplayFor(m => m.agentAddress)</td>
+										<td>@Html.DisplayFor(m => m.CSZ)</td>
+									</tr>
+									<tr>
+										<td>@Html.DisplayFor(m => m.agentPhone)</td>
+										<td><a href="mailto:@Html.DisplayFor(m => m.agentEmail)">@Html.DisplayFor(m => m.agentEmail)</a></td>
+									</tr>
+								</tbody>
+							</table>
+						</div><!-- /.table-responsive -->
+
+						<hr />
+
+						<div class="table-responsive">
+							<table class="table  table-striped">
+								<thead>
+									<tr>
+										<th>Order No</th>
+										<th>Home Country</th>
+										<th>Destination</th>
+										<th>Effective Date</th>
+										<th>Termination Date</th>
+										<th>Product</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td>@Html.DisplayFor(m => m.enrollID)</td>
+										<td>@Html.DisplayFor(m => m.country)</td>
+										<td>@Html.DisplayFor(m => m.destination)</td>
+										<td>@Model.baseForm.eff_date.ToShortDateString()</td>
+										<td>@Model.baseForm.term_date.ToShortDateString()</td>
+										<td>@Html.DisplayFor(m => m.productName)</td>
+									</tr>
+								</tbody>
+							</table>
+						</div><!-- /.table-responsive -->
+
+
+						<hr />
+
+
+						<h4 class="title">Covered @(Model.members.Count > 1 ? "People" : "Person")</h4>
+
+						<div class="table-responsive">
+							<table class="table  table-striped">
+								<thead>
+									<tr>
+										<th>Insurance ID</th>
+										<th>First Name</th>
+										<th>Last Name</th>
+										<th>Date of Birth</th>
+									</tr>
+								</thead>
+								<tbody>
+									@foreach (var item in Model.members)
+									{
+									<tr>
+										<td>@Html.DisplayFor(modelItem => item.trawickID)</td>
+										<td>@Html.DisplayFor(modelItem => item.firstName)</td>
+										<td>@Html.DisplayFor(modelItem => item.lastName)</td>
+										<td>@item.DOB.ToShortDateString()</td>
+									</tr>
+									}
+								</tbody>
+							</table>
+						</div><!-- /.table-responsive -->
+
+
+						<hr />
+
+
+						@if (Model.options != null)
+						{
+						<h4 class="title">Benefits and Limits</h4>
+						<div class="table-responsive">
+							<table class="table  table-striped">
+								<tbody>
+									@foreach (var option in Model.options)
+									{
+										string[] options = option.Split(':');
+										string key = options[0];
+										string val = options.Length > 2 ? string.Format("{0}: {1}", options[1], options[2]) : options[1];
+										<tr><th>@Html.Encode(key)</th><td align="right">@Html.Encode(val.Replace(".00", "").Replace("class", "Class "))</td></tr>
+									}
+								</tbody>
+							</table>
+						</div>
+						}
+
+
+					</div><!-- /.invoice-tables -->
+				</div>
+
+				<div class="modal-footer">
+					@*<button type="button" class="btn  btn-info" onclick="printDiv('#receipt')">Print Receipt</button>*@
+					<button type="button" class="btn  btn-default" data-dismiss="modal">Close</button>
+				</div>
+
+			</div><!-- /.modal-content -->
+		</div><!-- /.modal-dialog -->
+	</div><!-- /.modal -->
+
+	}
+
+}

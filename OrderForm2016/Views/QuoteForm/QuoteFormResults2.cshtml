@@ -1,0 +1,285 @@
+﻿@model IEnumerable<OrderForm2016.Models.QuoteFormResults>
+
+@{
+	ViewBag.Title = "Quote Results";
+
+	string adjustJson = "";
+	foreach (var item in Model)
+	{
+		var jsonStr = item.quoteAdjustJson.TrimStart('[').TrimEnd(']');
+		adjustJson += jsonStr + ',';
+	}
+	adjustJson = '[' + adjustJson.TrimEnd(',') + ']';
+}
+
+<section class="page-title">
+	<div class="container">
+
+		@*<div class="btn-toolbar pull-right">
+				<a href="#" class="btn btn-default" onclick="ShowEmailQuote()"><i class="fa fa-envelope-o" aria-hidden="true"></i> Email</a>
+				<a href="javascript:window.print()" class="btn btn-default"><i class="fa fa-print" aria-hidden="true"></i> Print</a>
+			</div>*@
+
+		<h2>Quote Results</h2>
+
+	</div>
+</section>
+
+@if (ViewBag.NoResults)
+{
+	<section class="page-section">
+		<div class="container">
+			<div class="alert alert-danger">
+				<strong>Sorry, no results were found</strong> @ViewBag.ErrMessage
+			</div>
+		</div>
+	</section>
+}
+else
+{
+	<section id="results">
+		<div class="container">
+
+			<div class="row">
+
+
+				<div class="col-sm-4 col-lg-3">
+					<aside class="widget compact" id="trip-details">
+						<header class="widget-header primary">
+							<h3 class="widget-title">Your Trip Details</h3>
+						</header>
+						<div class="widget-block">
+							<table class="table small borderless">
+								<tbody>
+									<tr><th>Departure Date</th><td class="text-right">@Model.First().eff_date.ToShortDateString()</td></tr>
+									<tr><th>Return Date</th><td class="text-right">@Model.First().term_date.ToShortDateString()</td></tr>
+									<tr><th>Origin</th><td class="text-right">@Model.First().country</td></tr>
+									<tr><th>Destination</th><td class="text-right">@Model.First().destination</td></tr>
+									@if (Model.First().travelerAges != null)
+									{
+										var ageStr = "";
+										foreach (var age in Model.First().travelerAges)
+										{
+											ageStr += age + ",";
+										}
+										<tr><th>Traveler Ages</th><td class="text-right">@ageStr.TrimEnd(',')</td></tr>
+									}
+									@if (Model.First().trip_cost_per_person > 0)
+									{
+									<tr><th>Per Person Trip Cost</th><td class="text-right">@string.Format("{0:c0}", Model.First().trip_cost_per_person)</td></tr>
+									<tr><th>Trip Purchase Date</th><td class="text-right">@Model.First().trip_purchase_date.ToShortDateString()</td></tr>
+									}
+								</tbody>
+							</table>
+							<button class="btn btn-info btn-block no-shadow hidden" disabled>Edit My Quote</button>
+						</div>
+					</aside>
+
+
+					<div class="widget compact text-center no-print">
+						<div class="widget-header">
+							<h4 class="widget-title"> Save Your Quote</h4>
+						</div>
+						<div class="widget-block">
+							@*<p>Enter an email &amp; we will send you a link to this page.</p>*@
+							<div class="sidebarEmailFields">
+								<a href="javascript:void(0)" class="btn btn-success no-shadow" onclick="ShowEmailQuote()"><i class="fa fa-envelope-o" aria-hidden="true"></i> Email</a>&nbsp;
+								<a href="javascript:window.print()" class="btn btn-warning no-shadow"><i class="fa fa-print" aria-hidden="true"></i> Print</a>
+							</div>
+						</div>
+					</div>
+
+				</div><!-- /.col -->
+
+
+				<div class="col-sm-8 col-lg-8 col-lg-offset-1" id="plans">
+					@{
+						int OptionsFormID = CommonProcs.GetOptionsForm(Model.First().productID);
+						switch (OptionsFormID)
+						{
+							case 1:
+							@Html.Partial("_TravelOptions", Model.First())
+								break;
+							case 2:
+							@Html.Partial("_TripCanOptions", Model.First())
+								break;
+								@*case 6:
+									@Html.Partial("_NationwideOptions", Model.First())
+									break;*@
+
+						}
+					}
+
+					@foreach (var item in Model)
+
+					{
+						var typeClass = item.coverageType.Contains("Primary") ? "primary" : "danger";
+
+						<div class="widget compact product" id="p@(item.productID)">
+
+							<header class="widget-header">
+
+								<div class="row">
+									<div class="col-sm-12">
+										<div class="plan-carrier">
+											<div class="plan-heading">
+												<h4 class="plan-name">@item.productName</h4>
+											</div>
+										</div>
+									</div>
+									<div class="col-sm-3 plan-options hidden">
+										<span class="label label-@typeClass">@item.coverageType</span>
+									</div>
+								</div>
+							</header>
+
+							<div class="widget-block">
+								<div class="row">
+
+									<div class="col-sm-9">
+										<table class="table table-condensed">
+											@for (int i = 0; i < item.optionsList.Count(); i++)
+											{
+												var option = item.optionsList[i].Split(':');
+												string className = "";
+												switch (option[0])
+												{
+													case "AD&D Upgrade":
+														className = "update-add";
+														break;
+													case "Deductible":
+														className = "update-ded";
+														break;
+													case "Medical Maximum":
+													case "Medical Limit":
+														className = "update-max";
+														break;
+													default:
+														className = null;
+														break;
+												}
+												<tr class="@className">
+													<th class="text-primary">@option[0]</th>
+													<td class="text-right">@option[1]</td>
+												</tr>
+											}
+										</table>
+									</div>
+
+									<div class="col-sm-3 plan-options">
+										<hr class="visible-xs">
+										<div class="row">
+											<div class="col-xs-7 col-sm-12">
+												<div class="form-group">
+													<label class="">Total Price</label>
+													<div><span class="plan-cost">@string.Format("{0:c}", Convert.ToDecimal(item.QuotePrice))</span></div>
+												</div>
+											</div>
+											<div class="col-xs-5 col-sm-12 text-right">
+												<br class="visible-xs hidden">
+												<label class="checkbox-inline checkbox-compare hidden"><input type="checkbox" class="plan-compare" value="p19"><i class="fa fa-heart" aria-hidden="true"></i><span class="text">Compare</span></label>
+											</div>
+										</div>
+									</div>
+
+								</div>
+							</div>
+
+							<footer class="widget-footer">
+								<div class="row">
+									<div class="col-xs-6 col-sm-9">
+										<a href="@item.brochureLink" class="btn btn-sm btn-link" target="_blank">View Plan Details</a>
+									</div>
+									<div class="col-xs-6 col-sm-3 text-right">
+										@Html.ActionLink("Buy Now", "BaseFormFromQuoteID", "Home", new { qid = item.buyLink.baseFormID }, new { @class = "btn btn-sm btn-warning btn-buy no-shadow" })
+									</div>
+								</div>
+							</footer>
+						</div>
+					}
+
+				</div><!-- /.col -->
+
+
+			</div><!-- /.row -->
+
+		</div>
+	</section>
+						}
+
+
+
+@section Scripts {
+	<script src="/scripts/main.js"></script>
+	<script>
+
+
+		$('.btn-buy').on('click', function(e){
+			var form = $('#travOptions');
+			if (FormChanges(form[0]).length > 0) {
+				e.preventDefault();
+				// Quotes should be updated
+				form.attr('action', this.href).submit();
+				return false;
+			}
+			else {
+				// Nothing has changed
+			}
+		});
+
+
+		var adjustJson = @Html.Raw(adjustJson);
+
+		//console.log(adjustJson);
+
+		var adjustments = $('#adjustments');
+
+		adjustments.find('select').on('change', function(e){
+
+			var plan = adjustments.find('.select-max').val() || 0;
+			var deductible = adjustments.find('.select-ded').val() || 0;
+			var flightadd = adjustments.find('.select-flightadd').val() || 0;
+			var ad_d = adjustments.find('.select-add').val() || 0;
+			var adjustKey = '_' + plan + '_' + deductible + '_' + ad_d + '_' + flightadd;
+
+			$('.product').each(function(){
+				var product = $(this);
+				var id = this.id.replace('p','');
+				var json = findAdjustJson(id + adjustKey);
+				//console.log(id + adjustKey, json);
+				if (json)
+				{
+					product.find('.update-add > td:last').text(formatCurrency(json.ad_d, true));
+					product.find('.update-ded > td:last').text(formatCurrency(json.deductible, true));
+					product.find('.update-max > td:last').text(formatCurrency(json.policyMax, true));
+					product.find('.plan-cost').text(formatCurrency(json.Price));
+				}
+
+			})
+		}).trigger("change");
+
+
+		function findAdjustJson(key) {
+			return adjustJson.filter(function(o) {
+				return o.adjustKey == key;
+			})[0] || null;
+		}
+
+		function formatCurrency(n, clean) {
+			var format = '$' + n.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
+			return clean == true ? format.replace('.00', '') : format;
+		}
+	</script>
+
+	@if (Model.Count() > 0)
+	{
+		var resultsId = Model.First().QuoteFormResultsID;
+		<script>
+			function ShowEmailQuote() {
+				PopupCenter("/QuoteForm/EmailQuote/?resultsId=@resultsId&type=blah", "EmailQuote", 800, 700);
+				return false;
+			}
+		</script>
+	}
+
+}

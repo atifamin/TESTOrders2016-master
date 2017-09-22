@@ -1,0 +1,24 @@
+﻿@{
+	ViewBag.Title = "JavaScript required";
+	Layout = null; // <= Important!
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>@ViewBag.Title - Trawick International</title>
+
+	@Styles.Render("~/bundles/css")
+	@Scripts.Render("~/bundles/modernizr")
+	@Scripts.Render("~/bundles/jquery")
+</head>
+<body>
+	<div class="container text-center align-wrapper">
+		<h1 class="align-middle">To use this application JavaScript is required.</h1>
+        <h2 class="align-middle"><a href="http://www.enable-javascript.com/" target="_blank">Click here for instructions on how to enable Javascript in your browser</a></h2>
+	</div>
+	<script>document.location.href = "/";</script>
+</body>
+</html>

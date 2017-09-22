@@ -1,0 +1,95 @@
+﻿@model OrderForm2016.Models.xlHead
+
+@{
+	int prodId = 67;
+	if (Model.product_id != default(int))
+	{
+		prodId = Model.product_id;
+	}
+
+	IList<SelectListItem> YesNoList = new List<SelectListItem>
+	{
+		new SelectListItem{ Text = "No", Value = "No", Selected = true },
+		new SelectListItem{ Text = "Yes", Value = "Yes" }
+	};
+
+    ViewResult vr = (ViewResult)ViewData["partial"];
+    SelectList planList = (SelectList)vr.ViewData["plan"];
+    SelectList dedList = (SelectList)vr.ViewData["deductible"];
+    SelectList addList = (SelectList)vr.ViewData["ad_d"];
+    SelectList sportsList = (SelectList)vr.ViewData["sports"];
+}
+
+<fieldset>
+	<h3 class="widget-title"><strong>Travel</strong> Options</h3>
+	<div class="row">
+		<div class="col-sm-6">
+			<div class="form-group">
+				@Html.LabelFor(m => m.plan_id, "Select Policy Maximum", new { @class = "control-label" })
+				@Html.DropDownListFor(m => m.plan_id, planList, new { @class = "form-control" })
+				@Html.ValidationMessageFor(m => m.plan_id, "", new { @class = "text-danger" })
+			</div>
+		</div>
+		<div class="col-sm-6">
+			<div class="form-group">
+				@Html.LabelFor(m => m.deductible, "Deductible", new { @class = "control-label" })
+                @Html.DropDownListFor(m => m.deductible, dedList, new { @class = "form-control" })
+				@*@Html.DropDownListFor(m => m.deductible, (SelectList)ViewBag.deductible, new { @class = "form-control" })*@
+				@Html.ValidationMessageFor(m => m.deductible, "", new { @class = "text-danger" })
+			</div>
+		</div>
+		<div class="col-sm-12">
+			<div class="form-group">
+				@Html.LabelFor(m => m.ad_d, "Accidental Death and Dismemberment Upgrade Option", new { @class = "control-label" })
+                @Html.DropDownListFor(m => m.ad_d, addList, new { @class = "form-control" })
+				@*@Html.DropDownListFor(m => m.ad_d, (SelectList)ViewBag.ad_d, new { @class = "form-control" })*@
+				@Html.ValidationMessageFor(m => m.ad_d, "", new { @class = "text-danger" })
+			</div>
+		</div>
+	</div><!-- /.row -->
+</fieldset>
+
+
+<fieldset>
+	@*<h3 class="widget-title"><strong>Extra</strong> Options</h3>*@
+	<div class="row">
+		<div class="col-md-6">
+			<div class="form-group">
+				@Html.LabelFor(m => m.sports, "Athletic Sports", new { @class = "control-label" })
+				<a role="button" data-toggle="tab" href="#tab-sports"><i class="fa fa-info-circle"></i></a>
+				@Html.DropDownListFor(m => m.sports, sportsList, new { @class = "form-control" })
+				@*@Html.DropDownListFor(m => m.sports, (SelectList)ViewBag.sports, new { @class = "form-control" })*@
+				@Html.ValidationMessageFor(m => m.sports, "", new { @class = "text-danger" })
+			</div>
+		</div>
+		<div class="col-md-6">
+			<div class="form-group">
+				@Html.LabelFor(m => m.home_country, "Home Country/Follow Me Home", new { @class = "control-label" })
+				<a role="button" data-toggle="tab" href="#tab-follow"><i class="fa fa-info-circle"></i></a>
+				@Html.DropDownListFor(m => m.home_country, @YesNoList, new { @class = "form-control" })
+				@Html.ValidationMessageFor(m => m.home_country, "", new { @class = "text-danger" })
+			</div>
+		</div>
+	</div>
+	<hr />
+	<div class="help-block">
+		<div class="tab-content small">
+			<div class="tab-pane fade in active" id="tab-sports">
+				<h5>Athletic Sports</h5>
+				<div class="list-group mb-0" id="selectClass">
+					<a href="#" data-value="yes" class="list-group-item"><strong>Class 1</strong> includes Tennis, Swimming, Cross Country, Track, Volleyball, Golf</a>
+					<a href="#" data-value="class2" class="list-group-item"><strong>Class 2</strong> includes Archery, Ballet, Cheerleading</a>
+					<a href="#" data-value="class3" class="list-group-item"><strong>Class 3</strong> includes Basketball, Diving, Equestrian, Fencing, Field Hockey, Lacrosse, Karate, Polo</a>
+					<a href="#" data-value="class4" class="list-group-item"><strong>Class 4</strong> includes Football (no division 1), Gymnastics, Hockey, Rowing, Rugby, Soccer</a>
+					<a href="#" data-value="class5" class="list-group-item"><strong>Class 5</strong> includes Running with the Bulls</a>
+				</div>
+			</div>
+			<div class="tab-pane fade" id="tab-follow">
+				<h5>Home Country/Follow Me Home</h5>
+				<p>Treatment in your Home Country is excluded on this plan.  You may purchase a limited amount of coverage for use in your Home Country. This benefit is limited to 60 days per 12 months of purchased coverage or pro rata thereof. (Example: 5 days per month of purchased coverage). You must purchase 30 days of coverage to add this benefit. Home Country Coverage cannot begin until you leave your Home Country.</p>
+				<p>In consideration of additional 10% premium paid, under the Exclusions section the following is deleted in its entirety – 35. expenses incurred in your Home Country; and the following are added under the Medical Expense Benefits: Follow Me Home Coverage - This plan shall pay for Covered Expenses incurred in your Home Country up to $5,000 for conditions first diagnosed outside Your Home Country and treated during your Policy Period. The chosen deductible applies and Coinsurance: 100% up to the $5,000 maximum.  This Benefit does not apply when an Emergency Evacuation has occurred.</p>
+				<p>Home Country Coverage - for Injury or Sickness that occur during an Incidental Trip to your Home Country during your Policy Period. Maximum benefit is reduced to $50,000. The chosen deductible applies and Coinsurance: 100% up to the $50,000 maximum.</p>
+			</div>
+		</div>
+	</div>
+</fieldset>

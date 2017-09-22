@@ -1,0 +1,94 @@
+﻿@model List<OrderForm2016.Models.CertLinks>
+@{
+	ViewBag.Title = "State Certificate Links";
+
+	int productId = Model[0].productId;
+	string productName = "";
+
+	switch (productId)
+	{
+		case 65:
+			productName = "3-in-1";
+			break;
+		case 66:
+			productName = "Single Trip";
+			break;
+		case 67:
+			productName = "First Class";
+			break;
+	}
+}
+
+<section class="page-title">
+	<div class="container">
+		<h2>State Certificate Links for Safe Travels @productName</h2>
+		<h3>These are the Certificates that will accompany your documents for the state  you select.</h3>
+	</div>
+</section>
+
+
+<section>
+	<div class="container">
+
+		<table class="table">
+
+			<thead>
+			<th width="200">State Name</th>
+			<th width="100">State Abbr</th>
+			<th>Certificate</th>
+			@if (productId == 67)
+			{
+			<th>Certificate for Pet</th>
+			}
+			</thead>
+
+			<tbody>
+				@foreach (var item in Model)
+				{
+				<tr>
+					<th>
+						@Html.DisplayFor(x => item.stateName)
+					</th>
+					<td>
+						@Html.DisplayFor(x => item.stateAbbr)
+					</td>
+
+					@if (item.notAvailable == false)
+					{
+						<td>
+							<a href="@Html.DisplayFor(x => item.certLink)" target="_blank">@Html.DisplayFor(x => item.certName)</a>
+						</td>
+
+						if (productId == 67)
+						{
+							<td>
+								@if (item.hasPet)
+								{
+									string link = item.certLink.Replace(".pdf", "Pet.pdf");
+									<a href='@link' target='_blank'>@(item.certName + "for Pet Assist")</a>
+								}
+								else {
+									<span class="text-muted">@(item.certName + "for Pet Assist - Not available")</span>
+								}
+							</td>
+						}
+					}
+					else
+					{
+					<td class="text-muted">
+						@("This product is not currently available for sale in " +  item.stateName)
+					</td>
+						if (productId == 67)
+						{
+							<td class="text-muted">
+								@(item.certName + "for Pet Assist - Not available")
+							</td>
+						}
+					}
+				</tr>
+				}
+			</tbody>
+		</table>
+
+	</div>
+</section>

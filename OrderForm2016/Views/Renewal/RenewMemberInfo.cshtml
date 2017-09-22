@@ -1,0 +1,280 @@
+﻿@model OrderForm2016.Models.RenewalQuoteViewModel
+@using OrderForm2016.Helpers
+
+
+@{
+	ViewBag.Title = "Member Info";
+	Layout = "~/Views/Shared/_RenewalLayout.cshtml";
+
+
+
+	List<SelectListItem> GenderList = new List<SelectListItem>();
+	GenderList.Add(new SelectListItem
+	{
+		Text = "M",
+		Value = "Male"
+	});
+	GenderList.Add(new SelectListItem
+	{
+		Text = "F",
+		Value = "Female",
+	});
+}
+
+
+<section class="page-title">
+	<div class="container">
+		<h2>@ViewBag.ProductName  Member Info</h2>
+		@if (@ViewBag.ProductDesc != @ViewBag.ProductName)
+		{
+		<h4>@ViewBag.ProductDesc</h4>}
+	</div>
+</section>
+
+
+<section>
+	<div class="container">
+
+
+		@using (Html.BeginForm("GetCCInfo", "RenewCreditCard"))
+		{
+		@Html.AntiForgeryToken()
+			@Html.ValidationSummary(true, "", new { @class = "text-danger" })
+			@Html.HiddenFor(m => m.members[0].base_form_id, new { @id = "bFormID" })
+			@Html.HiddenFor(m => m.members[0].traveler_age_id)
+			@Html.HiddenFor(m => m.renewalEnrollment.eff_date)
+			@Html.HiddenFor(m => m.renewalEnrollment.term_date)
+			@Html.HiddenFor(m => m.renewalEnrollment.newTermDate)
+			@Html.HiddenFor(m => m.renewalEnrollment.newPrice)
+			@Html.HiddenFor(m => m.renewalEnrollment.master_enrollment_id)
+			@Html.HiddenFor(m => m.renewalEnrollment.base_form_id)
+
+			if (ViewBag.TripCanIncluded != null)
+			{
+			@Html.Hidden("tripCanIncluded", (bool)ViewBag.TripCanIncluded)
+			}
+
+			<div class="row">
+				<div class="col-sm-9">
+
+					<div class="widget">
+
+						@if (ViewBag.QuoteError == null)
+						{
+						<div class="widget-header  primary">
+							<h3 class="widget-title"><strong>Renewal Quote</strong> extended to: @Model.renewalEnrollment.newTermDate.ToShortDateString() <span class="pull-right">@string.Format("{0:c}", Model.renewalEnrollment.newPrice)</span></h3>
+						</div>
+						}
+						else
+						{
+						<div class="widget-header  primary">
+							<h3 class="widget-title"><strong>@ViewBag.QuoteError</strong></h3>
+						</div>
+						}
+
+						<div class="widget-block">
+
+							@*<div class="widget-block">
+										<h3 class="widget-title"><strong>Renewal Quote</strong> extended to: @Model.renewalEnrollment.newTermDate.ToShortDateString()</h3>
+										@string.Format("{0:c}", Model.renewalEnrollment.newPrice)
+								</div>*@
+
+							<div class="widget-block">
+								<h3 class="widget-title"><strong>Member</strong> Information</h3>
+							</div>
+
+							@{
+								int prodId = ViewBag.ProductId;
+								int adults = 0;
+								int children = 0;
+
+								for (int i = 0; i < Model.members.Count(); i++)
+								{
+									int age = Model.members[i].TravelerAge;
+									string type = Model.members[i].memType;
+									string title = "Spouse";
+
+									<fieldset>
+
+										@Html.HiddenFor(m => m.members[i].memType)
+										@Html.HiddenFor(x => x.members[i].TripCost)
+										@Html.HiddenFor(x => x.members[i].member_id)
+
+
+										<div class="row">
+											<div class="col-md-4  col-lg-2">
+												<div class="form-group">
+													@Html.LabelFor(m => m.members[i].firstName, "First Name", new { @class = "control-label" })
+													@Html.EditorFor(m => m.members[i].firstName, new { htmlAttributes = new { @class = "form-control", @readonly = true } })
+													@Html.ValidationMessageFor(m => m.members[i].firstName, "", new { @class = "text-danger" })
+												</div>
+											</div>
+											<div class="col-md-4  col-lg-2">
+												<div class="form-group">
+													@Html.LabelFor(m => m.members[i].midName, "Middle Name", new { @class = "control-label" })
+													@Html.EditorFor(m => m.members[i].midName, new { htmlAttributes = new { @class = "form-control", @readonly = true } })
+													@Html.ValidationMessageFor(m => m.members[i].midName, "", new { @class = "text-danger" })
+												</div>
+											</div>
+											<div class="col-md-4  col-lg-3">
+												<div class="form-group">
+													@Html.LabelFor(m => m.members[i].lastName, "Last Name", new { @class = "control-label" })
+													@Html.EditorFor(m => m.members[i].lastName, new { htmlAttributes = new { @class = "form-control", @readonly = true } })
+													@Html.ValidationMessageFor(m => m.members[i].lastName, "", new { @class = "text-danger" })
+												</div>
+											</div>
+											<div class="col-md-4  col-lg-2">
+												<div class="form-group">
+													@Html.LabelFor(m => m.members[i].DOB, "DOB", new { @class = "control-label" })
+													@Html.TextBoxFor(m => m.members[i].DOB, "{0:d}", new { @class = "form-control", @readonly = true })
+												</div>
+											</div>
+											<div class="col-md-4  col-lg-3">
+												<div class="form-group">
+													@Html.LabelFor(m => m.members[i].passPort, "Passport", new { @class = "control-label" })
+													@Html.EditorFor(m => m.members[i].passPort, new { htmlAttributes = new { @class = "form-control" } })
+													@Html.ValidationMessageFor(m => m.members[i].passPort, "", new { @class = "text-danger" })
+												</div>
+											</div>
+										</div><!-- /.row -->
+
+									</fieldset>
+								}
+							}
+
+
+							<fieldset>
+								@*<h3 class="widget-title"><strong>Contact</strong> Information</h3>*@
+
+								<div class="row">
+									<div class="col-md-6">
+										<div class="form-group">
+											@Html.LabelFor(m => m.members[0].email, "Primary Email", new { @class = "control-label" })
+											@Html.EditorFor(m => m.members[0].email, new { htmlAttributes = new { @class = "form-control", @type = "email", @required = "required" } })
+											@Html.ValidationMessageFor(m => m.members[0].email, "", new { @class = "text-danger" })
+										</div>
+									</div>
+									<div class="col-md-6">
+										<div class="form-group">
+											@Html.LabelFor(m => m.members[0].phone, "Primary Phone #", new { @class = "control-label" })
+											@Html.EditorFor(m => m.members[0].phone, new { htmlAttributes = new { @class = "form-control", @type = "tel", @required = "required" } })
+											@Html.ValidationMessageFor(m => m.members[0].phone, "", new { @class = "text-danger" })
+										</div>
+									</div>
+								</div><!-- /.row -->
+							</fieldset>
+
+							@*<div class="help-block  pull-right"><strong class="text-danger">*</strong> where you currently live and call home</div>*@
+							<h3 class="widget-title"><strong>Address</strong> Information</h3>
+
+							<fieldset>
+								@*<hr />*@
+
+								<div class="form-group">
+									@Html.LabelFor(m => m.members[0].addr1, (prodId == 43 ? "USA" : "Home Country") + " Address", new { @class = "control-label" }) @*<span class="text-danger">*</span>*@
+									@Html.EditorFor(m => m.members[0].addr1, new { htmlAttributes = new { @class = "form-control", @readonly = true } })
+									@Html.ValidationMessageFor(m => m.members[0].addr1, "", new { @class = "text-danger" })
+								</div>
+
+								<div class="row">
+									<div class="col-md-6">
+										<div class="form-group">
+											@Html.LabelFor(m => m.members[0].city, (prodId == 43 ? "USA" : "Home Country") + " City", new { @class = "control-label" }) @*<span class="text-danger">*</span>*@
+											@Html.EditorFor(m => m.members[0].city, new { htmlAttributes = new { @class = "form-control", @readonly = true } })
+											@Html.ValidationMessageFor(m => m.members[0].city, "", new { @class = "text-danger" })
+										</div>
+									</div>
+
+									@if (Model.members[0].country.Trim() == "US")
+									{
+									<div class="col-md-3">
+										<div class="form-group">
+											@Html.LabelFor(m => m.members[0].state, (prodId == 43 ? "USA" : "Home Country") + " State", new { @class = "control-label" }) @*<span class="text-danger">*</span>*@
+											@Html.EditorFor(m => m.members[0].state, new { htmlAttributes = new { @class = "form-control", @readonly = true } })
+											@Html.ValidationMessageFor(m => m.members[0].state, "", new { @class = "text-danger" })
+										</div>
+									</div>
+									}
+									@if (Model.members[0].country.Trim() != "US")
+									{
+									<div class="col-md-3">
+										<div class="form-group">
+											@Html.LabelFor(m => m.members[0].state, (prodId == 43 ? "USA" : "Home Country") + " State", new { @class = "control-label" }) @*<span class="text-danger">*</span>*@
+											@Html.EditorFor(m => m.members[0].state, new { htmlAttributes = new { @class = "form-control", @readonly = true } })
+											@Html.ValidationMessageFor(m => m.members[0].state, "", new { @class = "text-danger" })
+										</div>
+									</div>
+									}
+									<div class="col-md-3">
+										<div class="form-group">
+											@Html.LabelFor(m => m.members[0].zip, "Postal Code", new { @class = "control-label" }) @*<span class="text-danger">*</span>*@
+											@Html.EditorFor(m => m.members[0].zip, "{0:#####}", new { htmlAttributes = new { @class = "form-control", @readonly = true } })
+											@Html.ValidationMessageFor(m => m.members[0].zip, "", new { @class = "text-danger" })
+										</div>
+									</div>
+								</div><!-- /.row -->
+
+
+								<div class="form-group">
+									@Html.LabelFor(m => m.members[0].country, "Home Country", new { @class = "control-label" }) @*<span class="text-danger">*</span>*@
+									@Html.EditorFor(m => m.members[0].country, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+								</div>
+
+							</fieldset>
+
+						</div><!-- /.widget-block -->
+
+						<div class="widget-footer  form-submit">
+							<button type="button" class="btn  btn-default  btn-prev"><i class="fa  fa-caret-left"></i> Previous</button>
+
+							@if (Model.renewalEnrollment.newPrice < 0)
+							{
+							<button type="submit" class="btn  btn-primary  btn-next" disabled>Continue <i class="fa  fa-caret-right"></i></button>
+							}
+							else
+							{
+							<button type="submit" class="btn  btn-primary  btn-next">Continue <i class="fa  fa-caret-right"></i></button>
+							}
+						</div>
+
+					</div><!-- /.widget -->
+				</div><!-- /.col -->
+
+
+				<div class="col-sm-3">
+					@Html.Partial("_SideLogos")
+				</div><!-- /.col -->
+
+			</div><!-- /.row -->}
+	</div><!-- /.container -->
+</section>
+
+
+@section Scripts {
+	@Scripts.Render("~/bundles/jqueryval")
+	<script src="/scripts/main.js"></script>
+	<script>
+		//AddressByZip('[name="[0].zip"]', '[name="[0].city"]', '[name="[0].state"]');
+	</script>
+}
+
+
+@section Modals {
+	<div class="modal  fade" tabindex="-1" role="dialog" id="ageband" data-backdrop="static" data-keyboard="false">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					@*<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>*@
+					<h4 class="modal-title"></h4>
+				</div>
+				<div class="modal-body">
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn  btn-success  hidden" data-dismiss="modal">Accept</button>
+					<button type="button" class="btn  btn-default" id="cancelAgeBand">Cancel</button>
+					<button type="button" class="btn  btn-primary" id="updateAgeBand">Update Quote</button>
+				</div>
+			</div><!-- /.modal-content -->
+		</div><!-- /.modal-dialog -->
+	</div><!-- /.modal -->
+}

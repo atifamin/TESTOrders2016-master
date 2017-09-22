@@ -1,0 +1,56 @@
+﻿@model OrderForm2016.Models.xlHead
+
+@{
+    ViewResult vr = (ViewResult)ViewData["partial"];
+    SelectList planList = (SelectList)vr.ViewData["medical_limit"];
+    SelectList dedList = (SelectList)vr.ViewData["deductible"];
+    SelectList addList = (SelectList)vr.ViewData["ad_d"];
+    SelectList sportsList = (SelectList)vr.ViewData["sports"];
+}
+
+<fieldset>
+	<h3 class="widget-title"><strong>Trip Cancellation</strong> Options</h3>
+	<div class="row">
+		<div class="col-sm-6">
+			<div class="form-group">
+				@Html.LabelFor(m => m.trip_amount, "Trip Amount", new { @class = "control-label" })
+				<div class="input-group">
+					<span class="input-group-addon">$</span>
+					@Html.EditorFor(m => m.trip_amount, new { htmlAttributes = new { @class = "form-control" } })
+					<span class="input-group-addon">.00</span>
+				</div>
+				@Html.ValidationMessageFor(m => m.trip_amount, "", new { @class = "text-danger" })
+			</div>
+		</div>
+		<div class="col-sm-6">
+			<div class="form-group">
+				@Html.LabelFor(m => m.trip_purchase_date, "Trip Purchase Date", new { @class = "control-label" })
+				<div class="input-group date" id="purchaseDate">
+					@Html.TextBox(Html.NameFor(m => m.trip_purchase_date).ToString(), "", new { @class = "form-control", placeholder = "mm/dd/yyyy" })
+					<div class="input-group-addon"><i class="fa fa-calendar"></i></div>
+				</div>
+				@Html.ValidationMessageFor(m => m.trip_purchase_date, "", new { @class = "text-danger" })
+			</div>
+		</div>
+	</div><!-- /.row -->
+
+	<hr />
+
+	<div class="row">
+		<div class="col-md-5">
+			<div class="form-group">
+				@Html.LabelFor(m => m.med_limit, "Medical Benefit Limit", new { @class = "control-label" })
+                @Html.DropDownListFor(m => m.med_limit, planList, new { @class = "form-control" })
+				@Html.ValidationMessageFor(m => m.med_limit, "", new { @class = "text-danger" })
+			</div>
+		</div>
+		<div class="col-md-7">
+			<div class="form-group">
+				@Html.LabelFor(m => m.ad_d, "Accidental Death and Dismemberment Upgrade Option", new { @class = "control-label" })
+				@Html.EditorFor(m => m.ad_d, new { htmlAttributes = new { @class = "form-control" } })
+				@*@Html.DropDownListFor(m => m.ad_d, (SelectList)ViewBag.ad_d, new { @class = "form-control" })*@
+				@Html.ValidationMessageFor(m => m.ad_d, "", new { @class = "text-danger" })
+			</div>
+		</div>
+	</div><!-- /.row -->
+</fieldset>

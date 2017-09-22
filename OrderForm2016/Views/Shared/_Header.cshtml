@@ -1,0 +1,50 @@
+﻿<header id="page-header">
+
+	<div class="header-top">
+		<div class="container">
+			<div class="top-contact  pull-left">
+				<i class="fa  fa-envelope color"></i> <a href="mailto:info@trawickinternational.com">info@trawickinternational.com</a>
+				<i class="fa  fa-phone color"></i> 888-301-9289
+				<i class="fa  fa-heartbeat color"></i> <a href="https://www.trawickinternational.com/resources/healthcare-provider-search">Find a Healthcare Provider</a>
+			</div>
+			<div class="top-social  pull-right">
+				<div class="brand-bg  text-right">
+					<a href="https://www.facebook.com/pages/Trawick-International-Travel-Insurance/125983830777040" class="facebook external" target="_blank"><i class="fa fa-facebook square-2 rounded-1"></i></a>
+					<a href="https://twitter.com/TrawickIntl" class="twitter external" target="_blank"><i class="fa fa-twitter square-2 rounded-1"></i></a>
+					<a href="https://plus.google.com/u/0/b/106173933592983959516/+Trawickinternationals" class="google-plus external" target="_blank"><i class="fa fa-google-plus square-2 rounded-1"></i></a>
+					<a href="http://www.linkedin.com/company/trawick-international" class="linkedin external" target="_blank"><i class="fa fa-linkedin square-2 rounded-1"></i></a>
+				</div>
+			</div>
+		</div><!-- /.container -->
+	</div><!-- /.header-top -->
+
+	<nav class="navbar  navbar-static-top">
+		<div class="container">
+			<div class="navbar-header">
+				<a class="navbar-brand  img-logo" href="https://www.trawickinternational.com/">
+					<img src="~/Content/images/trawick-logo.svg" width="150" alt="Trawick International">
+				</a>
+				@*<button type="button" class="navbar-toggle  collapsed" data-toggle="collapse" data-target="#nav-primary" aria-expanded="false">
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="sr-only">Toggle navigation</span>
+				</button>*@
+			</div><!-- /.navbar-header -->
+
+			<div class="collapse  navbar-collapse" id="nav-primary">
+
+				@*@{ Html.RenderAction("SiteNavigation", "Home", new { remote = false }); }*@
+
+				<form class="navbar-form  navbar-left  hidden" role="search">
+					<div class="form-group">
+						<input name="searchTerms" type="text" class="form-control" placeholder="Search for...">
+					</div>
+					<button type="button" id="searchBtn" class="btn  btn-default">Search</button>
+				</form>
+
+			</div><!-- /.navbar-collapse -->
+		</div><!-- /.container -->
+	</nav><!-- /.navbar -->
+
+</header><!-- /#page-header -->

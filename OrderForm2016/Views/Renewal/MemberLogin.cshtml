@@ -1,0 +1,124 @@
+﻿@model OrderForm2016.Models.RenewMemberLogin
+
+@{
+	ViewBag.Title = "Member Renewal Login";
+}
+
+<section class="page-title">
+	<div class="container">
+		<h2>Member Renewal Login</h2>
+	</div>
+</section>
+
+
+
+<section>
+	<div class="container">
+		@using (Html.BeginForm("ProcessMemberLogin", "Renewal"))
+		{
+		@Html.AntiForgeryToken()
+			@Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+			<div class="row">
+				<div class="col-sm-8">
+
+					<div class="widget">
+						<div class="widget-block">
+
+							<fieldset>
+
+								<div class="form-group">
+									<div class="row form-inline">
+										<div class="col-md-4">
+											<div class="form-control-static">
+												Login with:
+											</div>
+											<div class="btn-group btn-group-sm pull-right" data-toggle="buttons">
+												<label class="btn btn-primary active" data-toggle="tab" data-target="#user"><input type="radio" class="hidden">User Id</label>
+												<label class="btn btn-primary" data-toggle="tab" data-target="#name"><input type="radio" class="hidden">Name</label>
+											</div>
+										</div>
+										<div class="col-md-8">
+											@*<hr />*@
+										</div>
+									</div>
+								</div>
+
+								<div class="row">
+
+									<div class="col-md-7">
+										<div class="tab-content">
+											<div id="user" class="tab-pane fade in active">
+												<div class="form-group">
+													@Html.LabelFor(m => m.useridOrEmail, "Insurance ID OR Email Address", htmlAttributes: new { @class = "control-label" })
+													@Html.EditorFor(m => m.useridOrEmail, new { htmlAttributes = new { @class = "form-control" } })
+													@Html.ValidationMessageFor(m => m.useridOrEmail, "", new { @class = "text-danger" })
+												</div>
+
+											</div>
+											<div id="name" class="tab-pane fade">
+												<div class="row">
+													<div class="col-md-6">
+														<div class="form-group">
+															@Html.LabelFor(m => m.firstName, "First Name", htmlAttributes: new { @class = "control-label" })
+															@Html.EditorFor(m => m.firstName, new { htmlAttributes = new { @class = "form-control" } })
+															@Html.ValidationMessageFor(m => m.firstName, "", new { @class = "text-danger" })
+														</div>
+													</div>
+													<div class="col-md-6">
+														<div class="form-group">
+															@Html.LabelFor(m => m.lastName, "Last Name", htmlAttributes: new { @class = "control-label" })
+															@Html.EditorFor(m => m.lastName, new { htmlAttributes = new { @class = "form-control" } })
+															@Html.ValidationMessageFor(m => m.lastName, "", new { @class = "text-danger" })
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+
+									<div class="col-md-1  text-center">
+										@*<label class="control-label">&nbsp;</label>
+											<div class="form-control-static">
+													<i class="fa fa-ellipsis-v" aria-hidden="true"></i>
+											</div>*@
+									</div>
+
+									<div class="col-md-4">
+										<div class="form-group">
+											@Html.LabelFor(m => m.DOB, "Member DOB", htmlAttributes: new { @class = "control-label" })
+											<div class="input-group  date">
+												@*@Html.TextBoxFor(m => m.DOB, "{0:MM/dd/yyyy}", new { @class = "form-control  dateUS", placeholder = "mm/dd/yyyy", data_provide = "datepicker", @required = "required" })*@
+												@Html.TextBox(Html.NameFor(m => m.DOB).ToString(), "", new { @class = "form-control  dateUS", placeholder = "mm/dd/yyyy", data_provide = "datepicker", @required = "required" })
+												<div class="input-group-addon  input-group-calendar"><i class="fa  fa-calendar"></i></div>
+											</div>
+											@Html.ValidationMessageFor(m => m.DOB, "", new { @class = "text-danger" })
+										</div>
+									</div>
+
+								</div><!-- /.row -->
+							</fieldset>
+
+						</div><!-- /.widget-block -->
+
+						<div class="widget-footer  form-submit">
+							@*<button type="button" class="btn  btn-default  btn-prev"><i class="fa  fa-caret-left"></i> Previous</button>*@
+							<button type="submit" class="btn  btn-primary  btn-next">Login <i class="fa  fa-caret-right"></i></button>
+						</div>
+					</div><!-- /.widget -->
+
+				</div><!-- /.col -->
+
+				<div class="col-sm-4">
+					@Html.Partial("_SideLogos")
+				</div>
+
+			</div><!-- /.row -->}
+	</div>
+</section>
+
+
+@section Scripts {
+	@*@Scripts.Render("~/bundles/jqueryval")*@
+	<script src="/scripts/main.js"></script>
+}

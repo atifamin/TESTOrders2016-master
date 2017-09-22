@@ -1,0 +1,18 @@
+﻿@model OrderForm2016.Models.Error
+
+@{
+	ViewBag.Title = "Error";
+}
+
+<div class="full-page-photo" style="background-image: url(/content/images/404.jpg);">
+	<div class="container">
+		<section class="call-to-action  middle">
+			<div class="header">Error</div>
+			<h1>We're sorry, we had an error.</h1>
+			@if (Model != null)
+			{
+			<h2>@Model.ErrorMessage</h2>
+			}
+		</section>
+	</div>
+</div>

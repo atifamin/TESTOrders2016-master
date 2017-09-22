@@ -1,0 +1,55 @@
+﻿@model OrderForm2016.Models.BaseForm
+@{
+    ViewBag.Title = "Missionary Options";
+}
+
+@Html.HiddenFor(m => m.missionaryOptions.base_form_id)
+
+
+@*<div class="form-group">
+		@Html.LabelFor(model => model.missionaryOptions.cancel_any_reason, htmlAttributes: new { @class = "control-label col-md-2" })
+		<div class="col-md-10">
+			<div class="checkbox">
+				@Html.EditorFor(model => model.missionaryOptions.cancel_any_reason)
+				@Html.ValidationMessageFor(model => model.missionaryOptions.cancel_any_reason, "", new { @class = "text-danger" })
+			</div>
+		</div>
+	</div>
+
+	<div class="form-group">
+		@Html.LabelFor(model => model.missionaryOptions.cancel_curtail, htmlAttributes: new { @class = "control-label col-md-2" })
+		<div class="col-md-10">
+			<div class="checkbox">
+				@Html.EditorFor(model => model.missionaryOptions.cancel_curtail)
+				@Html.ValidationMessageFor(model => model.missionaryOptions.cancel_curtail, "", new { @class = "text-danger" })
+			</div>
+		</div>
+	</div>*@
+
+
+@*<div class="form-group">
+	<label class="control-label">Select Plan</label>
+	<select name="plan" class="form-control" aria-invalid="false">
+		<option value="1050" selected>Missionary Plan: Policy Max $150,000</option>
+	</select>
+</div>
+
+<div class="form-group">
+	<div class="checkbox">
+		<label class="faux-label">
+			@Html.EditorFor(m => m.missionaryOptions.cancel_any_reason)
+			<span>@ViewData["cancel_for_any_reasonLabel"].ToString()</span>
+		</label>
+	</div>
+	@Html.ValidationMessageFor(m => m.missionaryOptions.cancel_any_reason, "", new { @class = "text-danger" })
+</div>
+
+<div class="form-group">
+	<div class="checkbox">
+		<label class="faux-label">
+			@Html.EditorFor(m => m.missionaryOptions.cancel_curtail)
+			<span>@ViewData["cncLabel"].ToString()</span>
+		</label>
+	</div>
+	@Html.ValidationMessageFor(m => m.missionaryOptions.cancel_curtail, "", new { @class = "text-danger" })
+</div>*@

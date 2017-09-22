@@ -1,0 +1,244 @@
+﻿@model OrderForm2016.Models.BaseForm
+
+@{
+    ViewBag.Title = "Travel Options";
+
+
+    List<SelectListItem> YesNoList = new List<SelectListItem>();
+    YesNoList.Add(new SelectListItem
+    {
+        Text = "No",
+        Value = "No",
+        Selected = true
+    });
+    YesNoList.Add(new SelectListItem
+    {
+        Text = "Yes",
+        Value = "Yes",
+    });
+}
+
+<section class="page-title">
+    <div class="container">
+        <h2>@Model.ProductName  Travel Options</h2>
+        @if (@Model.ProductDesc != @Model.ProductName)
+        {
+            <h4>@Model.ProductDesc</h4>}
+    </div>
+</section>
+
+
+<section>
+    <div class="container">
+
+        @using (Html.BeginForm("GetQuotes", "Quotes", new { @id = string.Empty }, FormMethod.Post, new { @id = "optionsform" }))
+        {
+            @Html.AntiForgeryToken()
+            @Html.HiddenFor(m => m.base_form_id)
+            @Html.HiddenFor(m => m.ProductName)
+            @Html.HiddenFor(m => m.ProductDesc)
+            @Html.HiddenFor(m => m.country)
+            @Html.HiddenFor(m => m.destination)
+            @Html.HiddenFor(m => m.eff_date)
+            @Html.HiddenFor(m => m.term_date)
+            @Html.HiddenFor(m => m.product_id)
+            @Html.HiddenFor(m => m.TravelerAges)
+            @Html.HiddenFor(m => m.tripCanIncluded)
+            @Html.HiddenFor(m => m.tripCostPerPerson)
+            @Html.HiddenFor(m => m.tripPurchaseDate)
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+
+            <div class="row">
+                <div class="col-sm-8">
+
+                    <div class="widget">
+                        <div class="widget-header">
+                            For more information click the <i class="fa fa-info-circle text-primary"></i> icon.
+                        </div>
+
+                        <div class="widget-block">
+
+                            @if (Model.tripCanIncluded == true)
+                            {
+                                <div class="alert alert-info">
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                            <strong>3-in-1 Trip Cancellation Plan:</strong> Quoted
+                                        </div>
+                                        <span class="col-sm-6 text-right">
+                                            <strong>Total Trip Cost:</strong> @(String.Format("{0:c}", Model.tripCostPerPerson * Model.TravelerAges.Count))
+                                        </span>
+                                    </div>
+                                </div>
+                            }
+
+                            <fieldset>
+
+                                <div class="form-group">
+                                    @Html.LabelFor(m => m.travelOptions.plan, ViewData["planLabel"].ToString(), new { @class = "control-label" })
+                                    @Html.DropDownListFor(m => m.travelOptions.plan, (SelectList)ViewBag.plan, new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(m => m.travelOptions.plan, "", new { @class = "text-danger" })
+                                </div>
+
+                                <div class="form-group">
+                                    @Html.LabelFor(m => m.travelOptions.deductible, ViewData["deductibleLabel"].ToString(), new { @class = "control-label" })
+                                    @Html.DropDownListFor(m => m.travelOptions.deductible, (SelectList)ViewBag.deductible, new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(m => m.travelOptions.deductible, "", new { @class = "text-danger" })
+                                </div>
+
+                                <div class="form-group">
+                                    @{
+                                        string pattern = "(\\[.*\\])|(\".*\")|('.*')|(\\(.*\\))";
+                                        string ad_dLabel = ViewData["ad_dLabel"].ToString();
+                                        ad_dLabel = System.Text.RegularExpressions.Regex.Replace(ad_dLabel, pattern, "");
+                                    }
+                                    @Html.LabelFor(m => m.travelOptions.ad_d, ad_dLabel, new { @class = "control-label" })
+                                    @Html.DropDownListFor(m => m.travelOptions.ad_d, (SelectList)ViewBag.ad_d, new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(m => m.travelOptions.ad_d, "", new { @class = "text-danger" })
+                                </div>
+
+                            </fieldset>
+
+
+                            <fieldset>
+
+                                <div class="form-group">
+                                    @Html.LabelFor(m => m.travelOptions.sports, ViewData["sportsLabel"].ToString(), new { @class = "control-label" })
+                                    @Html.DropDownListFor(m => m.travelOptions.sports, (SelectList)ViewBag.sports, new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(m => m.travelOptions.sports, "", new { @class = "text-danger" })
+                                </div>
+
+                                <div class="list-group  small" id="selectClass">
+                                    <a href="#" data-value="yes" class="list-group-item"><strong>Class 1</strong> includes Tennis, Swimming, Cross Country, Track, Volleyball, Golf</a>
+                                    @if (Model.product_id == 63 || Model.product_id == 64)
+                                    {
+                                        <a href="#" data-value="class2" class="list-group-item"><strong>Class 2</strong> includes Ballet, Basketball, Cheerleading, Equestrian, Fencing, Field Hockey, Football(no Division 1), Gymnastics, Hockey, Karate, Lacrosse, Polo, Rowing, Rugby, Soccer</a>
+                                    }
+                                    else
+                                    {
+                                        <a href="#" data-value="class2" class="list-group-item"><strong>Class 2</strong> includes Archery, Ballet, Cheerleading</a>
+                                    }
+                                    <a href="#" data-value="class3" class="list-group-item"><strong>Class 3</strong> includes Basketball, Diving, Equestrian, Fencing, Field Hockey, Lacrosse, Karate, Polo</a>
+                                    <a href="#" data-value="class4" class="list-group-item"><strong>Class 4</strong> includes Football (no division 1), Gymnastics, Hockey, Rowing, Rugby, Soccer</a>
+                                    <a href="#" data-value="class5" class="list-group-item"><strong>Class 5</strong> includes Running with the Bulls</a>
+                                </div>
+
+                            </fieldset>
+
+
+                            <fieldset>
+                                <div class="row">
+                                    @{  string xsportsLabel = ViewData["extreme_sportsLabel"].ToString();
+                                        xsportsLabel = System.Text.RegularExpressions.Regex.Replace(xsportsLabel, pattern, "");
+
+                                        bool isCardio = (Model.product_id == 63 || Model.product_id == 64);
+                                        bool isInbound = CommonProcs.isInbound(Model.product_id);
+                                    }
+                                    @if (!isCardio)
+                                    {
+                                        //not avaiable for 63 64
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                @Html.LabelFor(m => m.travelOptions.extreme_sports, xsportsLabel, new { @class = "control-label" })
+                                                <a class="btn  btn-link" role="button" data-toggle="tab" href="#hazact"><i class="fa fa-info-circle"></i></a>
+                                                @Html.DropDownListFor(m => m.travelOptions.extreme_sports, @YesNoList, new { @class = "form-control" })
+                                                @Html.ValidationMessageFor(m => m.travelOptions.extreme_sports, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+                                    }
+                                    @if (isInbound)
+                                    {
+                                        //available only for 63 64
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                @Html.LabelFor(m => m.travelOptions.home_country, ViewData["home_countryLabel"].ToString(), new { @class = "control-label" })
+                                                <a class="btn  btn-link" role="button" data-toggle="tab" href="#follow"><i class="fa fa-info-circle"></i></a>
+                                                @Html.DropDownListFor(m => m.travelOptions.home_country, @YesNoList, new { @class = "form-control" })
+                                                @Html.ValidationMessageFor(m => m.travelOptions.home_country, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+                                    }
+                                </div>
+
+                                <hr />
+                                <div class="help-block">
+                                    <div class="tab-content  small">
+
+                                        <div class="tab-pane @(!isCardio ? "active" : "")" id="hazact">
+                                            <h5>Hazardous Activities</h5>
+                                            <p>Certain Activities are excluded under this coverage -see AD&D Exclusion 11 and Medical Exclusion 18 Coverage for some activities can be purchased by paying additional premium.</p>
+                                            <p>These activities are no longer excluded from Medical or AD&D coverage when you purchase the rider: Aviation (no piloting), Bobsleigh, BMX, Bungee Jumping, Canopying, Canyoning, Caving, High Diving, Hang Gliding, Heli-skiing, Hot Air Ballooning, Inline Skating, Jet Skiing, Kayaking, Motorcycling, Mountain Biking, Mountain Climbing (under 3500 meters and Classes I to IV), Paragliding, Parasailing, Parascending, Scuba Diving (except in Cyprus), Snowboarding, Snowmobiling, Snow Skiing, Spelunking, Surfing, Trekking, Water Skiing, Wind Surfing, Whitewater Rafting under class V, Zip Lining, Zorbing.</p>
+                                            <p>The following activities remain excluded even upon purchase of this coverage: Abseiling, BASE Jumping, Extreme Sports, Luge, Motocross, Moto-X, Mountaineering, or Mountain Climbing (exceeding 3500 meters or Class V difficulty on the Yosemite Decimal System), Piloting any Aircraft, Racing of any kind, Rock Climbing, Rodeo Activities, Rappelling, Scuba Diving in Cyprus, Ski Jumping, Skydiving, or Whitewater Rafting  exceeding Class V.</p>
+                                        </div>
+
+                                        <div class="tab-pane @(isCardio ? "active" : "")" id="follow">
+                                            <h5>Home Country/Follow Me Home</h5>
+                                            <p>Treatment in your Home Country is excluded on this plan.  You may purchase a limited amount of coverage for use in your Home Country. This benefit is limited to 60 days per 12 months of purchased coverage or pro rata thereof. (Example: 5 days per month of purchased coverage). You must purchase 30 days of coverage to add this benefit. Home Country Coverage cannot begin until you leave your Home Country.</p>
+                                            <p>In consideration of additional 10% premium paid, under the Exclusions section the following is deleted in its entirety – 35. expenses incurred in your Home Country; and the following are added under the Medical Expense Benefits: Follow Me Home Coverage - This plan shall pay for Covered Expenses incurred in your Home Country up to $5,000 for conditions first diagnosed outside Your Home Country and treated during your Policy Period. The chosen deductible applies and Coinsurance: 100% up to the $5,000 maximum.  This Benefit does not apply when an Emergency Evacuation has occurred.</p>
+                                            <p>Home Country Coverage - for Injury or Sickness that occur during an Incidental Trip to your Home Country during your Policy Period. Maximum benefit is reduced to $50,000. The chosen deductible applies and Coinsurance: 100% up to the $50,000 maximum.</p>
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                            </fieldset>
+                        </div><!-- /.widget-block -->
+
+
+                        <div class="widget-footer  form-submit">
+                            <button type="submit" name="direction" value="prev" class="btn  btn-default  btn-prev"><i class="fa  fa-caret-left"></i> Previous</button>
+                            @if (!string.IsNullOrEmpty(ViewBag.brochurePath))
+                            {
+                                <a href="@ViewBag.brochurePath" class="btn  btn-default  btn-details" target="_blank" role="button"><span class="hidden-xs">View Policy </span>Details</a>
+                            }
+                            <button type="submit" name="direction" value="next" class="btn  btn-primary  btn-next">Continue <i class="fa  fa-caret-right"></i></button>
+                        </div>
+
+                    </div><!-- /.widget -->
+                </div><!-- /.col -->
+
+
+                <div class="col-sm-4">
+                    @Html.Partial("_SideLogos")
+                </div><!-- /.col -->
+
+
+            </div><!-- /.row -->}
+    </div><!-- /.container -->
+</section>
+
+
+@section Styles {
+
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script src="/scripts/main.js"></script>
+    <script>
+        var sportsOptions = $('#travelOptions_sports');
+        var selectClass = $('#selectClass');
+
+        selectClass.find('a').on('click', function (e) {
+            var a = $(this).addClass('active');
+            a.siblings().removeClass('active');
+            sportsOptions.val(a.data('value'));
+            e.preventDefault();
+        });
+
+        sportsOptions.on('change', function (e) {
+            selectClass.find('a').removeClass('active');
+            selectClass.find('a[data-value="' + this.value + '"]').addClass('active');
+        });
+
+
+        var optionVals = sportsOptions.find('option').map(function () { return this.value }).get();
+
+        selectClass.find('a').each(function (e) {
+            if (optionVals.indexOf(this.dataset.value) < 0) {
+                $(this).addClass('hidden');
+            }
+        });
+    </script>
+}

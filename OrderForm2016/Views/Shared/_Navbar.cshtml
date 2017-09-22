@@ -1,0 +1,25 @@
+﻿@model OrderForm2016.Models.Navigation
+
+<ul class="nav  navbar-nav">
+	@foreach (var page in Model.Children)
+	{
+		var hasChild = page.Children != null && page.Children.Count > 0;
+		<li class="@(hasChild ? "dropdown" : null)">
+			@if (hasChild)
+			{
+			<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button">@page.Name <span class="caret"></span></a>
+			<ul class="dropdown-menu">
+				@foreach (var child in page.Children)
+				{
+				<li><a href="@child.Url">@child.Name</a></li>
+				}
+			</ul>
+			}
+			else
+			{
+			<a href="@page.Url">@page.Name</a>
+			}
+		</li>
+	}
+</ul>
+

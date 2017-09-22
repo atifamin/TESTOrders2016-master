@@ -1,0 +1,31 @@
+﻿@model OrderForm2016.Models.QuoteFormResults
+
+@{
+	bool showButton = false;
+
+}
+@using (Html.BeginForm("BaseFormFromQuoteID", "Home", new { @qid = Model.buyLink.baseFormID }, FormMethod.Post, new { id = "travOptions" }))
+{
+	@Html.HiddenFor(m => m.QuoteFormResultsID)
+    @Html.HiddenFor(m => m.deductible,new { @class = "form-control select-ded" })
+
+
+	<div class="well well-sm">
+		<div class="row" id="adjustments">
+			<div class="col-sm-6 col-lg-4">
+				<div class="form-group">
+					@Html.LabelFor(m => m.plan, "Medical Maximum", new { @class = "control-label" })
+					@Html.DropDownList("plan", Model.medLimitList, new { @class = "form-control select-max" })
+					@*@Html.DropDownListFor(m => m.medical_limit, Model.medLimitList, new { @class = "form-control" })*@
+				</div>
+			</div>
+			<div class="col-sm-6 col-lg-4">
+				<div class="form-group">
+					@Html.LabelFor(m => m.ad_d, "AD&D Upgrade Option", new { @class = "control-label" })
+					@Html.DropDownList("ad_d", Model.ADDList, new { @class = "form-control select-add" })
+					@*@Html.DropDownListFor(m => m.ad_d, Model.ADDList, new { @class = "form-control" })*@
+				</div>
+			</div>
+		</div>
+	</div>
+}

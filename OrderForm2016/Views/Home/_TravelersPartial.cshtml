@@ -1,0 +1,79 @@
+﻿@model OrderForm2016.Models.BaseForm
+
+<h3 class="widget-title"><strong>Traveler</strong> Information</h3>
+@{
+	//bool single = Model.TravelerAges.Count == 1;
+	//string classes = single ? "col-xs-3  col-sm-2" : "group  col-xs-3";
+}
+
+
+
+@if (Model.CCPartial != null)
+{
+	bool includeChildren = false;
+
+	if (Model.CCPartial.numberOfChildren > 0)
+	{
+		if (Model.CCPartial.childAges.First().childAge > 0)
+		{
+			includeChildren = true;
+		}
+	}
+
+	<div class="help-block  small">(Enter age at the time of travel)</div>
+	<div class="row">
+		<div class="col-xs-6  col-sm-5  col-lg-6">
+			<div class="form-group">
+				@Html.LabelFor(m => m.TravelerAges, "Student Age", new { @class = "control-label" })
+				<div class="age-fields">
+					@for (var i = 0; i < Model.TravelerAges.Count; i++)
+					{
+						var required = (i == 0) ? "  required" : String.Empty;
+						<div class="group">
+							@Html.EditorFor(m => m.TravelerAges[i].travelerAge, new { htmlAttributes = new { @class = "form-control", min = "0", max = "65", size = "3" } })
+						</div>
+					}
+				</div>
+			</div>
+		</div>
+		<div class="col-xs-6  col-sm-7  col-md-6  col-md-offset-1  col-lg-5">
+			<div class="row">
+				<div class="col-sm-6">
+					<div class="checkbox">
+						<label class="faux-label">
+							@Html.EditorFor(m => m.CCPartial.includeSpouse, new { htmlAttributes = new { data_toggle = "checkbox", data_target = "#spouse-block" } })
+							<span>Include Spouse</span>
+						</label>
+					</div>
+				</div>
+				<div class="col-sm-6">
+					<div class="checkbox">
+						<label class="faux-label">
+							<input id="includeChildren" name="includeChildren" data-toggle="checkbox" data-target="#children-block" type="checkbox" @(includeChildren ? "checked" : "")>
+							<span>Include Children</span>
+						</label>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+}
+else
+{
+    int pId = Model.product_id;
+    int maxAge = CommonProcs.GetMaxAge(pId);
+
+	<div class="form-group">
+		@Html.LabelFor(m => m.TravelerAges, "Traveler Ages", new { @class = "control-label" })
+		<div class="help-block  inline  small">(at the time of travel - press Tab to add more travelers)</div>
+		<div id="travelers" class="row  age-fields">
+			@for (var i = 0; i < Model.TravelerAges.Count; i++)
+				{
+					var required = (i == 0) ? "  required" : String.Empty;
+					<div class="traveler  col-xs-3">
+						@Html.EditorFor(m => m.TravelerAges[i].travelerAge, new { htmlAttributes = new { @class = "form-control", min = "0", max = @maxAge.ToString(), size = "3" } })
+					</div>
+				}
+		</div>
+	</div>
+}

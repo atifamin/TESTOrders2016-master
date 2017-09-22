@@ -1,0 +1,43 @@
+﻿@model OrderForm2016.Models.BaseForm
+
+<div class="row">
+	<div class="col-sm-4">
+		<div class="form-group">
+			@Html.Label("Trip Purchase Date", new { @class = "control-label" })
+			<div class="input-group  date  date-prior">
+				<div class="input-group-addon  input-group-calendar"><i class="fa  fa-calendar"></i></div>
+				@Html.TextBox(Html.NameFor(m => m.tripPurchaseDate).ToString(), "", new { @class = "form-control", placeholder = "mm/dd/yyyy", required = "required" })
+			</div>
+			@Html.ValidationMessageFor(m => m.tripPurchaseDate, "", new { @class = "text-danger" })
+		</div>
+	</div>
+	<div class="col-sm-4">
+		<div class="form-group">
+			@Html.Label("Total Trip Cost", new { @class = "control-label" })
+			<div class="input-group">
+				<span class="input-group-addon">$</span>
+				@Html.TextBox(Html.NameFor(m => m.tripCostPerPerson).ToString(), "", new { @class = "form-control no-spinners", type = "number", placeholder = "0", required = "required", min = "0", max = "10000" })
+			</div>
+			@Html.ValidationMessageFor(m => m.tripCostPerPerson, "", new { @class = "text-danger" })
+		</div>
+	</div>
+	<div class="col-sm-4">
+		<div class="form-group">
+			<label class="control-label">Trip Cancellation Cost</label>
+			<div class="input-group">
+				<span class="input-group-addon">$</span>
+				<input class="form-control" id="tripCanCost" type="text" value="" readonly>
+			</div>
+		</div>
+	</div>
+</div><!-- /.row -->
+<hr />
+<small class="help-block">
+	These plans are underwritten by Starr Indemnity &amp; Liability Company, a Texas domiciled corporation (NAIC Company Code: 38318: TX license number: 93542) with its principal place of business at 399 Park Avenue, 8th Floor, New York, NY 10022.
+	Starr Indemnity &amp; Liability Company is currently authorized to do business in all states, the District of Columbia and Puerto Rico. This website contains only a brief description of the coverages available under each plan and not all
+	coverages may be available in all states. These plans provide insurance coverage during the covered trip. You may have coverage from other sources that provide you with similar benefits but may be subject to different restrictions depending
+	upon your other coverage. You may wish to compare the terms of these policies with your existing life, health, home, and automobile insurance policies. If you have any questions about your current coverage, call your insurer or insurance
+	agent or broker. Plans are administered by Starr Assist, LLC, a Delaware limited liability company (FL. Seller of Travel Reg. No.: L093030; www.starrassist.com) with its principal place of business at 399 Park Avenue, 9th Floor, New York,
+	NY 10022. Starr Assist, LLC is doing business as Starr Assist Insurance Agency, LLC in California (CA license number: 0F95103). If you have any questions about the plans offered on this website you may contact Starr Assist, LLC at the
+	following: Toll-free customer hotline: (866) 477-6741 or email at: info@starrassist.com.
+</small>

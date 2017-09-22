@@ -1,0 +1,68 @@
+﻿@model OrderForm2016.Models.BaseForm
+
+<div class="@(Model.CCPartial.includeSpouse ? "" : "collapse")" id="spouse-block">
+	<hr />
+	<div class="row">
+		<div class="col-sm-3">
+			<div class="form-group">
+				@Html.LabelFor(m => m.CCPartial.spouseAge, "Spouse Age", new { @class = "control-label" })
+				@Html.EditorFor(m => m.CCPartial.spouseAge, new { htmlAttributes = new { @class = "form-control", min = "0", max = "99", size = "3" } })
+				@Html.ValidationMessageFor(m => m.CCPartial.spouseAge, "", new { @class = "text-danger" })
+			</div>
+		</div>
+		<div class="col-sm-8  col-sm-offset-1">
+			<div class="form-group  faux-label">
+				<div class="help-block  small  form-control-static">(at the time of travel)</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+@{
+	bool includeChildren = false;
+
+	if (Model.CCPartial.numberOfChildren > 0)
+	{
+		if (Model.CCPartial.childAges.First().childAge > 0)
+		{
+			includeChildren = true;
+		}
+	}
+}
+<div class="@(includeChildren ? "" : "collapse")" id="children-block">
+	<hr />
+	<div class="help-block  small">How many children need to be included in this coverage?</div>
+	<div class="row">
+		<div class="col-sm-3">
+			<div class="form-group">
+				@Html.LabelFor(m => m.CCPartial.numberOfChildren, "Children", new { @class = "control-label" })
+				@Html.EditorFor(m => m.CCPartial.numberOfChildren, new { htmlAttributes = new { @class = "form-control", min = "0", size = "3", data_target = "#children" } })
+				@Html.ValidationMessageFor(m => m.CCPartial.numberOfChildren, "", new { @class = "text-danger" })
+			</div>
+		</div>
+		<div class="col-sm-8  col-sm-offset-1">
+			<div class="form-group">
+				@Html.LabelFor(m => m.CCPartial.numberOfChildren, "Individual Ages", new { @class = "control-label" })
+				<div id="children" class="row  age-fields" data-counter="#@Html.IdFor(m => m.CCPartial.numberOfChildren).ToString()">
+					@for (var i = 0; i < Model.CCPartial.childAges.Count; i++)
+					{
+					var required = (i == 0) ? "  required" : String.Empty;
+					<div class="traveler  col-xs-3">
+						@Html.EditorFor(m => m.CCPartial.childAges[i].childAge, new { htmlAttributes = new { @class = "form-control", min = "0", max = "17", size = "3" } })
+						@*@Html.ValidationMessageFor(m => m.CCPartial.childAges[i].childAge, "", new { @class = "text-danger" })*@
+					</div>
+					}
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+
+
+@section Scripts {
+	<script>
+		//sections don't work in partials
+	</script>
+}

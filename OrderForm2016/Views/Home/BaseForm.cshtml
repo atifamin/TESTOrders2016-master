@@ -1,0 +1,682 @@
+﻿@model OrderForm2016.Models.BaseForm
+
+@{
+	ViewBag.Title = "Trip Information";
+
+	string colCss = Model.product_id == 43 ? "col-md-4" : "col-md-6";
+	List<int> inbound = new List<int>() { 14, 16, 17, 28, 63, 38, 39, 64, 31, 37 };
+	bool isInbound = false;
+	if (inbound.Contains(Model.product_id))
+	{
+		isInbound = true;
+	}
+}
+
+<section class="page-title">
+	<div class="container">
+		<h2>@Model.ProductName</h2>
+		@if (Model.ProductDesc != Model.ProductName)
+		{
+		<h4>@Model.ProductDesc</h4>}
+	</div>
+</section>
+
+
+<section>
+	<div class="container">
+
+		@using (Html.BeginForm("OptionsForm", "OptionsForm", new { @id = string.Empty }, FormMethod.Post, new { @id = "baseform" }))
+		{
+		@Html.AntiForgeryToken()
+			@Html.HiddenFor(m => m.product_id)
+			@Html.HiddenFor(m => m.basePartialName)
+			@Html.HiddenFor(m => m.purchDate)
+			@Html.HiddenFor(m => m.ProductName)
+			@Html.HiddenFor(m => m.ProductDesc)
+			@Html.HiddenFor(m => m.agent_id)
+            @Html.HiddenFor(m => m.refKey)
+
+			@Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+
+				<div class="row">
+					<div class="col-sm-8">
+
+						<div class="widget hidden">
+							<div class="widget-block">
+								<div class="input-group">
+									<input type="text" class="form-control" id="quoteId" placeholder="Quote Id (e.g. 99999)">
+									<span class="input-group-btn">
+										<button class="btn btn-primary" id="retrieveQuote" type="button">Retrieve Existing Quote</button>
+									</span>
+								</div>
+							</div>
+						</div>
+
+
+						<div class="widget">
+							<div class="widget-block">
+
+								<fieldset>
+									<h3 class="widget-title"><strong>Trip</strong> Information</h3>
+
+									@if (ViewBag.country != null && ViewBag.destination != null)
+									{
+										string co_label = "Traveling From";
+										string dest_label = "Traveling To";
+
+										SelectList homeList = ViewBag.country;
+										SelectList destList = ViewBag.destination;
+
+										<div class="row">
+											<div class="col-md-6">
+												<div class="form-group">
+													@Html.LabelFor(m => m.country, "Traveling From", new { @class = "control-label" })
+													@if (homeList.Count() > 1)
+													{
+														if (Model.country != null)
+														{
+														@Html.DropDownList("country", null, "Select Country", new { @class = "form-control" })
+														}
+														else
+														{
+														@Html.DropDownListFor(m => m.country, homeList, "Select Country", new { @class = "form-control" })
+														}
+													}
+													else
+													{
+													@Html.DropDownListFor(m => m.country, homeList, new { @class = "form-control", @readonly = "readonly" })
+													}
+													@Html.ValidationMessageFor(m => m.country, "", new { @class = "text-danger" })
+												</div>
+
+											</div>
+
+											<div class="col-md-6">
+												<div class="form-group">
+													@Html.LabelFor(m => m.destination, "Traveling To", new { @class = "control-label" })
+
+													@if (destList.Count() > 1)
+													{
+														if (Model.destination != null)
+														{
+														@Html.DropDownList("destination", null, "Select Destination", new { @class = "form-control" })
+														}
+														else
+														{
+														@Html.DropDownListFor(m => m.destination, destList, "Select Destination", new { @class = "form-control" })
+														}
+													}
+													else
+													{
+													@Html.DropDownListFor(m => m.destination, destList, new { @class = "form-control", @readonly = "readonly" })
+													}
+													@Html.ValidationMessageFor(m => m.destination, "", new { @class = "text-danger" })
+												</div>
+											</div>
+										</div>
+									}
+
+
+									@if (Model.product_id == 43)
+									{
+										SelectList DestState = ViewBag.DestState;
+
+										<div class="row collapse fade" id="stateSelect">
+											<div class="col-md-6 col-md-offset-6">
+												<div class="form-group">
+													@Html.LabelFor(m => m.DestState, "Destination State", new { @class = "control-label" })
+													@Html.DropDownListFor(m => m.DestState, DestState, "Select Destination State", new { @class = "form-control" })
+													@Html.ValidationMessageFor(m => m.DestState, "", new { @class = "text-danger" })
+												</div>
+											</div>
+										</div>
+									}
+
+
+									<div class="row">
+
+										@if (Model.product_id == 43)
+										{
+										<div class="col-md-4">
+											<div class="form-group">
+												@Html.LabelFor(m => m.term_date, "Trip Deposit Date", new { @class = "control-label" })
+												<div class="input-group date" id="purchaseDate">
+
+													@if (Model.tripPurchaseDate != default(DateTime))
+													{
+													@Html.TextBoxFor(m => m.tripPurchaseDate, "{0:d}", new { @class = "form-control", placeholder = "mm/dd/yyyy" })
+													}
+													else
+													{
+													@Html.TextBox(Html.NameFor(m => m.tripPurchaseDate).ToString(), "", new { @class = "form-control", placeholder = "mm/dd/yyyy", @required = true })
+													}
+													<div class="input-group-addon input-group-calendar"><i class="fa fa-calendar"></i></div>
+												</div>
+												@Html.ValidationMessageFor(m => m.tripPurchaseDate, "", new { @class = "text-danger" })
+											</div>
+										</div>
+										}
+
+										<div class="@colCss">
+											<div class="form-group">
+												@Html.LabelFor(m => m.eff_date, ViewData["eff_dateLabel"].ToString(), new { @class = "control-label" })
+												<div class="input-group date" id="effDate" data-daterange="start">
+
+													@if (Model.eff_date != default(DateTime))
+													{
+													@Html.TextBoxFor(m => m.eff_date, "{0:d}", new { @class = "form-control", placeholder = "mm/dd/yyyy" })
+													}
+													else
+													{
+													@Html.TextBox(Html.NameFor(m => m.eff_date).ToString(), "", new { @class = "form-control", placeholder = "mm/dd/yyyy" })
+													}
+													<div class="input-group-addon input-group-calendar"><i class="fa fa-calendar"></i></div>
+												</div>
+												@Html.ValidationMessageFor(m => m.eff_date, "", new { @class = "text-danger" })
+											</div>
+										</div>
+
+
+										@if (Model.product_id != 22 && Model.product_id != 37)
+										{
+										<div class="@colCss">
+											<div class="form-group">
+												@Html.LabelFor(m => m.term_date, ViewData["term_dateLabel"].ToString(), new { @class = "control-label" })
+												<div class="input-group date" id="termDate" data-daterange="end">
+
+													@if (Model.term_date != default(DateTime))
+													{
+													@Html.TextBoxFor(m => m.term_date, "{0:d}", new { @class = "form-control", placeholder = "mm/dd/yyyy" })
+													}
+													else
+													{
+													@Html.TextBox(Html.NameFor(m => m.term_date).ToString(), "", new { @class = "form-control", placeholder = "mm/dd/yyyy" })
+													}
+													<div class="input-group-addon input-group-calendar"><i class="fa fa-calendar"></i></div>
+												</div>
+												@Html.ValidationMessageFor(m => m.term_date, "", new { @class = "text-danger" })
+											</div>
+										</div>
+										}
+
+
+										else if (Model.product_id == 37 && Model.basePartialName == "RepatOptions")
+										{
+										<div class="col-md-6">
+											@{Html.RenderPartial("RepatOptions", Model);}
+										</div>
+												}
+									</div>
+
+									<div class="small help-block" id="help-message"></div>
+
+
+									@if (isInbound)
+									{
+									<div class="form-group">
+										<label class="control-label mr-3">Are you a US citizen?</label>
+										<label class="radio-inline">
+											<input type="radio" name="usPassport" id="usPassport1" value="false" checked> No
+										</label>
+										<label class="radio-inline">
+											<input type="radio" name="usPassport" id="usPassport2" value="true"> Yes
+										</label>
+									</div>
+									<div class="alert alert-danger px-3 py-2">
+										<div>
+											<strong>Note:</strong> If you are a citizen of multiple countries, and one of them is United States, you must answer yes to the question above.
+										</div>
+										<div class="mt-3" data-check-toggle="[name=usPassport]" data-check-value="true">
+											<strong>US Citizens are ineligible to purchase this coverage.</strong>
+										</div>
+									</div>
+									}
+
+								</fieldset>
+
+
+
+
+								<fieldset id="partials">
+									@{
+										bool bFormReturned = (Model.country != null && Model.destination != null && Model.eff_date != default(DateTime) && Model.term_date != default(DateTime));
+
+										if (Model.basePartialName == "_NWTravelers")
+										{
+											Html.RenderPartial("_NWTravelers");
+										}
+										else if (Model.basePartialName == "_saPartial")
+										{
+											Html.RenderPartial("_TravelersPartial", Model);
+											Html.RenderPartial("_saPartial", Model);
+										}
+										else if (Model.basePartialName == "_ccPartial")
+										{
+											Html.RenderPartial("_TravelersPartial", Model);
+											Html.RenderPartial("_ccPartial", Model);
+										}
+										else if (!Model.isOutbound || (Model.isOutbound && bFormReturned))
+										{
+											Html.RenderPartial("_TravelersPartial", Model);
+										}
+									}
+								</fieldset>
+
+
+								<fieldset id="tripCanOptions" class="hidden">
+									@if (Model.product_id == 55 || Model.isOutbound)
+									{
+										Html.RenderPartial("_STTripCan", Model);
+									}
+								</fieldset>
+
+							</div><!-- /.widget-block -->
+
+							<div class="widget-footer form-submit">
+								@if (!string.IsNullOrEmpty(ViewBag.brochurePath))
+								{
+								<a href="@ViewBag.brochurePath" class="btn  btn-default btn-details" target="_blank" role="button"><span class="hidden-xs">View Policy </span>Details</a>
+								}
+								<button type="submit" class="btn btn-primary btn-next">Continue <i class="fa fa-caret-right"></i></button>
+							</div>
+
+						</div><!-- /.widget -->
+					</div><!-- /.col -->
+
+					<div class="col-sm-4">
+						@Html.Partial("_SideLogos")
+					</div><!-- /.col -->
+
+				</div><!-- /.row -->}
+	</div><!-- /.container -->
+</section>
+
+
+@section Styles {
+
+}
+
+@section Scripts {
+	@Scripts.Render("~/bundles/jqueryval")
+	<script src="/scripts/Travelers.js"></script>
+	<script src="/scripts/toggles.js"></script>
+	<script src="/scripts/main.js"></script>
+
+	<script>
+		$('#retrieveQuote').on('click', function (e) {
+			var qid = $('#quoteId').val();
+			if (qid != '') {
+				var url = window.location.href;
+				url += (url.indexOf('?') > -1 ? '&' : '?') + 'qid=' + qid + '&isQuickQuote=true';
+				window.location.href = url;
+			}
+		});
+	</script>
+
+
+	@if (isInbound)
+	{
+	<script>
+        var isInbound = @isInbound.ToString().ToLower();
+
+
+        $('[type="submit"]').prop('disabled', !isInbound);
+		$(document).on('change', '[name="usPassport"]', function (e) {
+			$('[type="submit"]').prop('disabled', this.value == 'true');
+		});
+	</script>
+	}
+
+
+	<script>
+		document.write('<style>.noscript { display: none; }</style>');
+
+
+		//setIsInbound(isInbound);
+
+		//function setIsInbound(isTrue) {
+		//	console.log('setIsInbound');
+		//}
+
+		function getUrlVars() {
+			var vars = [], hash;
+			var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+			for(var i = 0; i < hashes.length; i++) {
+				hash = hashes[i].split('=');
+				vars.push(hash[0]);
+				vars[hash[0]] = hash[1];
+			}
+			return vars;
+		}
+
+
+		//if (getUrlVars()['product']) {
+		//	var product = getUrlVars()['product'];
+		//	console.log('product: ', product);
+
+		//	IfTrue('/Home/IsInbound', {productID: product}, setIsInbound)
+		//}
+
+
+		function IfTrue(url, params, callback) {
+			if (typeof params == 'function') {
+				callback = params;
+				params = null;
+			}
+			$.ajax({ method: 'GET', url: url, data: params })
+.done(function(response) {
+	if (response == true && callback) callback(response);
+})
+		}
+
+
+		function forceSelectReadonly() {
+			$(document).on('mousedown', 'select[readonly]', function(e){
+				e.preventDefault();
+				this.blur();
+				window.focus();
+			});
+		}
+
+
+		var TRIP_CAN_OFFERED = tripCanOffered();
+
+		var FORCE_PRIMARY_STATE = true;
+
+
+		function tripCanOffered() {
+			return isNationwide();
+		}
+
+
+		// Trip Cancellation currently not available for following states:
+		var unlicensed = @Html.Raw(Json.Encode(ViewBag.UnlicensedStates));
+
+		//["CA","IA","NY","OR","PR"]
+		//console.log(unLicensedStates.join(', '));
+		function unLicensedStateNames() {
+			var options = $('select.traveler-state:first option');
+			return options.map(function () {
+				if (!isLicensedState(this.value))
+					return $(this).text();
+			}).get();
+		}
+
+		function isLicensedState(value, strict) {
+			if (strict == true) {
+				return value ? $.inArray(value, unlicensed) < 0 : false;
+			}
+			return $.inArray(value, unlicensed) < 0;
+		}
+
+		function anySelectedUnLicensed() {
+			var selects = $('select.traveler-state');
+			var array = selects.map(function () {
+				if (this.value) return !isLicensedState(this.value);
+			}).get();
+			return $.inArray(true, array) > -1;
+		}
+
+		function allStatesLicensed() {
+			var selects = $('select.traveler-state');
+			var array = selects.map(function () {
+				return isLicensedState(this.value, true);
+			}).get();
+			return $.inArray(false, array) < 0;
+		}
+
+		@*function hasUnLicensedStates() {
+			var selects = $('select[name$=".travelerState"]');
+			var array = selects.map(function () {
+				return this.value ? $.inArray(this.value, unlicensed) > -1 : true;
+			}).get();
+			return $.inArray(true, array) > -1;
+		}*@
+
+
+		function checkAllStates() {
+			var allLicensed = allStatesLicensed();
+			var tripCanIncluded = $('#tripCanIncluded');
+
+			tripCanIncluded.prop('disabled', !allLicensed);
+			if (!allLicensed) tripCanIncluded.prop('checked', false).change();
+
+			if (this.localName == 'button') {
+				var added = $('[data-traveler]:last');
+				added.find('select').closest('.form-group').removeClass('has-success has-error has-warning');
+				added.find('.errorMsg').html('');
+			}
+
+			if (this.localName == 'select') {
+				var parent = $(this).closest('.form-group');
+				var errorMsg = $(this).closest('.row').find('.errorMsg');
+
+				if (!this.value) {
+					parent.removeClass('has-success has-error has-warning');
+					errorMsg.html('');
+				}
+				else if (!isLicensedState(this.value)) {
+					setTimeout(function(){// get around validator
+						//parent.removeClass('has-success').addClass('has-error');
+						parent.removeClass('has-success').addClass('has-warning');
+					}, 10);
+					errorMsg.html('<i class="fa fa-exclamation-circle text-warning"></i>');
+				}
+				else {
+					parent.removeClass('has-error has-warning');
+					errorMsg.html('<i class="fa fa-check-circle text-success"></i>');
+				}
+			}
+			setTravelersError(anySelectedUnLicensed());
+		}
+
+		function setTravelersError(isError) {
+			var unLicensedStates = unLicensedStateNames();
+			var errStr = '<strong>Trip Cancellation currently not available for following states:</strong> ';
+			var output = isError ? errStr + unLicensedStates.join(', ') + ', and Puerto Rico.' : '';
+			$('.travelers-error').html(output).toggleClass('alert alert-small', isError);
+		}
+
+
+		$(document).on('change', '#tripCanIncluded', function (e) {
+			$('#tripCanOptions').toggleClass('hidden', !this.checked);
+		});
+
+		$(document).on('input', '#tripCostPerPerson', function (e) {
+			$('#tripCanCost').val(parseFloat($(this).val() * .05).toFixed(2));
+		});
+
+
+		//console.log('TRIP_CAN_OFFERED: ', TRIP_CAN_OFFERED);
+
+		if (TRIP_CAN_OFFERED) {
+			$(document).on('change', 'select.traveler-state', checkAllStates);
+			//$(document).on('postclick', '#addTravelers', checkAllStates);
+		}
+
+
+
+
+
+		$(document).on('change', '#use-primary-state', usePrimaryState);
+
+
+		$(document).on('change', 'select.traveler-state:first', function (e) {
+			if (FORCE_PRIMARY_STATE) {
+				usePrimaryState(true);
+			}
+			else {
+				var text = this.value ? $(this).find('option:selected').text() : '';
+				togglePrimaryStateCheckbox(this.value, text);
+
+				usePrimaryState(usePrimaryStateChecked());
+			}
+		});
+
+
+		$(document).on('postclick', '#addTravelers', function (e) {
+			if (FORCE_PRIMARY_STATE) {
+				setAllStatesPrimary(true);
+			}
+			else {
+				$('select.traveler-state:first').trigger('change');
+			}
+
+			if (TRIP_CAN_OFFERED) checkAllStates();
+		});
+
+
+		function togglePrimaryStateCheckbox(val, text) {
+			var selects = $('select.traveler-state');
+			var hide = selects.length > 1 ? !val : true;
+			$('#primary-state').toggleClass('hidden', hide)
+.find('span.state').html(text).data('value', val);
+		}
+
+		function usePrimaryStateChecked() {
+			return $('#use-primary-state').is(':checked');
+		}
+
+		function usePrimaryState(e) {
+			var isEvent = (e && e.type == 'change');
+			var isBool = ($.type(e) === 'boolean');
+			var checked = isBool ? e : isEvent ? this.checked : true;
+			setAllStatesPrimary(checked);
+		}
+
+		function setAllStatesPrimary(checked) {
+			var sel = $('select.traveler-state');
+			sel.not(':first')
+.attr('readonly', checked)
+.each(function(e) {
+	var v = checked ? sel[0].value : this.defaultValue;
+	$(this).val(v).find('option').map(function (e) {
+		$(this).prop('disabled', this.value != v);
+	});
+}).trigger('change');
+		}
+
+		function forceAllStatesPrimary() {
+			setAllStatesPrimary(true);
+		}
+
+
+
+		$(document).on('click', '[type="submit"]', function (e) {
+			// must validate added inputs on submit
+			validateTravelerInputs();
+
+			//if ($('#tripCanIncluded').is('checked')) {
+			//	if ($('select.traveler-state').length) {
+			//		if (!allStatesLicensed()) e.preventDefault();
+			//	}
+			//}
+
+			//if ($('select.traveler-state').length) {
+			//	if (!allStatesLicensed()) e.preventDefault();
+			//}
+
+			if (TRIP_CAN_OFFERED) {
+				if ($('select.traveler-state').length) {
+					if (!allStatesLicensed()) e.preventDefault();
+				}
+			}
+
+		});
+
+
+
+		function fromUS() {
+			return $('#country').val() == 'US';
+		}
+
+		function toUS() {
+			return $('#destination').val() == 'US';
+		}
+
+
+
+		function validateTravelerInputs() {
+			// require all dynamically created inputs
+			$('[data-traveler] :input').each(function (e) {
+				var input = $(this);
+				input.rules('add', { required: true });
+				if (input.is('[type=number]')) {
+					input.rules('add', { min: 1 })
+				}
+			})
+		}
+
+	</script>
+
+
+	@if (Model.product_id == 55 || (Model.isOutbound && (Model.basePartialName != "_NWTravelers")))
+	{
+	<script>
+
+
+		if (!getUrlVars()["qid"]){
+			$('#country, #destination, #eff_date, #term_date').on('change', loadPartial);
+		}
+
+
+
+
+
+		function getTripDuration() {
+			var effDate = $('#effDate');
+			var termDate = $('#termDate');
+			return getTimeSpan(effDate, termDate);
+		}
+
+		function checkCountries() {
+			var noList = ['Iran','North Korea','Crimea','Sudan'],
+							destination = $('#destination option:selected').text(),
+							country = $('#country').val();
+			var destinationOK = noList.every(function(c){
+				return destination.indexOf(c);
+			});
+			if ($('#destination').val() == '') destinationOK = false;
+			return (country == 'US' && destinationOK);
+		}
+
+		function isTripCanEligible() {
+			var duration = getTripDuration();
+			return checkCountries() && (duration && duration <= 90);
+		}
+
+		function allInputsFilled(array) {
+			var inputs = array || ['#country','#destination','#eff_date','#term_date'];
+			return inputs.every(function(i){ return $(i).val() });
+		}
+
+
+		var loadedView = '',
+						partials = $('#partials'),
+						tripCan = $('#tripCanOptions');
+
+		function loadPartial() {
+			if (allInputsFilled()) {
+				if (isTripCanEligible()) {
+					if (loadedView != '_STTravelers') {
+						partials.load('@Url.Action("LoadTravelers")?view=_STTravelers&product='+ @Model.product_id, bindTravelerEvents);
+						@*//tripCan.load('@Url.Action("LoadTravelers")?view=_STTripCan');*@
+						tripCan.show();
+						//$('#tripCanBlock').toggleClass('hidden', !TRIP_CAN_OFFERED);
+						loadedView = '_STTravelers';
+					}
+				}
+				else if (loadedView != '_TravelersPartial') {
+					partials.load('@Url.Action("LoadTravelers")?view=_TravelersPartial&product='+ @Model.product_id, bindTravelerEvents);
+					@*//tripCan.empty();*@
+					tripCan.hide();
+					loadedView = '_TravelersPartial';
+				}
+				TRIP_CAN_OFFERED = tripCanOffered();
+			}
+		}
+	</script>
+	}
+
+}

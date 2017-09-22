@@ -1,0 +1,32 @@
+﻿@model OrderForm2016.Models.xlHead
+@using (Html.BeginForm("SubmitGroupRoster", "GroupEnroll", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+	@Html.AntiForgeryToken()
+	<fieldset>
+		@*<div class="row">
+			<div class="col-sm-6">
+				<div class="form-group">
+					<label class="control-label" for="file">Upload Roster Spreadsheet</label>
+					<input type="file" name="file">
+				</div>
+			</div>
+			<div class="col-sm-6">
+				<div class="form-group">
+					<button type="submit" class="btn btn-primary">UploadRoster</button>
+				</div>
+			</div>
+		</div>*@
+		<label class="control-label" for="file">Upload Roster Spreadsheet</label>
+		<div class="input-group">
+			<input type="text" class="form-control file-preview-filename" placeholder="No file chosen" disabled>
+			<div class="input-group-btn">
+				@*<button type="button" class="btn btn-default file-preview-clear" style="display:none;"><span class="fa fa-times"></span> Clear</button>*@
+				<div class="btn btn-default btn-file">
+					<i class="fa fa-folder-open"></i> Browse
+					<input type="file" name="file" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel">
+				</div>
+				<button type="submit" name="Command" value="UploadRoster" class="btn btn-primary"><i class="fa fa-upload"></i> Upload</button>
+			</div>
+		</div>
+	</fieldset>
+}

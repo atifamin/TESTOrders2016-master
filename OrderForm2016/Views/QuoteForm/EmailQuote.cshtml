@@ -1,0 +1,132 @@
+﻿@model OrderForm2016.Models.QuoteFormEmail
+
+@{
+	ViewBag.Title = "Email Quote Results";
+
+	Layout = "~/Views/Shared/_EmptyLayout.cshtml";
+}
+
+@if (ViewBag.EmailSuccess != null) {
+	if (ViewBag.EmailSuccess == true)
+	{
+		<script>
+			window.close();
+		</script>
+	}
+}
+
+<section class="page-title container-fluid">
+	<div class="container-fluid">
+		@*<button type="button" id="btnExpand" class="btn  btn-default  pull-right">Toggle Table Width</button>*@
+		<h2>@ViewBag.Title</h2>
+	</div>
+</section>
+
+
+<section class="container-fluid">
+	<div class="container-fluid">
+		@using (Html.BeginForm("EmailQuote", "QuoteForm", new { @id = string.Empty }, FormMethod.Post, new { @id = "emailForm" }))
+		{
+		@Html.AntiForgeryToken()
+
+			@Html.ValidationSummary(true, "", new { @class = "text-danger" })
+			@Html.HiddenFor(m => m.QuoteFormID)
+            @Html.HiddenFor(m => m.BaseFormID)
+			@Html.HiddenFor(m => m.results)
+
+			<div class="row">
+				<div class="form-group col-sm-6">
+					@Html.LabelFor(m => m.emailName, "Your Name", new { @class = "control-label" })
+					@Html.EditorFor(m => m.emailName, new { htmlAttributes = new { @class = "form-control", @required = "required" } })
+					@Html.ValidationMessageFor(m => m.emailName, "", new { @class = "text-danger" })
+				</div>
+				<div class="form-group col-sm-6">
+					@Html.LabelFor(m => m.emailEmail, "Your Email", new { @class = "control-label" })
+					@Html.EditorFor(m => m.emailEmail, new { htmlAttributes = new { @class = "form-control", @required = "required" } })
+					@Html.ValidationMessageFor(m => m.emailEmail, "", new { @class = "text-danger" })
+				</div>
+			</div>
+
+			<div class="form-group">
+				<div class="checkbox">
+					<label><input type="checkbox" id="sendToFriend" value="1"> Include a friend</label>
+				</div>
+			</div>
+
+			<div class="hidden" id="friendBlock">
+				<div class="row">
+					<div class="form-group col-xs-9">
+						<div class="row">
+							<div class="col-xs-6">
+								@Html.LabelFor(m => m.friendEmailName, "Friend's Name", new { @class = "control-label" })
+							</div>
+							<div class="col-xs-6">
+								@Html.LabelFor(m => m.friendEmailEmail, "Friend's Email", new { @class = "control-label" })
+							</div>
+						</div>
+						<div id="friends">
+
+							<div class="row">
+								<div class="form-group col-xs-6">
+									@Html.EditorFor(m => m.friendEmailName, new { htmlAttributes = new { @class = "form-control", @autocomplete = "off" } })
+									@Html.ValidationMessageFor(m => m.friendEmailName, "", new { @class = "text-danger" })
+								</div>
+								<div class="form-group col-xs-6">
+									@Html.EditorFor(m => m.friendEmailEmail, new { htmlAttributes = new { @class = "form-control", @autocomplete = "off" } })
+									@Html.ValidationMessageFor(m => m.friendEmailEmail, "", new { @class = "text-danger" })
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="form-group col-xs-3 text-right">
+						@*<label class="control-label">&nbsp;</label>
+						<div><button type="button" class="btn btn-default" id="addFriend"><i class="fa fa-plus-circle"></i> Add a friend</button></div>*@
+					</div>
+				</div>
+			</div>
+
+			<div class="form-actions">
+				<button type="submit" id="submit" class="btn btn-primary pull-right">Send</button>
+				<button type="button" id="cancel" class="btn btn-default">Cancel</button>
+			</div>
+		}
+
+	</div>
+</section>
+
+
+
+<script>
+	function closeWindow() {
+		window.close();
+	}
+
+	$(function () {
+
+		$('#cancel').on('click', closeWindow);
+
+		$('#sendToFriend').on('change', function (e) {
+			$('#friendBlock').toggleClass('hidden', !this.checked);
+			$('#selfBlock').toggleClass('hidden', !this.checked);
+		});
+
+
+		var friends = $('#friends');
+
+		$('#addFriend').on('click', function (e) {
+			var total = friends.find('.row').length;
+
+			var template = friends.find('.row:first').clone().wrap('<div>').parent().html();
+			template = template.replace(/\_(\d+)\__/g, '_{x}__').replace(/\[(\d+)\]./g, '[{x}].');
+
+			var fragment = $(document.createDocumentFragment());
+			fragment.append(template.replace(/{x}/g, total));
+			fragment.find(':input').val('');
+			fragment.appendTo(friends);
+
+			// only one friend
+			$(this).prop('disabled', true);
+		});
+
+	})
+</script>

@@ -1,0 +1,29 @@
+﻿@model OrderForm2016.Models.Error
+
+@{
+	ViewBag.Title = "Error";
+}
+
+<div id="errorMsg" class="full-page-photo" style="background-image: url(/content/images/404.jpg);">
+    @if (Model == null)
+    {
+        <div class="container">
+            <section class="call-to-action  middle">
+                <div class="header">Error</div>
+                <h1>We're sorry, we had an error.</h1>
+                <h2></h2>
+            </section>
+        </div>
+    }
+    else
+    {
+        <div class="container">
+            <section class="call-to-action  middle">
+                <div class="header">Error</div>
+                <h1>We're sorry, we got this error:</h1>
+                <h3>@Model.FriendlyMessage</h3>
+                <h2></h2>
+            </section>
+        </div>
+    }
+</div>

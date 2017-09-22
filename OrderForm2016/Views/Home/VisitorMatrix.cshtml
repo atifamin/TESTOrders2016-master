@@ -1,0 +1,150 @@
+﻿@model OrderForm2016.Models.VisitorMatrix
+
+@{
+	ViewBag.Title = "Visitors Plan";
+
+
+	var prems = (from plan in Model.planData
+							//where plan.Deductible == 0
+							orderby decimal.Parse(plan.PolicyMax)
+							select new
+							{
+								PlanDesc = plan.PlanDesc,
+								PlanName = plan.PlanName,
+								PolicyMax = plan.PolicyMax
+							}).Distinct();
+
+	var plans = from deductible in Model.deductibleAmounts
+							join plan in Model.planData on deductible equals plan.Deductible into planGroup
+							orderby deductible
+							select new
+							{
+								Deductible = deductible,
+								Plans = from p in planGroup
+												orderby decimal.Parse(p.PolicyMax)
+												select p
+							};
+}
+
+<section class="page-title">
+	<div class="container">
+        <h2>Visitors to the USA Quote Results</h2>
+        @*@if (@Model.ProductDesc != @Model.ProductName)
+        {
+            <h4>@Model.ProductDesc</h4>}*@
+	</div>
+</section>
+
+
+<section>
+	<div class="container">
+
+		@using (Html.BeginForm("SetupVisitors", "Quotes", new { bFormID = Model.base_form_id }))
+		{
+            @Html.Hidden("SelectedPrice")
+		<div class="row">
+			<div class="col-sm-9">
+
+				<div class="widget">
+
+					<div class="widget-header  primary">
+						<h4 class="widget-title">Choose your plan and deductible amount</h4>
+						<h5 class="widget-subtitle">Please click on a premium amount below to purchase that coverage type.</h5>
+					</div>
+
+					<table id="matrix" class="table  table-striped">
+						<thead>
+							<tr>
+								<th>Deductible</th>
+								@foreach (var premium in prems)
+								{
+									var name = premium.PlanName;
+									var amount = decimal.Parse(premium.PolicyMax);
+									<th><span class="name">@name</span><span class="premium">@string.Format("{0:c0}", amount)</span><span>Premium Amount</span></th>
+								}
+							</tr>
+						</thead>
+						<tbody>
+							@foreach (var planGroup in plans)
+							{
+								var deductible = planGroup.Deductible;
+								<tr>
+									<td><div>$@deductible</div></td>
+
+									@*@foreach (var plan in planGroup.Plans)
+									{
+									var premium = string.Format("{0:c0}", decimal.Parse(plan.PolicyMax));
+									<td data-name="@plan.PlanName" data-premium="@premium"><a role="button" class="btn  btn-sm  btn-default  no-shadow" data-plan="@plan.plan_id" data-deductible="@deductible">@string.Format("{0:c}", Convert.ToDecimal(plan.rate))</a></td>
+									}*@
+
+									@foreach (var premium in prems)
+									{
+										var plan = planGroup.Plans.FirstOrDefault(x => x.PlanName == premium.PlanName && x.Deductible == deductible);
+										if (plan != null)
+										{
+											var premo = string.Format("{0:c0}", decimal.Parse(plan.PolicyMax));
+											<td data-name="@plan.PlanName" data-premium="@premo">
+												@Html.Hidden("SelectPrice" + plan.plan_id, plan.rate)
+												<a role="button" class="btn  btn-sm  btn-default  no-shadow" data-plan="@plan.plan_id" data-deductible="@deductible">@string.Format("{0:c}", Convert.ToDecimal(plan.rate))</a>
+											</td>
+										}
+										else 
+										{
+											<td><div class="help-block  small">Not Available</div></td>
+										}
+									}
+								</tr>
+							}
+						</tbody>
+					</table>
+
+					<div class="hidden">
+						<select name="plan" class="form-control">
+							@foreach (var plan in Model.planData)
+							{
+							<option value="@plan.plan_id">@plan.PlanName: $@plan.Deductible Deductible</option>
+							}
+						</select>
+					</div>
+
+					<div class="widget-footer  form-submit">
+						@if (Model.brochureLink != null)
+						{
+						<a href="@Model.brochureLink" class="btn  btn-default  btn-details" target="_blank" role="button"><span class="hidden-xs">View Policy </span>Details</a>
+						}
+						<button type="submit" class="btn  btn-primary  btn-next">Continue <i class="fa  fa-caret-right"></i></button>
+					</div>
+
+				</div><!-- /.widget -->
+			</div><!-- /.col -->
+
+
+			<div class="col-sm-3">
+				@Html.Partial("_SideLogos")
+			</div><!-- /.col -->
+
+
+		</div><!-- /.row -->
+		}
+	</div><!-- /.container -->
+</section>
+
+
+@section Styles {
+
+}
+
+@section Scripts {
+	@Scripts.Render("~/bundles/jqueryval")
+	<script src="/scripts/main.js"></script>
+	<script>
+		$(function () {
+			var planId = $('select[name="plan"]').val();
+			var button = $('#matrix a[data-plan=' + planId + ']');
+			var idx = button.closest('td').index();
+			$('#matrix th:eq(' + idx + ')').addClass('selected');
+			button.addClass('btn-success').closest('tr').addClass('selected');
+			//$('#SelectedPrice').val(button.text());
+		});
+	</script>
+}

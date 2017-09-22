@@ -1,0 +1,286 @@
+﻿@model OrderForm2016.Models.BaseForm
+
+@{
+	ViewBag.Title = "Trip Cancellation Options";
+
+	string currencyPattern = "^((\\d+)|(\\d{1,3})(\\,\\d{3}|)*)(\\.\\d{2}|)$";
+
+	List<SelectListItem> YesNoList = new List<SelectListItem>();
+	YesNoList.Add(new SelectListItem
+	{
+		Text = "No",
+		Value = "No",
+		Selected = true
+	});
+	YesNoList.Add(new SelectListItem
+	{
+		Text = "Yes",
+		Value = "Yes",
+	});
+
+	List<SelectListItem> ADDList = new List<SelectListItem>();
+	ADDList.Add(new SelectListItem
+	{
+		Text = "Not Included",
+		Value = "0",
+		Selected = true
+	});
+	ADDList.Add(new SelectListItem
+	{
+		Text = "$100,000",
+		Value = "100000",
+	});
+	ADDList.Add(new SelectListItem
+	{
+		Text = "$250,000",
+		Value = "250000",
+	});
+	ADDList.Add(new SelectListItem
+	{
+		Text = "$500,000",
+		Value = "500000",
+	});
+
+	List<SelectListItem> BaggageList = new List<SelectListItem>();
+	BaggageList.Add(new SelectListItem
+	{
+		Text = "Not Included",
+		Value = "0",
+		Selected = true
+	});
+	BaggageList.Add(new SelectListItem
+	{
+		Text = "$5,000",
+		Value = "5000",
+	});
+	BaggageList.Add(new SelectListItem
+	{
+		Text = "$10,000",
+		Value = "10000",
+	});
+}
+
+
+<section class="page-title">
+	<div class="container">
+		<h2>@Model.ProductName  Trip Cancellation Options</h2>
+		@if (@Model.ProductDesc != @Model.ProductName)
+		{
+		<h4>@Model.ProductDesc</h4>}
+	</div>
+</section>
+
+
+<section>
+	<div class="container">
+
+		@using (Html.BeginForm("GetQuotes", "Quotes", new { @id = string.Empty }, FormMethod.Post, new { @id = "optionsform" }))
+		{
+		@Html.AntiForgeryToken()
+			@Html.HiddenFor(m => m.base_form_id)
+			@Html.HiddenFor(m => m.ProductName)
+			@Html.HiddenFor(m => m.ProductDesc)
+			@Html.HiddenFor(m => m.country)
+			@Html.HiddenFor(m => m.destination)
+			@Html.HiddenFor(m => m.eff_date)
+			@Html.HiddenFor(m => m.term_date)
+			@Html.HiddenFor(m => m.product_id)
+			@Html.HiddenFor(m => m.TravelerAges)
+			@Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+
+			<div class="row">
+				<div class="col-sm-8">
+
+					<div class="widget">
+
+						<div class="widget-header">
+							<div class="row">
+								<div class="col-sm-6">
+									For more information click the <i class="fa fa-info-circle text-primary"></i> icon.
+								</div>
+								<div class="col-sm-6  text-right">
+									@*<i class="fa fa-usd text-primary"></i> All currencies set to USD.*@
+								</div>
+							</div>
+						</div>
+
+						<div class="widget-block">
+
+							<fieldset>
+								<div class="form-group">
+									@Html.LabelFor(m => m.nationwideOptions.trip_purchase_date, "Trip Purchase Date", new { @class = "control-label" })
+									<div class="input-group date" id="purchaseDate">
+										@if (Model.nationwideOptions.trip_purchase_date == default(DateTime))
+										{
+										@Html.TextBox(Html.NameFor(m => m.nationwideOptions.trip_purchase_date).ToString(), "", new { @class = "form-control", placeholder = "mm/dd/yyyy", required = "required" })
+										}
+										else
+										{
+										@Html.EditorFor(m => m.nationwideOptions.trip_purchase_date, "{0:d}", new { htmlAttributes = new { @class = "form-control", placeholder = "mm/dd/yyyy", required = "required" } })
+										}
+										<div class="input-group-addon  input-group-calendar"><i class="fa  fa-calendar"></i></div>
+									</div>
+									@Html.ValidationMessageFor(m => m.nationwideOptions.trip_purchase_date, "", new { @class = "text-danger" })
+								</div>
+								<div class="form-group">
+									@Html.LabelFor(m => m.nationwideOptions.trip_cost_per_person, "Trip Cost Per Person", new { @class = "control-label" })
+									<div class="input-group">
+										<span class="input-group-addon">$</span>
+										@{
+											var maxTripCost = 25000;
+                                            var minTripCost = 0;
+											switch (Model.product_id)
+											{
+												case 65:
+													maxTripCost = 10000;
+                                                    minTripCost = 150;
+													break;
+												case 66:
+													maxTripCost = 30000;
+													break;
+												case 67:
+													maxTripCost = 50000;
+													break;
+											}
+										}
+										@if (Model.nationwideOptions.trip_cost_per_person == default(decimal))
+										{
+										@Html.TextBox(Html.NameFor(m => m.nationwideOptions.trip_cost_per_person).ToString(), "0", new { @class = "form-control no-spinners", type = "number", placeholder = "0", required = "required", min = minTripCost.ToString(), max = @maxTripCost.ToString(),  })
+										}
+										else
+										{
+										@Html.EditorFor(m => m.nationwideOptions.trip_cost_per_person, new { htmlAttributes = new { @class = "form-control", @pattern = "\\d*.\\d{2}", @required = "required", min = minTripCost.ToString(), @max = @maxTripCost.ToString() } })
+										}
+										@*<span class="input-group-addon">.00</span>*@
+									</div>
+									@Html.ValidationMessageFor(m => m.nationwideOptions.trip_cost_per_person, "", new { @class = "text-danger" })
+								</div>
+							</fieldset>
+
+
+							@if (Model.product_id != 65)
+							{
+							<fieldset>
+
+								@*<h3 class="widget-title"><strong>Select</strong> Lists</h3>*@
+								<div class="row">
+									<div class="col-md-6">
+										<div class="form-group">
+											@Html.LabelFor(m => m.nationwideOptions.CDW, "Collision Damage Waiver", new { @class = "control-label" })
+											@Html.DropDownListFor(m => m.nationwideOptions.CDW, @YesNoList, new { @class = "form-control" })
+											@Html.ValidationMessageFor(m => m.nationwideOptions.CDW, "", new { @class = "text-danger" })
+										</div>
+									</div>
+
+									<div class="col-md-6">
+										<div class="form-group">
+											@Html.LabelFor(m => m.nationwideOptions.flightad_d, "Flight Accident Per Trip Limit", new { @class = "control-label" })
+											@Html.DropDownListFor(m => m.nationwideOptions.flightad_d, @ADDList, new { @class = "form-control" })
+											@Html.ValidationMessageFor(m => m.nationwideOptions.flightad_d, "", new { @class = "text-danger" })
+										</div>
+									</div>
+								</div>
+							</fieldset>
+
+							<fieldset>
+
+								<div class="row">
+									@if (Model.product_id == 67)
+									{
+									<div class="col-md-6">
+										<div class="form-group">
+											@Html.LabelFor(m => m.nationwideOptions.baggage, "Baggage Upgrade", new { @class = "control-label" })
+											@Html.DropDownListFor(m => m.nationwideOptions.baggage, @BaggageList, new { @class = "form-control" })
+											@Html.ValidationMessageFor(m => m.nationwideOptions.baggage, "", new { @class = "text-danger" })
+										</div>
+									</div>
+									<div class="col-md-6">
+										<div class="form-group">
+											@Html.LabelFor(m => m.nationwideOptions.cancelForAny, "Cancel for Any Reason", new { @class = "control-label" })
+											@Html.DropDownListFor(m => m.nationwideOptions.cancelForAny, @YesNoList, new { @class = "form-control" })
+											@Html.ValidationMessageFor(m => m.nationwideOptions.cancelForAny, "", new { @class = "text-danger" })
+										</div>
+									</div>
+										bool badState = false;
+										List<string> noPetPack = new List<string>() { "MN", "MO", "VA" };
+										foreach (var trav in Model.TravelerAges)
+										{
+											if (noPetPack.Contains(trav.travelerState))
+											{
+												badState = true;
+											}
+										}
+										if (!badState)
+										{
+										<div class="col-md-6">
+											<div class="form-group">
+												@Html.LabelFor(m => m.nationwideOptions.petAssist, "Pet Assist", new { @class = "control-label" })
+												@Html.DropDownListFor(m => m.nationwideOptions.petAssist, @YesNoList, new { @class = "form-control" })
+												@Html.ValidationMessageFor(m => m.nationwideOptions.petAssist, "", new { @class = "text-danger" })
+											</div>
+										</div>
+										}
+									}
+								</div>
+							</fieldset>
+							}
+
+						</div><!-- /.widget-block -->
+
+						<div class="widget-footer  form-submit">
+							<button type="button" class="btn  btn-default  btn-prev"><i class="fa  fa-caret-left"></i> Previous</button>
+							@if (!string.IsNullOrEmpty(ViewBag.brochurePath))
+							{
+							<a href="@ViewBag.brochurePath" class="btn  btn-default  btn-details" target="_blank" role="button"><span class="hidden-xs">View Policy </span>Details</a>
+							}
+							<button type="submit" class="btn  btn-primary  btn-next">Continue <i class="fa  fa-caret-right"></i></button>
+						</div>
+
+					</div><!-- /.widget -->
+				</div><!-- /.col -->
+
+
+				<div class="col-sm-4">
+					@Html.Partial("_SideLogos")
+				</div><!-- /.col -->
+
+
+			</div><!-- /.row -->}
+	</div><!-- /.container -->
+</section>
+
+
+@section Styles {
+
+}
+
+@section Scripts {
+	@Scripts.Render("~/bundles/jqueryval")
+	<script src="/scripts/main.js"></script>
+	<script>
+		var sportsOptions = $('#tripCanOptions_sports');
+		var selectClass = $('#selectClass');
+
+		selectClass.find('a').on('click', function (e) {
+			var a = $(this).addClass('active');
+			a.siblings().removeClass('active');
+			sportsOptions.val(a.data('value'));
+			e.preventDefault();
+		});
+
+		sportsOptions.on('change', function (e) {
+			selectClass.find('a').removeClass('active');
+			selectClass.find('a[data-value="' + this.value + '"]').addClass('active');
+		});
+
+
+		var optionVals = sportsOptions.find('option').map(function () { return this.value }).get();
+
+		selectClass.find('a').each(function (e) {
+			if (optionVals.indexOf(this.dataset.value) < 0) {
+				$(this).addClass('hidden');
+			}
+		});
+	</script>
+}

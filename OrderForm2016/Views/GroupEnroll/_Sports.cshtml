@@ -1,0 +1,18 @@
+﻿@model OrderForm2016.Models.xlHead
+
+<fieldset>
+	<h3 class="widget-title"><strong>Sports</strong> Options</h3>
+	<div class="form-group">
+		@Html.LabelFor(m => m.sports, "Athletic Sports", new { @class = "control-label" })
+		@Html.EditorFor(m => m.sports, new { htmlAttributes = new { @class = "form-control" } })
+		@*@Html.DropDownListFor(m => m.sports, (SelectList)ViewBag.sports, new { @class = "form-control" })*@
+		@Html.ValidationMessageFor(m => m.sports, "", new { @class = "text-danger" })
+	</div>
+	<div class="list-group small" id="selectClass">
+		<a href="#" data-value="yes" class="list-group-item"><strong>Class 1</strong> includes Tennis, Swimming, Cross Country, Track, Volleyball, Golf</a>
+		<a href="#" data-value="class2" class="list-group-item"><strong>Class 2</strong> includes Archery, Ballet, Cheerleading</a>
+		<a href="#" data-value="class3" class="list-group-item"><strong>Class 3</strong> includes Basketball, Diving, Equestrian, Fencing, Field Hockey, Lacrosse, Karate, Polo</a>
+		<a href="#" data-value="class4" class="list-group-item"><strong>Class 4</strong> includes Football (no division 1), Gymnastics, Hockey, Rowing, Rugby, Soccer</a>
+		<a href="#" data-value="class5" class="list-group-item"><strong>Class 5</strong> includes Running with the Bulls</a>
+	</div>
+</fieldset>

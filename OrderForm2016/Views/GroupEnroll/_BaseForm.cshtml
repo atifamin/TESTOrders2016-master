@@ -1,0 +1,84 @@
+﻿@model OrderForm2016.Models.xlHead
+
+<fieldset>
+	@*<h3 class="widget-title"><strong>Trip</strong> Information</h3>*@
+	<div class="row">
+		<div class="col-md-6">
+			<div class="form-group">
+				@Html.LabelFor(m => m.country, "Traveling From", new { @class = "control-label" })
+				@Html.DropDownListFor(m => m.country, (SelectList)ViewBag.country, "Select Country", new { @class = "form-control" })
+				@Html.ValidationMessageFor(m => m.country, "", new { @class = "text-danger" })
+			</div>
+		</div>
+		<div class="col-md-6">
+			<div class="form-group">
+				@Html.LabelFor(m => m.destination, "Traveling To", new { @class = "control-label" })
+				@Html.DropDownListFor(m => m.destination, (SelectList)ViewBag.destination, "Select Destination", new { @class = "form-control" })
+				@Html.ValidationMessageFor(m => m.destination, "", new { @class = "text-danger" })
+			</div>
+		</div>
+        <fieldset>
+            <h3 class="widget-title"><strong>Primary Member Address</strong> Information</h3>
+            <div class="row">
+                <div class="col-xs-6">
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.email, "Email Address", new { @class = "control-label" })
+                        @Html.EditorFor(m => m.email, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(m => m.email, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="col-xs-6">
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.phone, "Phone", new { @class = "control-label" })
+                        @Html.EditorFor(m => m.phone, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(m => m.phone, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="col-xs-12">
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.addr1, "Address 1", new { @class = "control-label" })
+                        @Html.EditorFor(m => m.addr1, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(m => m.addr1, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="col-xs-12">
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.addr2, "Address 2", new { @class = "control-label" })
+                        @Html.EditorFor(m => m.addr2, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(m => m.addr2, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="col-md-5">
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.city, "City", new { @class = "control-label" })
+                        @Html.EditorFor(m => m.city, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(m => m.city, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="col-sm-8 col-md-4">
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.state, "State", new { @class = "control-label" })
+                        @*@Html.EditorFor(m => m.state, new { htmlAttributes = new { @class = "form-control" } })*@
+                        @Html.DropDownListFor(m => m.state, (SelectList)ViewBag.states, "Select State", new { @class = "form-control" })
+                        @Html.ValidationMessageFor(m => m.state, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="col-sm-4 col-md-3">
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.zip, "Postal Code", new { @class = "control-label" })
+                        @Html.EditorFor(m => m.zip, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(m => m.zip, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="col-xs-12">
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.memCountry, "Home Country", new { @class = "control-label" })
+                        @*@Html.EditorFor(m => m.memCountry, new { htmlAttributes = new { @class = "form-control" } })*@
+                        @Html.DropDownListFor(m => m.memCountry, (SelectList)ViewBag.memCountry, "Select Home Country", new { @class = "form-control" })
+                        @Html.ValidationMessageFor(m => m.memCountry, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div><!-- /.row -->
+        </fieldset>
+	</div><!-- /.row -->
+</fieldset>

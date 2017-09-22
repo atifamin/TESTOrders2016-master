@@ -1,0 +1,172 @@
+﻿@model List<OrderForm2016.Models.QuoteResults>
+
+
+@{
+    ViewBag.Title = "Quote Results";
+    //Layout = "~/Views/Shared/_AgentHeader.cshtml";
+}
+
+<section class="page-title">
+    <div class="container">
+        <h2>Safe Travels International Quote Results</h2>
+        <h3>Choose either the Minimum Required Coverage OR the Expanded Coverage</h3>
+    </div>
+</section>
+
+
+<section>
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-8">
+                @for (int i = 0; i < Model.Count(); i++)
+                {
+                    if (i == 0)
+                    {
+                        <h3 class="widget-title">Minimum Coverage (Required)</h3>
+                    }
+                    else
+                    {
+                        <h3 class="widget-title">Expanded Coverage (Optional)</h3>
+                    }
+
+                    <div class="widget compact">
+                        <div class="widget-header">
+                            <div class="row">
+                                <div class="col-xs-6">
+                                    <div>@Html.LabelFor(m => m[i].QuoteNumber, "Quote #")</div>
+                                    <h3 class="widget-title">@Html.DisplayFor(m => m[i].QuoteNumber)</h3>
+                                </div>
+                                <div class="col-xs-6  text-right">
+                                    @if (Model[i].quoteAmount != null)
+                                    {
+                                        <div>@Html.LabelFor(m => m[i].quoteAmount, "Total Premium Amount")</div>
+                                        <h3 class="widget-title"><sup><small><i class="fa fa-usd" aria-hidden="true"></i></small></sup><span id="qAmount">@(string.Format("{0:f2}", Model[i].quoteAmount))</span></h3>
+                                    }
+                                </div>
+                            </div>
+                        </div><!-- /.widget-header -->
+                        <div class="widget-block">
+                            @if (Model[i].CoverageDates != null)
+                            {
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            @Html.LabelFor(m => m[i].CoverageDates, "Coverage Dates", new { @class = "control-label" })
+                                            <div class="form-control-static">@Html.DisplayFor(m => m[i].CoverageDates)</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        @if (Model[i].PlanName != null)
+                                        {
+                                            <div class="form-group">
+                                                @Html.LabelFor(m => m[i].PlanName, "Plan Name", new { @class = "control-label" })
+                                                <div class="form-control-static">@Html.DisplayFor(m => m[i].PlanName)</div>
+                                            </div>
+                                        }
+                                    </div>
+                                </div>
+                            }
+
+                            @if (Model[i].dateMessage != null)
+                            {
+                                <div class="table  alert  alert-info  well-sm" role="alert">
+                                    <span class="cell"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i></span>
+                                    <span class="cell">@Html.DisplayFor(m => m[i].dateMessage)</span>
+                                </div>
+                            }
+
+                            @if (Model[i].travelerNames != null)
+                            {
+                                <label class="control-label">Travelers</label>
+                                <table class="table  table-striped">
+                                    <tbody>
+                                        @foreach (var tName in Model[i].travelerNames)
+                                        {
+                                            string[] tNames = tName.Split(':');
+                                            string tDesc = tNames[0];
+                                            string tAge = tNames[1];
+                                            <tr><th>@Html.Encode(tDesc.Replace("travelerAge", "Traveler "))</th><td align="right">@Html.Encode(tAge)</td></tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            }
+
+                            @if (Model[i].OptionsList != null)
+                            {
+                                <label class="control-label">Options</label>
+                                <table class="table  table-striped">
+                                    <tbody>
+                                        @foreach (var option in Model[i].OptionsList)
+                                        {
+                                            string[] options = option.Split(':');
+                                            string key = options[0];
+                                            string val = options.Length > 2 ? string.Format("{0}: {1}", options[1], options[2]) : options[1];
+                                            <tr><th>@Html.Encode(key)</th><td align="right">@Html.Encode(val.Replace(".00", "").Replace("class", "Class "))</td></tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            }
+                        </div><!-- /.widget-block -->
+                        <div class="widget-footer form-submit">
+                            @Html.ActionLink("Buy Now", "MemberInfo", "Member", new { bFormID = Model[i].base_form_id }, new { @class = "btn btn-primary" })
+                        </div><!-- /.widget-footer -->
+                    </div>
+                }
+            </div>
+            <div class="col-sm-4 col-lg-3 col-lg-offset-1 no-print">
+
+                <div class="widget compact text-center">
+                    <div class="widget-header">
+                        <h4 class="widget-title"> Save Your Quote</h4>
+                    </div>
+                    <div class="widget-block">
+                        @*<p>Enter an email &amp; we will send you a link to this page.</p>*@
+                        <div class="sidebarEmailFields">
+                            <a href="javascript:void(0)" class="btn btn-success no-shadow" onclick="ShowEmailQuote()"><i class="fa fa-envelope-o" aria-hidden="true"></i> Email</a>&nbsp;
+                            @*<btn class="btn btn-success no-shadow" data-toggle="modal" data-target="#emailModal"><i class="fa fa-envelope-o" aria-hidden="true"></i> Email</btn>&nbsp;*@
+                            <a href="javascript:window.print()" class="btn btn-warning no-shadow"><i class="fa fa-print" aria-hidden="true"></i> Print</a>
+                        </div>
+                    </div>
+                </div>
+
+                @Html.Partial("_SideLogos")
+
+            </div><!-- /.col -->
+        </div>
+    </div>
+</section>
+
+
+
+@section Scripts {
+    <script src="/scripts/main.js"></script>
+    @*<script>
+            var planNav = $('#plan-nav');
+            var planSel = $('#plan-select');
+            var planPanes = $('#plan-panes');
+
+            planSel.on('change', function (e) {
+                var tab = this.options[this.selectedIndex].value;
+                planNav.find('a[href="#' + tab + '"]').click();
+            });
+
+            planNav.on('show.bs.tab', 'a', function (e) {
+                var tab = this.getAttribute('href').replace('#', '');
+                planSel.val(tab);
+            });
+
+            planNav.find('li:first').addClass('active');
+            planPanes.find('.tab-pane:first').addClass('in active');
+        </script>*@
+    @*<script>
+            function ShowEmailQuote() {
+                @if (Model.Count() > 0){
+                    var resultsId = Model.First().QuoteFormResultsID;
+                    <text>PopupCenter("/QuoteForm/EmailQuote/?resultsId=@resultsId&type=blah", "EmailQuote", 800, 700)</text>
+                }
+                return false;
+            }
+        </script>*@
+}
+
+

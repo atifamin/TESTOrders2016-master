@@ -1,0 +1,143 @@
+﻿@model OrderForm2016.Models.xlHead
+
+@{
+	int prodId = 67;
+	if (Model.product_id != default(int))
+	{
+		prodId = Model.product_id;
+	}
+
+	IList<SelectListItem> YesNoList = new List<SelectListItem>
+	{
+		new SelectListItem{ Text = "No", Value = "No", Selected = true },
+		new SelectListItem{ Text = "Yes", Value = "Yes" }
+	};
+
+	IList<SelectListItem> ADDList = new List<SelectListItem>
+	{
+		new SelectListItem{ Text = "Not Included", Value = "0", Selected = true },
+		new SelectListItem{ Text = "$100,000", Value = "100000" },
+		new SelectListItem{ Text = "$250,000", Value = "250000" },
+		new SelectListItem{ Text = "$500,000", Value = "500000" }
+	};
+
+	IList<SelectListItem> BaggageList = new List<SelectListItem>
+	{
+		new SelectListItem{ Text = "Not Included", Value = "0", Selected = true },
+		new SelectListItem{ Text = "$5,000", Value = "5000" },
+		new SelectListItem{ Text = "$10,000", Value = "10000" }
+	};
+
+
+	var maxTripCost = 25000;
+	switch (prodId)
+	{
+		case 65:
+			maxTripCost = 10000;
+			break;
+		case 66:
+			maxTripCost = 30000;
+			break;
+		case 67:
+			maxTripCost = 50000;
+			break;
+	}
+
+
+	bool badState = false;
+	List<string> noPetPack = new List<string>() { "MN", "MO", "VA" };
+	if (Model.state == null || noPetPack.Contains(Model.state))
+	{
+		badState = true;
+	}
+}
+
+<fieldset>
+	<h3 class="widget-title"><strong>Nationwide</strong> Options</h3>
+	<div class="row">
+		<div class="col-sm-6">
+			<div class="form-group">
+				@Html.LabelFor(m => m.trip_amount, "Trip Amount", new { @class = "control-label" })
+				<div class="input-group">
+					<span class="input-group-addon">$</span>
+					@if (Convert.ToDecimal(Model.trip_amount) == default(decimal))
+					{
+					@Html.TextBox(Html.NameFor(m => m.trip_amount).ToString(), "0", new { @class = "form-control no-spinners", type = "number", placeholder = "0", min = "0", max = @maxTripCost.ToString() })
+					}
+					else
+					{
+					@Html.EditorFor(m => m.trip_amount, new { htmlAttributes = new { @class = "form-control", pattern = "\\d*.\\d{2}", max = @maxTripCost.ToString() } })
+					}
+					<span class="input-group-addon">.00</span>
+				</div>
+				@Html.ValidationMessageFor(m => m.trip_amount, "", new { @class = "text-danger" })
+			</div>
+		</div>
+		<div class="col-sm-6">
+			<div class="form-group">
+				@Html.LabelFor(m => m.trip_purchase_date, "Trip Purchase Date", new { @class = "control-label" })
+				<div class="input-group date" id="purchaseDate">
+					@if (Model.trip_purchase_date == default(DateTime))
+					{
+					@Html.TextBox(Html.NameFor(m => m.trip_purchase_date).ToString(), "", new { @class = "form-control", placeholder = "mm/dd/yyyy" })
+					}
+					else
+					{
+					@Html.EditorFor(m => m.trip_purchase_date, "{0:d}", new { htmlAttributes = new { @class = "form-control", placeholder = "mm/dd/yyyy" } })
+					}
+					<div class="input-group-addon"><i class="fa fa-calendar"></i></div>
+				</div>
+				@Html.ValidationMessageFor(m => m.trip_purchase_date, "", new { @class = "text-danger" })
+			</div>
+		</div>
+	</div><!-- /.row -->
+	@if (prodId != 65)
+	{
+	<hr />
+		<div class="row">
+			<div class="col-sm-6">
+				<div class="form-group">
+					@Html.LabelFor(m => m.flight_add, "Flight Accident Per Trip Limit", new { @class = "control-label" })
+					@Html.DropDownListFor(m => m.flight_add, @ADDList, new { @class = "form-control" })
+					@Html.ValidationMessageFor(m => m.flight_add, "", new { @class = "text-danger" })
+				</div>
+			</div>
+			<div class="col-sm-6">
+				<div class="form-group">
+					@Html.LabelFor(m => m.CDW, "Collision Damage Waiver", new { @class = "control-label" })
+					@Html.DropDownListFor(m => m.CDW, @YesNoList, new { @class = "form-control" })
+					@Html.ValidationMessageFor(m => m.CDW, "", new { @class = "text-danger" })
+				</div>
+			</div>
+		</div><!-- /.row -->
+		if (prodId == 67)
+		{
+		<div class="row">
+			<div class="@(!badState ? "col-sm-5" : "col-sm-6")">
+				<div class="form-group">
+					@Html.LabelFor(m => m.baggage, "Baggage Upgrade", new { @class = "control-label" })
+					@Html.DropDownListFor(m => m.baggage, @BaggageList, new { @class = "form-control" })
+					@Html.ValidationMessageFor(m => m.baggage, "", new { @class = "text-danger" })
+				</div>
+			</div>
+			<div class="@(!badState ? "col-sm-4" : "col-sm-6")">
+				<div class="form-group">
+					@Html.LabelFor(m => m.cancelForAny, "Cancel for Any Reason", new { @class = "control-label" })
+					@Html.DropDownListFor(m => m.cancelForAny, @YesNoList, new { @class = "form-control" })
+					@Html.ValidationMessageFor(m => m.cancelForAny, "", new { @class = "text-danger" })
+				</div>
+			</div>
+			@if (!badState)
+			{
+			<div class="col-sm-3">
+				<div class="form-group">
+					@Html.LabelFor(m => m.petAssist, "Pet Assist", new { @class = "control-label" })
+					@Html.DropDownListFor(m => m.petAssist, @YesNoList, new { @class = "form-control" })
+					@Html.ValidationMessageFor(m => m.petAssist, "", new { @class = "text-danger" })
+				</div>
+			</div>
+			}
+		</div><!-- /.row -->
+		}
+	}
+</fieldset>

@@ -1,0 +1,10 @@
+﻿@model OrderForm2016.Models.BaseForm
+
+
+<div class="form-group">
+	@Html.LabelFor(m => m.repatOptions.plan, ViewData["planLabel"].ToString(), new { @class = "control-label" })
+	<div class="">
+		@Html.DropDownListFor(m => m.repatOptions.plan, (SelectList)ViewBag.plan,  new { @class = "form-control" })
+		@Html.ValidationMessageFor(m => m.repatOptions.plan, "", new { @class = "text-danger" })
+	</div>
+</div>

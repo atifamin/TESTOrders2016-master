@@ -1,0 +1,126 @@
+﻿@using OrderForm2016.Models;
+
+@{
+	Agent agent = Model;
+	//bool isHockey = Convert.ToBoolean(Html.ViewContext.ViewBag.isHockey);
+
+	if (agent.AgentId == 550)
+	{
+		agent.TollFreePhone = "888-301-9289";
+		agent.Phone = "251-661-0924";
+		agent.Fax = "251-666-1806";
+		agent.AdminEmail = "enrollments@trawickinternational.com";
+	}
+
+}
+
+
+<header id="agent-header">
+
+	<div class="header-top">
+		<div class="container">
+			<div class="top-contact pull-right">
+				<ul class="list-unstyled list-inline" style="margin-bottom:0;">
+					@if (!string.IsNullOrEmpty(agent.TollFreePhone))
+					{
+					<li><strong>Toll-Free:</strong> @agent.TollFreePhone</li>
+					}
+					@if (!string.IsNullOrEmpty(agent.Phone))
+					{
+					<li><strong>Phone:</strong> @agent.Phone</li>
+					}
+					@if (!string.IsNullOrEmpty(agent.Fax))
+					{
+					<li><strong>Fax:</strong> @agent.Fax</li>
+					}
+					@if (!string.IsNullOrEmpty(agent.AdminEmail))
+					{
+					<li><strong>Email:</strong> <a href="mailto:@agent.AdminEmail.ToLower()">@agent.AdminEmail.ToLower()</a></li>
+					}
+					@*@if (!string.IsNullOrEmpty(agent.Homepage))
+						{
+						<li><strong>Website:</strong> <a href="http://@agent.Homepage.ToLower()" target="_blank">@agent.Homepage.ToLower()</a></li>
+						}*@
+				</ul>
+			</div>
+		</div><!-- /.container -->
+	</div><!-- /.header-top -->
+
+
+
+	<div class="container">
+		<div class="logo-header">
+			<div class="logo">
+				@if (!string.IsNullOrEmpty(agent.Homepage))
+				{
+				<a href="http://@agent.Homepage.ToLower()" target="_blank" title="@agent.Name">
+					@if (!string.IsNullOrEmpty(agent.LogoUrl))
+					{
+					<img class="logo-image" src="@agent.LogoUrl" alt="@agent.Name">
+					}
+					else
+					{
+					<span class="logo-brand">@agent.Name</span>
+					}
+				</a>
+				}
+				else
+				{
+					if (!string.IsNullOrEmpty(agent.LogoUrl))
+					{
+					<img class="logo-image" src="@agent.LogoUrl" alt="@agent.Name">
+					}
+					else
+					{
+					<span class="logo-brand">@agent.Name</span>
+					}
+				}
+			</div>
+
+			<div class="side">
+				<aside>
+					@if (agent != null && agent.AgentId == 525)
+					{
+					<h3>
+						<span class="label  label-warning" style="font-weight:400;border-radius:2px;">
+							<i class="fa fa-usd text-danger"></i> All currencies set to <strong>USD</strong>
+						</span>
+					</h3>
+					}
+				</aside>
+			</div>
+
+		</div>
+	</div>
+</header>
+
+
+
+@if (agent != null && agent.AgentId != 1)
+{
+	<div class="container  visible-xs-block">
+		<br />
+		<ul class="list-unstyled">
+			@if (!string.IsNullOrEmpty(agent.TollFreePhone))
+			{
+			<li><strong>Toll-Free:</strong> @agent.TollFreePhone</li>
+			}
+			@if (!string.IsNullOrEmpty(agent.Phone))
+			{
+			<li><strong>Phone:</strong> @agent.Phone</li>
+			}
+			@if (!string.IsNullOrEmpty(agent.Fax))
+			{
+			<li><strong>Fax:</strong> @agent.Fax</li>
+			}
+			@if (!string.IsNullOrEmpty(agent.AdminEmail))
+			{
+			<li><strong>Email:</strong> <a href="mailto:@agent.AdminEmail.ToLower()">@agent.AdminEmail.ToLower()</a></li>
+			}
+			@*@if (!string.IsNullOrEmpty(agent.Homepage))
+				{
+				<li><strong>Website:</strong> <a href="http://@agent.Homepage.ToLower()" target="_blank">@agent.Homepage.ToLower()</a></li>
+				}*@
+		</ul>
+	</div>
+}

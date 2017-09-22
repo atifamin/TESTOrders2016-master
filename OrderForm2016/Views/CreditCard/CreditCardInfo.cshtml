@@ -1,0 +1,292 @@
+﻿@model OrderForm2016.Models.CreditCardInfo
+@{
+	ViewBag.Title = "Complete Purchase";
+	var countryList = ViewBag.countryList;
+}
+
+
+<section class="page-title">
+	<div class="container">
+		<h2>Complete Your  @ViewBag.ProductName  Purchase</h2>
+		<h4>Please enter your payment information to complete your purchase.</h4>
+	</div>
+</section>
+
+<section>
+	<div class="container">
+		<div class="row">
+			<div class="col-sm-8">
+
+				@using (Html.BeginForm("CompletePurchase", "CreditCard", FormMethod.Post, new { @id = "ccform" }))
+				{
+				@Html.AntiForgeryToken()
+					@Html.ValidationSummary(true, "", new { @class = "text-danger" })
+					@Html.HiddenFor(m => m.quoteID)
+					@Html.HiddenFor(m => m.base_form_id)
+					@Html.HiddenFor(m => m.TotalAmount)
+					@Html.HiddenFor(m => m.tripCanAmount)
+					@Html.HiddenFor(m => m.medicalAmount)
+					if (ViewBag.isHockey != null)
+					{
+					@Html.Hidden("isHockey");
+					}
+
+					var wClass = ViewBag.PurchStatus != null ? "error" : "";
+
+					<div class="widget">
+
+						<div class="widget-header @wClass">
+							@if (ViewBag.PurchStatus != null)
+							{
+								<h4 class="text-center">@ViewBag.PurchStatus</h4>
+							}
+							else
+							{
+								if (ViewBag.AlreadyCharged != null && ViewBag.AlreadyCharged == true)
+								{
+									<h4 class="text-center text-danger">Warning - You have already made a payment for @(string.Format("{0:c}", Convert.ToDecimal(Model.TotalAmount))) for this transaction today.</h4>
+								}
+								else
+								{
+									<div class="row">
+										<div class="col-xs-6">
+											<p class="text-danger">* All form fields are required.</p>
+										</div>
+										<div class="col-xs-6 text-right">
+											<h4 class="widget-subtitle-">
+												<strong class="small">@Html.DisplayNameFor(m => m.TotalAmount)</strong>
+												<span class="cost text-info">@string.Format("{0:c}", Convert.ToDecimal(Model.TotalAmount))</span>
+											</h4>
+										</div>
+									</div>
+									if (Convert.ToDecimal(Model.tripCanAmount) > 0)
+									{
+										<div class="row">
+											<table class="table text-right small" style="margin:0;">
+												<tr class="">
+													<td class="visible-lg" width="25%"></td>
+													<td class="visible-lg" width="25%"></td>
+													<td><strong>Trip Medical Amount</strong><br class="visible-lg"> @(string.Format("{0:c}", Convert.ToDecimal(Model.medicalAmount)))</td>
+													<td><strong>Trip Cancellation Amount</strong><br class="visible-lg"> @(string.Format("{0:c}", Convert.ToDecimal(Model.tripCanAmount)))</td>
+												</tr>
+											</table>
+										</div>
+									}
+								}
+							}
+						</div>
+
+						@*@if (Convert.ToDecimal(Model.tripCanAmount) > 0)
+						{
+							<table class="table  text-right  small" style="margin:0;">
+								<tr class="bg-primary">
+									<td class="visible-lg" width="25%"></td>
+									<td class="visible-lg" width="25%"></td>
+									<td><strong>Trip Medical Amount</strong><br class="visible-lg"> @(string.Format("{0:c}", Convert.ToDecimal(Model.medicalAmount)))</td>
+									<td><strong>Trip Cancellation Amount</strong><br class="visible-lg"> @(string.Format("{0:c}", Convert.ToDecimal(Model.tripCanAmount)))</td>
+								</tr>
+							</table>
+						}*@
+						
+						<div class="widget-block">
+
+							<fieldset id="credit">
+
+								<h3 class="widget-title"><strong>Credit Card</strong> Information</h3>
+
+								<div class="row">
+									<div class="col-md-7">
+										<div class="form-group">
+											@Html.LabelFor(m => m.cardNumber, new { @class = "control-label" })
+											@Html.EditorFor(m => m.cardNumber, new { htmlAttributes = new { @class = "form-control", @required = true } })
+											@Html.ValidationMessageFor(m => m.cardNumber, "", new { @class = "text-danger" })
+										</div>
+									</div>
+									<div class="col-md-3">
+										<div class="form-group">
+											@Html.LabelFor(m => m.expirationDate, "Exp Date", new { @class = "control-label" })
+											<div class="input-group date  expiration-date">
+												@Html.TextBox(Html.NameFor(m => m.expirationDate).ToString(), "", new { @class = "form-control", placeholder = "mm/yyyy" })
+												<div class="input-group-addon input-group-calendar"><i class="fa fa-calendar"></i></div>
+											</div>
+											@Html.ValidationMessageFor(m => m.expirationDate, "", new { @class = "text-danger" })
+										</div>
+									</div>
+									<div class="col-md-2">
+										<div class="form-group">
+											@Html.LabelFor(m => m.cardCode, new { @class = "control-label" })
+											@Html.EditorFor(m => m.cardCode, new { htmlAttributes = new { @class = "form-control", @size = "3", @required = true } })
+											@Html.ValidationMessageFor(m => m.cardCode, "", new { @class = "text-danger" })
+										</div>
+									</div>
+								</div><!-- /.row -->
+
+								<div class="row">
+									<div class="col-sm-offset-2 col-sm-8">
+										<img class="img-responsive" src="/Content/Images/cc-logos.png">
+									</div>
+								</div>
+
+							</fieldset>
+
+
+							<fieldset id="billing">
+
+								<h3 class="widget-title"><strong>Billing</strong> Information</h3>
+
+								<p><label class="checkbox-inline"><input type="checkbox" name="useHomeCountry">Use Home Country Mailing Address</label></p>
+
+								<div class="row">
+									<div class="col-md-6">
+										<div class="form-group">
+											@Html.LabelFor(m => m.firstName, new { @class = "control-label" })
+											<div class="">
+												@Html.EditorFor(m => m.firstName, new { htmlAttributes = new { @class = "form-control", placeholder = "First", @required = true } })
+												@Html.ValidationMessageFor(m => m.firstName, "", new { @class = "text-danger" })
+											</div>
+										</div>
+									</div>
+									<div class="col-md-6">
+										<div class="form-group">
+											@Html.LabelFor(m => m.lastName, new { @class = "control-label" })
+											<div class="">
+												@Html.EditorFor(m => m.lastName, new { htmlAttributes = new { @class = "form-control", placeholder = "Last", @required = true } })
+												@Html.ValidationMessageFor(m => m.lastName, "", new { @class = "text-danger" })
+											</div>
+										</div>
+									</div>
+								</div><!-- /.row -->
+
+								<div class="form-group">
+									@Html.LabelFor(m => m.address, new { @class = "control-label" })
+									<div class="">
+										@Html.EditorFor(m => m.address, new { htmlAttributes = new { @class = "form-control", placeholder = "Address", @required = true } })
+										@Html.ValidationMessageFor(m => m.address, "", new { @class = "text-danger" })
+									</div>
+								</div><!-- /.form-group -->
+
+								<div class="row">
+									<div class="col-md-7">
+										<div class="form-group">
+											@Html.LabelFor(m => m.city, new { @class = "control-label" })
+											<div class="">
+												@Html.EditorFor(m => m.city, new { htmlAttributes = new { @class = "form-control", placeholder = "City", @required = true } })
+												@Html.ValidationMessageFor(m => m.city, "", new { @class = "text-danger" })
+											</div>
+										</div>
+									</div>
+									<div class="col-md-2">
+										<div class="form-group">
+											@Html.LabelFor(m => m.state, new { @class = "control-label" })
+											<div class="">
+												@Html.EditorFor(m => m.state, new { htmlAttributes = new { @class = "form-control", placeholder = "State", @required = true } })
+												@Html.ValidationMessageFor(m => m.state, "", new { @class = "text-danger" })
+											</div>
+										</div>
+									</div>
+									<div class="col-md-3">
+										<div class="form-group">
+											@Html.LabelFor(m => m.zip, new { @class = "control-label" })
+											<div class="">
+												@Html.EditorFor(m => m.zip, new { htmlAttributes = new { @class = "form-control", placeholder = "Zip Code", @required = true } })
+												@Html.ValidationMessageFor(m => m.zip, "", new { @class = "text-danger" })
+											</div>
+										</div>
+									</div>
+								</div><!-- /.row -->
+
+								@if (ViewBag.countryList != null)
+								{
+								<div class="form-group">
+									@Html.LabelFor(m => m.country, new { @class = "control-label" })
+									@Html.DropDownListFor(m => m.country, (SelectList)ViewBag.countryList, "Select Country", new { @class = "form-control", @required = true })
+									@*@Html.EditorFor(m => m.country, new { htmlAttributes = new { @class = "form-control", placeholder = "Country", @required = true } })*@
+									@Html.ValidationMessageFor(m => m.country, "", new { @class = "text-danger" })
+								</div><!-- /.form-group -->
+								}
+
+							</fieldset>
+
+
+							<fieldset id="terms">
+
+								<label class="checkbox-inline">
+									<input type="checkbox" name="acceptTermsAndConditionsCheckBox" id="acceptTermsAndConditionsCheckBox" required aria-required="true">
+									<span class="terms">
+										@Html.DisplayFor(m => m.DisclaimerText)
+									</span>
+								</label>
+
+							</fieldset>
+
+							<p class="alert alert-info">Trawick International will email policy documents within 5 minutes of purchase</p>
+
+						</div><!-- /.widget-block -->
+
+
+						<div class="widget-footer form-submit">
+							<div class="row">
+
+								<div class="col-sm-6 form-control-static">
+									<strong class="col-sm-6 col-md-4 text-left">@Html.DisplayNameFor(m => m.TotalAmount)</strong>
+									<span class="col-sm-6 col-md-8 text-left">
+										<strong class="text-info"><span class="cost">@String.Format("{0:c}", Convert.ToDecimal(Model.TotalAmount))</span></strong>
+									</span>
+								</div>
+
+								<div class="col-sm-6">
+									<button type="submit" id="submitButton" class="btn btn-primary btn-next">Complete Purchase <i class="fa fa-caret-right"></i></button>
+								</div>
+
+							</div>
+						</div><!-- /.widget-footer -->
+					</div><!-- /.widget -->
+				}
+
+
+			</div><!-- /.col -->
+
+
+			<div class="col-sm-4">
+				@Html.Partial("_SideLogos")
+			</div><!-- /.col -->
+
+
+		</div><!-- /.row -->
+	</div><!-- /.container -->
+</section>
+
+
+@section Scripts {
+	@Scripts.Render("~/bundles/jqueryval")
+	<script src="/scripts/main.js"></script>
+	<script>
+
+		$('input[name="useHomeCountry"]').on('change', function(e) {
+			var homeAddress = @Html.Raw(Json.Encode(ViewBag.HomeAddress));
+			for (var key in homeAddress) {
+				var input = $(':input[name="'+key+'"]');
+				input.val(this.checked ? decodeEntities(homeAddress[key]) : '');
+				input.attr('readonly', this.checked);
+			}
+		});
+
+		function decodeEntities(encodedString) {
+			var textArea = document.createElement('textarea');
+			textArea.innerHTML = encodedString;
+			return textArea.value;
+		}
+
+		//AddressByZip('[name="zip"]', '[name="city"]', '[name="state"]', true);
+
+		@if(HttpContext.Current.Request.IsLocal)
+		{
+		<text>
+		$('#cardNumber').val('4111111111111111');
+		$('#expirationDate').val('10/19');
+		$('#cardCode').val('123');
+		$('input[name="useHomeCountry"], #acceptTermsAndConditionsCheckBox').prop('checked', true).change();
+		</text>
+		}
+	</script>
+}

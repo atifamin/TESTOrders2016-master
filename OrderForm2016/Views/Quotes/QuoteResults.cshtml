@@ -1,0 +1,261 @@
+﻿@model OrderForm2016.Models.QuoteResults
+
+@{
+	ViewBag.Title = "Quote Results";
+
+	if (Model.quoteAmount >= 9999999999)
+	{
+		// This had an error, probably because no ages were actually set, all were 0.
+		//Next page (MemberInfo), only Spouse shows up [Spouse - -1]
+	}
+
+	bool isError = Model.errMessage != null && Model.errMessage != "";
+	string errorClass = isError ? "error" : "";
+}
+
+<section class="page-title">
+	<div class="container">
+
+		@*<div class="btn-toolbar pull-right">
+			<a href="javascript:void(0)" class="btn btn-default no-shadow" onclick="ShowEmailQuote()"><i class="fa fa-envelope-o" aria-hidden="true"></i> Email</a>
+			<a href="javascript:window.print()" class="btn btn-default no-shadow"><i class="fa fa-print" aria-hidden="true"></i> Print</a>
+		</div>*@
+
+		<h2>@ViewBag.ProductName  Quote Results</h2>
+		@if (@ViewBag.ProductDesc != @ViewBag.ProductName)
+		{
+		<h4>@ViewBag.ProductDesc</h4>
+		}
+
+	</div>
+</section>
+
+
+
+<section>
+
+	<div class="container">
+
+
+		<div class="row">
+			<div class="col-sm-8">
+
+				@using (Html.BeginForm("MemberInfo", "Member", new { @id = string.Empty, @bFormID = Model.base_form_id }))
+				{
+				@Html.HiddenFor(m => m.base_form_id)
+
+
+					<div class="widget">
+
+						<div class="widget-header @errorClass">
+							@if (isError)
+							{
+							<h3 class="widget-title">
+								<strong>Error: </strong><span class="message">@Html.DisplayFor(m => m.errMessage)</span>
+							</h3>
+							}
+							else
+							{
+							<div class="row">
+								<div class="col-xs-6">
+									<div>@Html.LabelFor(m => m.QuoteNumber, "Quote #")</div>
+									<h3 class="widget-title">@Html.DisplayFor(m => m.QuoteNumber)</h3>
+								</div>
+								<div class="col-xs-6  text-right">
+									@if (Model.quoteAmount != null)
+									{
+									<div>@Html.LabelFor(m => m.quoteAmount, "Total Premium Amount")</div>
+									@*<h3 class="widget-title"><sup><small><i class="fa fa-usd" aria-hidden="true"></i></small></sup>@Html.DisplayFor(m => m.quoteAmount)</h3>*@
+										<h3 class="widget-title"><sup><small><i class="fa fa-usd" aria-hidden="true"></i></small></sup><span id="qAmount">@(String.Format("{0:f2}", Model.quoteAmount))</span></h3>
+									}
+								</div>
+							</div><!-- /.row -->
+							}
+						</div><!-- /.widget-header -->
+
+
+						@if (Model.tripCanAmount > 0)
+						{
+						<div class="widget-options">
+							<table class="table">
+								<tr>
+									@if (Model.medicalAmount != null)
+									{
+									<th class="form-control-static">Trip Medical Amount</th>
+									<td class="form-control-static"><sup><small><i class="fa fa-usd" aria-hidden="true"></i></small></sup>@(String.Format("{0:f2}", Model.medicalAmount))</td>
+									}
+								</tr>
+								@if (Model.tripCanAmount != null)
+								{
+								<tr id="tripCanAmt">
+									<th class="form-control-static">Trip Cancellation Amount</th>
+									<td class="form-control-static"><sup><small><i class="fa fa-usd" aria-hidden="true"></i></small></sup>@(String.Format("{0:f2}", Model.tripCanAmount))</td>
+								</tr>
+								<tr>
+									<td colspan="2">
+										<div class="checkbox-inline">
+											<label>
+												<input type="checkbox" id="includeTripCan" name="includeTripCan" value="true" checked> Include Trip Cancellation
+											</label>
+										</div>
+									</td>
+								</tr>
+								}
+							</table>
+						</div>
+						}
+
+						<div class="widget-block">
+
+							@if (Model.CoverageDates != null)
+							{
+							<div class="row">
+								<div class="col-md-6">
+									<div class="form-group">
+										@Html.LabelFor(m => m.CoverageDates, "Coverage Dates", new { @class = "control-label" })
+										<div class="form-control-static">@Html.DisplayFor(m => m.CoverageDates)</div>
+									</div>
+								</div>
+								<div class="col-md-6">
+									@if (Model.PlanName != null)
+									{
+									<div class="form-group">
+										@Html.LabelFor(m => m.PlanName, "Plan Name", new { @class = "control-label" })
+										<div class="form-control-static">@Html.DisplayFor(m => m.PlanName)</div>
+									</div>
+									}
+								</div>
+							</div><!-- /.row -->
+							}
+
+
+							@if (Model.dateMessage != null)
+							{
+							@*<div class="form-group">
+								@Html.LabelFor(m => m.dateMessage, "Date Message", new { @class = "control-label" })
+								@Html.DisplayFor(m => m.dateMessage, new { @class = "form-control-static" })
+								</div>*@
+								<div class="table  alert  alert-info  well-sm" role="alert">
+									<span class="cell"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i></span>
+									<span class="cell">@Html.DisplayFor(m => m.dateMessage)</span>
+								</div>
+							}
+
+
+							@if (Model.travelerNames != null)
+							{
+								int travCount = 1;
+								<label class="control-label">Travelers</label>
+								<table class="table  table-striped">
+									<tbody>
+										@foreach (var tName in Model.travelerNames)
+										{
+											string[] tNames = tName.Split(':');
+											string tDesc = tNames[0];
+											string tAge = tNames[1];
+											<tr><th>@Html.Encode(tDesc.Replace("travelerAge", "Traveler "))</th><td align="right">@Html.Encode(tAge)</td></tr>
+											@*<tr><th>Traveler @(travCount++)</th><td align="right">@Html.Encode(tAge)</td></tr>*@
+										}
+									</tbody>
+								</table>
+							}
+
+
+
+							@if (Model.OptionsList != null)
+							{
+							<label class="control-label">Options</label>
+							<table class="table  table-striped">
+								<tbody>
+									@foreach (var option in Model.OptionsList)
+									{
+										string[] options = option.Split(':');
+										string key = options[0];
+										string val = options.Length > 2 ? string.Format("{0}: {1}", options[1], options[2]) : options[1];
+										<tr><th>@Html.Encode(key)</th><td align="right">@Html.Encode(val.Replace(".00", "").Replace("class", "Class "))</td></tr>		}
+								</tbody>
+							</table>
+							}
+
+						</div><!-- /.widget-block -->
+
+
+						<div class="widget-footer  form-submit">
+							<button type="button" class="btn  btn-default  btn-prev"><i class="fa  fa-caret-left"></i> Previous</button>
+							<button type="submit" class="btn  btn-primary  btn-next" @(isError ? "disabled" : "")>Continue <i class="fa  fa-caret-right"></i></button>
+						</div>
+
+					</div><!-- /.widget -->
+				}
+
+			</div><!-- /.col -->
+
+
+			<div class="col-sm-4 col-lg-3 col-lg-offset-1 no-print">
+
+				<div class="widget compact text-center">
+					<div class="widget-header">
+						<h4 class="widget-title"> Save Your Quote</h4>
+					</div>
+					<div class="widget-block">
+						@*<p>Enter an email &amp; we will send you a link to this page.</p>*@
+						<div class="sidebarEmailFields">
+							<a href="javascript:void(0)" class="btn btn-success no-shadow" onclick="ShowEmailQuote()"><i class="fa fa-envelope-o" aria-hidden="true"></i> Email</a>&nbsp;
+							@*<btn class="btn btn-success no-shadow" data-toggle="modal" data-target="#emailModal"><i class="fa fa-envelope-o" aria-hidden="true"></i> Email</btn>&nbsp;*@
+							<a href="javascript:window.print()" class="btn btn-warning no-shadow"><i class="fa fa-print" aria-hidden="true"></i> Print</a>
+						</div>
+					</div>
+				</div>
+
+				@Html.Partial("_SideLogos")
+
+			</div><!-- /.col -->
+
+
+		</div><!-- /.row -->
+
+
+	</div><!-- /.container -->
+</section>
+
+
+@section Scripts {
+	<script src="/scripts/main.js"></script>
+	@if (Model.tripCanAmount != null)
+	{
+	<script>
+		var originalQuoteAmount = parseFloat(@String.Format("{0:f2}", Model.quoteAmount));
+		var tripCanAmount = parseFloat(@String.Format("{0:f2}", Model.tripCanAmount));
+
+		$('#includeTripCan').on('change', function () {
+			var amount = this.checked ? originalQuoteAmount : (originalQuoteAmount - tripCanAmount);
+			$('#qAmount').text(parseFloat(amount).toFixed(2));
+			$('#tripCanAmt').toggleClass('muted', !this.checked);
+		}).change();
+	</script>
+	}
+	<script>
+        function ShowEmailQuote() {
+                var resultsId = @Model.base_form_id;
+                PopupCenter("/QuoteForm/EmailQuote/?resultsId=" + resultsId + "&type=bForm", "EmailQuote", 800, 700)
+            return false;
+        }
+	</script>
+}
+
+
+@*@section Modals {
+<div class="modal fade" id="emailModal" tabindex="-1" role="dialog">
+	<div class="modal-dialog modal-lg" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-title">Email Quote Results</h4>
+			</div>
+			<div class="modal-body">
+				@{Html.RenderAction("EmailQuote", "QuoteForm", new { resultsId = Model.base_form_id, type = "bForm" });}
+			</div>
+		</div>
+	</div>
+</div>
+}*@

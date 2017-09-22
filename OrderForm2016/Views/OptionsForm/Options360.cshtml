@@ -1,0 +1,45 @@
+﻿@model OrderForm2016.Models.BaseForm
+@{
+    ViewBag.Title = "360 Options";
+}
+
+
+
+
+@*@Html.AntiForgeryToken()
+@Html.ValidationSummary(true, "", new { @class = "text-danger" })*@
+@Html.HiddenFor(m => m.options360.cnc)
+
+
+@*<div class="form-group">
+			@Html.LabelFor(model => model.options360.cnc, htmlAttributes: new { @class = "control-label col-md-2" })
+			<div class="col-md-10">
+					<div class="checkbox">
+							@Html.EditorFor(model => model.options360.cnc)
+							@Html.ValidationMessageFor(model => model.options360.cnc, "", new { @class = "text-danger" })
+					</div>
+			</div>
+	</div>*@
+
+@if (Model.product_id == 22)
+{
+	List<SelectListItem> TypeList = new List<SelectListItem>();
+	TypeList.Add(new SelectListItem
+	{
+		Text = "42 Days",
+		Value = "42"
+	});
+
+	TypeList.Add(new SelectListItem
+	{
+		Text = "90 Days",
+		Value = "90",
+	});
+	<div class="form-group">
+		@Html.LabelFor(m => m.options360.max_trip_len, ViewData["max_trip_lenLabel"].ToString(), new { @class = "control-label" })
+		<div class="">
+			@Html.DropDownListFor(m => m.options360.max_trip_len, TypeList, new { @class = "form-control" })
+			@Html.ValidationMessageFor(m => m.options360.max_trip_len, "", new { @class = "text-danger" })
+		</div>
+	</div>
+}

@@ -1,0 +1,105 @@
+﻿@model OrderForm2016.Models.BaseForm
+
+
+<h3 class="widget-title"><strong>Traveler</strong> Information</h3>
+<div class="help-block  small">(at the time of travel)</div>
+
+
+<div class="row">
+	<label class="control-label  col-xs-12">Number of Travelers</label>
+
+	<div class="col-xs-3  col-sm-2">
+		<div class="form-group">
+			<input type="number" class="form-control" id="numberOfTravelers" name="numberOfTravelers" min="1" size="3" value="1">
+		</div>
+	</div>
+
+	<div class="col-xs-9  col-sm-4">
+		<div class="form-group">
+			<button type="button" class="btn  btn-primary  hidden" id="addTravelers" disabled>Travelers</button>
+		</div>
+	</div>
+
+	<div class="col-xs-12  col-sm-6">
+		<div class="form-group hidden" id="primary-state">
+			<div class="checkbox">
+				<label>
+					<input type="checkbox" id="use-primary-state" value="true">
+					All travelers are from <span class="state" data-value=""></span>
+				</label>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+<div id="bh-travelers">
+@for (var i = 0; i < Model.TravelerAges.Count; i++)
+{
+	var isPrimary = i == 0 ? "primary" : "";
+	int pId = Model.product_id;
+	int maxAge = (pId == 28 || pId == 48) ? 79 : 99;
+
+	<div class="traveler" id="@isPrimary" data-traveler="@i">
+		<div class="row">
+
+			<div class="col-xs-3  col-sm-2">
+				<div class="form-group">
+					<label class="control-label">Age</label>
+					@*@Html.TextBox(Html.NameFor(m => m.TravelerAges[i].travelerAge).ToString(), "", new { @class = "form-control  input-sm", @required = true })*@
+					@Html.EditorFor(m => m.TravelerAges[i].travelerAge, new { htmlAttributes = new { @class = "form-control  input-sm  traveler-age", min = "0", max = @maxAge.ToString(), step = "1" } })
+				</div>
+			</div>
+
+			<div class="col-xs-8  col-sm-5  col-md-4">
+				<div class="form-group">
+					<label class="control-label">Home State/Province</label>
+					@Html.DropDownListFor(m => m.TravelerAges[i].travelerState, (SelectList)ViewBag.StateList, "Select State", new { @class = "form-control  input-sm  traveler-state" })
+				</div>
+			</div>
+
+			<div class="col-xs-1  col-sm-5  col-md-6">
+				<div class="form-group">
+					<label class="control-label hidden-xs">&nbsp;</label>
+					<div class="errorMsg  form-control-static  input-sm"></div>
+				</div>
+			</div>
+
+		</div><!-- /.row -->
+	</div><!-- /.traveler -->
+}
+
+</div>
+
+<div class="travelers-error small alert-warning"></div>
+
+
+@*<div id="tripCanBlock">
+	<div class="form-group">
+		<div class="travelers-error small alert-warning"></div>
+	</div>
+
+
+	<div class="form-group">
+		<div class="checkbox">
+			<label>
+				@Html.CheckBoxFor(m => m.tripCanIncluded, new { @disabled = true })
+				Include Trip Cancellation at 5% of Trip Cost <span class="hidden">up to 90 days</span>
+			</label>
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="col-sm-6">
+			<div class="form-group">
+				<a class="btn  btn-sm  btn-default" href="https://www.trawickinternational.com/assets/brochures/3n1Brochure.pdf" target="_blank">View Trip Cancellation Details</a>
+			</div>
+		</div>
+		<span class="col-sm-6  text-right">
+			<a class="btn  btn-sm  btn-default" href="https://www.trawickinternational.com/assets/brochures/LT0023in1GenericPolicy.pdf" target="_blank">Generic Policy Document *</a>
+		</span>
+	</div>
+
+
+	<small class="help-block">*This is a general policy document.Benefits, limits, coverage, terms and conditions may vary by state. Please check your individual state policy emailed to you upon purchase of this plan</small>
+</div>*@
